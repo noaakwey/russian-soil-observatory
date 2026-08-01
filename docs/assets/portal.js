@@ -29,6 +29,23 @@ const STRINGS = {
     'props.th.property': 'Свойство', 'props.th.category': 'Группа', 'props.th.n': 'Наблюдений',
     'props.th.docs': 'Публикаций', 'props.th.unit': 'Единица доказана',
     'props.th.header': 'Заголовок надёжен', 'props.th.value': 'Значение правдоподобно',
+    'props.filter': 'Найти свойство…',
+    'props.chart.pick': 'Выберите свойство в таблице выше ↑',
+    'props.chart.loading': 'База загружается при первом выборе свойства…',
+    'props.chart.ready': 'Выполните запрос — нажмите строку в таблице',
+    'props.chart.hist': 'Распределение значений', 'props.chart.depth': 'По глубине',
+    'props.chart.lat': 'По широте', 'props.chart.year': 'По годам публикации',
+    'chart.empty': 'Недостаточно данных для графика',
+    'chart.empty.depth': 'Нет наблюдений с указанной глубиной',
+    'chart.empty.lat': 'Нет наблюдений с пространственной привязкой',
+    'chart.empty.year': 'Нет наблюдений с известным годом публикации',
+    'chart.subtitle': '{n} наблюдений · {docs} публикаций · единица доказана {unit}% · типичная единица «{mode}»',
+    'chart.subtitle.raw': '{n} наблюдений · {docs} публикаций · единица доказана лишь {unit}% — график построен по значению как оно напечатано в таблице, без приведения к единой единице',
+    'chart.hist.note.metric': 'Значения приведены к «{mode}»; 1-й и 99-й процентили обрезаны, чтобы выбросы OCR не искажали шкалу.',
+    'chart.hist.note.raw': 'Единица не доказана — показано напечатанное число без пересчёта. Пунктир — медиана.',
+    'chart.depth.note': 'Медиана по интервалам 20 см; показаны интервалы не менее чем с 3 наблюдениями.',
+    'chart.lat.note': 'Медиана по полосам 4°; только координаты в границах России (41–82° с.ш.). Наведите точку для деталей.',
+    'chart.year.note': 'Число наблюдений в год; только надёжные заголовки и правдоподобные значения.',
     'quality.lede': 'Слой построен из OCR распознанных таблиц, поэтому часть значений неизбежно содержит ошибки распознавания. Они не удаляются, а помечаются: исходная ячейка остаётся доказательством, а решение принимает исследователь.',
     'quality.header': 'Как свойство опознано в заголовке',
     'quality.header.note': '<strong>symbol_embedded</strong> — химический символ найден внутри более длинного заголовка («Thickness of horizons, cm A + B»). Такие значения следует исключать из анализа по умолчанию.',
@@ -72,7 +89,7 @@ const STRINGS = {
     'popup.value': 'Значение', 'popup.none': 'Для этой точки пока нет измерения, прошедшего строгую пространственную связь.',
     'popup.records': 'записей с этой координатой', 'popup.year': 'год',
     'sql.rows': 'строк', 'sql.time': 'мс', 'sql.error': 'Ошибка SQL: ',
-    'sql.loading': 'Загрузка базы (7,7 МБ)…', 'sql.ready': 'База загружена. Выполните запрос.',
+    'sql.loading': 'Загрузка базы (9,5 МБ)…', 'sql.ready': 'База загружена. Выполните запрос.',
     'sql.truncated': 'показаны первые 1000 строк',
   },
   en: {
@@ -97,6 +114,23 @@ const STRINGS = {
     'props.th.property': 'Property', 'props.th.category': 'Group', 'props.th.n': 'Observations',
     'props.th.docs': 'Publications', 'props.th.unit': 'Unit proven',
     'props.th.header': 'Header reliable', 'props.th.value': 'Value plausible',
+    'props.filter': 'Find a property…',
+    'props.chart.pick': 'Pick a property in the table above ↑',
+    'props.chart.loading': 'The database loads on first selection…',
+    'props.chart.ready': 'Run a query — click a table row',
+    'props.chart.hist': 'Value distribution', 'props.chart.depth': 'By depth',
+    'props.chart.lat': 'By latitude', 'props.chart.year': 'By publication year',
+    'chart.empty': 'Not enough data for a chart',
+    'chart.empty.depth': 'No observations carry a depth',
+    'chart.empty.lat': 'No observations carry a spatial reference',
+    'chart.empty.year': 'No observations have a known publication year',
+    'chart.subtitle': '{n} observations · {docs} publications · unit proven for {unit}% · typical unit "{mode}"',
+    'chart.subtitle.raw': '{n} observations · {docs} publications · unit proven for only {unit}% — chart uses the value as printed in the table, not converted to a common unit',
+    'chart.hist.note.metric': 'Values converted to "{mode}"; 1st and 99th percentiles clipped so OCR outliers do not flatten the scale.',
+    'chart.hist.note.raw': 'Unit not proven — the printed number is shown unconverted. Dashed line is the median.',
+    'chart.depth.note': 'Median over 20 cm bins; only bins with 3+ observations are shown.',
+    'chart.lat.note': 'Median over 4° bands; coordinates within Russia only (41-82°N). Hover a point for detail.',
+    'chart.year.note': 'Observation count per year; trusted headers and plausible values only.',
     'quality.lede': 'The layer is built from OCR-recognised tables, so some values inevitably carry recognition errors. They are not deleted but flagged: the source cell remains as evidence and the researcher decides.',
     'quality.header': 'How the property was recognised in the header',
     'quality.header.note': '<strong>symbol_embedded</strong> — the chemical symbol was found inside a longer header ("Thickness of horizons, cm A + B"). Such values should be excluded from analysis by default.',
@@ -140,7 +174,7 @@ const STRINGS = {
     'popup.value': 'Value', 'popup.none': 'No measurement has passed strict spatial linkage for this point yet.',
     'popup.records': 'records at this coordinate', 'popup.year': 'year',
     'sql.rows': 'rows', 'sql.time': 'ms', 'sql.error': 'SQL error: ',
-    'sql.loading': 'Loading database (7.7 MB)…', 'sql.ready': 'Database loaded. Run a query.',
+    'sql.loading': 'Loading database (9.5 MB)…', 'sql.ready': 'Database loaded. Run a query.',
     'sql.truncated': 'first 1000 rows shown',
   },
 };
@@ -214,13 +248,27 @@ function renderOverview() {
     <dt>${esc(t('f.european'))}</dt><dd>${s.european_share_pct}%</dd>`;
 }
 
+function propertyLabel(row) {
+  return lang === 'ru' && row.property_ru ? row.property_ru : row.property;
+}
+
 function renderProperties() {
   const sort = document.getElementById('prop-sort').value;
-  const rows = [...AGG.properties].sort((a, b) => b[sort] - a[sort]);
+  const query = (document.getElementById('prop-filter').value || '').trim().toLowerCase();
   const pct = (part, whole) => whole ? `${Math.round(100 * part / whole)}%` : '—';
+  let rows = [...AGG.properties].sort((a, b) => b[sort] - a[sort]);
+  if (query) {
+    rows = rows.filter((row) =>
+      propertyLabel(row).toLowerCase().includes(query)
+      || row.property.toLowerCase().includes(query)
+      || (row.property_ru || '').toLowerCase().includes(query)
+      || (lang === 'ru' && row.category_ru || row.category).toLowerCase().includes(query));
+  }
+  document.getElementById('prop-count').textContent =
+    `${num(rows.length)} / ${num(AGG.properties.length)}`;
   document.querySelector('#props-table tbody').innerHTML = rows.map((row) => `
-    <tr>
-      <td>${esc(lang === 'ru' && row.property_ru ? row.property_ru : row.property)}</td>
+    <tr data-property-id="${esc(row.property_id)}" aria-selected="${row.property_id === selectedProperty}">
+      <td>${esc(propertyLabel(row))}</td>
       <td>${esc(lang === 'ru' && row.category_ru ? row.category_ru : row.category)}</td>
       <td class="num">${num(row.observations)}</td>
       <td class="num">${num(row.documents)}</td>
@@ -260,10 +308,10 @@ function renderQuality() {
 const DOWNLOADS = [
   ['data/full_table_observations.csv', {
     ru: 'Все табличные наблюдения с флагами качества и происхождением',
-    en: 'All table observations with quality flags and provenance' }, '77 MB'],
+    en: 'All table observations with quality flags and provenance' }, '80 MB'],
   ['data/observatory.sqlite.gz', {
     ru: 'База для браузера и локального анализа (SQLite, gzip)',
-    en: 'Database for the browser and local analysis (SQLite, gzip)' }, '7.7 MB'],
+    en: 'Database for the browser and local analysis (SQLite, gzip)' }, '9.5 MB'],
   ['data/aggregates.json', {
     ru: 'Все сводные показатели портала', en: 'Every aggregate the portal quotes' }, '30 KB'],
   ['data/portal_map.json', {
@@ -276,6 +324,9 @@ const DOWNLOADS = [
     ru: 'Описания разрезов и профилей', en: 'Profile and pit descriptions' }, '1.1 MB'],
   ['data/property_dictionary_ru_public.csv', {
     ru: 'Словарь свойств и канонических единиц', en: 'Property and canonical-unit dictionary' }, '34 KB'],
+  ['data/property_census.csv', {
+    ru: 'Перепись всех 101 свойств: охват единицей, глубиной, координатой',
+    en: 'Census of all 101 properties: unit, depth and spatial coverage' }, '17 KB'],
   ['data/full_table_observation_audit.json', {
     ru: 'Аудит полноты слоя наблюдений', en: 'Observation layer coverage audit' }, '1 KB'],
   ['data/observation_quality_audit.json', {
@@ -409,6 +460,7 @@ ORDER BY n DESC;`,
 let db = null;
 let loading = null;
 let lastResult = null;
+let selectedProperty = null;
 
 async function loadDatabase() {
   if (db) return db;
@@ -486,6 +538,302 @@ function downloadCsv() {
   URL.revokeObjectURL(url);
 }
 
+/* -------------------------------------------------------- property charts
+   A small vanilla-SVG chart kit: no charting library is vendored, so every
+   render function below builds its own <svg> tree.  All four charts for a
+   property are computed live from the in-browser database — nothing is
+   precomputed at build time — because with 101 properties, precomputing a
+   histogram + depth profile + latitude profile + year trend for each would
+   dwarf the JSON payloads the landing page needs to stay light. */
+
+const SVGNS = 'http://www.w3.org/2000/svg';
+
+function svgNode(tag, attrs) {
+  const el = document.createElementNS(SVGNS, tag);
+  for (const key in attrs) el.setAttribute(key, attrs[key]);
+  return el;
+}
+
+function withTitle(el, text) {
+  const title = svgNode('title', {});
+  title.textContent = text;
+  el.appendChild(title);
+  return el;
+}
+
+function fmtNum(value) {
+  if (value == null || Number.isNaN(value)) return '';
+  const abs = Math.abs(value);
+  const digits = abs >= 1000 ? 0 : abs >= 100 ? 1 : abs >= 1 ? 2 : 4;
+  return value.toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US', { maximumFractionDigits: digits });
+}
+
+function fillTemplate(template, vars) {
+  return template.replace(/\{(\w+)\}/g, (_, key) => vars[key] ?? '');
+}
+
+function median(sortedValues) {
+  return sortedValues.length ? sortedValues[Math.floor((sortedValues.length - 1) / 2)] : null;
+}
+
+function emptyChart(container, message) {
+  container.innerHTML = `<div class="chart-empty">${esc(message)}</div>`;
+}
+
+const CHART_W = 340;
+const CHART_H = 176;
+
+/** Bars over p1-p99 of ``values`` so a handful of OCR-corrupted numbers
+ * cannot flatten the whole histogram onto one bin. */
+function renderHistogram(container, values, unitLabel) {
+  if (values.length < 3) return emptyChart(container, t('chart.empty'));
+  const sorted = [...values].sort((a, b) => a - b);
+  const lo = sorted[Math.floor(0.01 * (sorted.length - 1))];
+  const hi = sorted[Math.ceil(0.99 * (sorted.length - 1))];
+  const span = hi - lo || Math.abs(hi) || 1;
+  const clipped = values.filter((v) => v >= lo && v <= hi);
+  const binCount = Math.min(20, Math.max(6, Math.round(Math.sqrt(clipped.length))));
+  const bins = new Array(binCount).fill(0);
+  clipped.forEach((v) => {
+    let index = Math.floor(((v - lo) / span) * binCount);
+    if (index >= binCount) index = binCount - 1;
+    if (index < 0) index = 0;
+    bins[index]++;
+  });
+  const maxCount = Math.max(...bins, 1);
+  const margin = { top: 8, right: 8, bottom: 20, left: 8 };
+  const innerW = CHART_W - margin.left - margin.right;
+  const innerH = CHART_H - margin.top - margin.bottom;
+  const barW = innerW / binCount;
+  const svg = svgNode('svg', { viewBox: `0 0 ${CHART_W} ${CHART_H}`, class: 'chart-svg' });
+
+  bins.forEach((count, i) => {
+    if (!count) return;
+    const h = innerH * count / maxCount;
+    const bar = svgNode('rect', {
+      class: 'bar', x: (margin.left + i * barW + 0.5).toFixed(1),
+      y: (margin.top + innerH - h).toFixed(1), width: Math.max(0.5, barW - 1).toFixed(1),
+      height: h.toFixed(1), rx: 1.5,
+    });
+    const binLo = lo + span * i / binCount, binHi = lo + span * (i + 1) / binCount;
+    withTitle(bar, `${fmtNum(binLo)}–${fmtNum(binHi)} ${unitLabel}: ${count}`);
+    svg.appendChild(bar);
+  });
+
+  const med = median(sorted);
+  const medX = margin.left + innerW * Math.min(1, Math.max(0, (med - lo) / span));
+  svg.appendChild(svgNode('line', {
+    class: 'median-line', x1: medX.toFixed(1), x2: medX.toFixed(1),
+    y1: margin.top, y2: margin.top + innerH,
+  }));
+
+  [[lo, 'start', margin.left], [hi, 'end', margin.left + innerW]].forEach(([val, anchor, x]) => {
+    const label = svgNode('text', {
+      class: 'tick-label', x: x.toFixed(1), y: CHART_H - 5, 'text-anchor': anchor,
+    });
+    label.textContent = fmtNum(val);
+    svg.appendChild(label);
+  });
+  const medLabel = svgNode('text', { class: 'tick-label', x: medX.toFixed(1), y: margin.top - 1, 'text-anchor': 'middle' });
+  medLabel.textContent = fmtNum(med);
+  svg.appendChild(medLabel);
+
+  container.innerHTML = '';
+  container.appendChild(svg);
+}
+
+/** Simple categorical bars, used for the per-year observation count. */
+function renderBars(container, items) {
+  if (items.length < 2) return emptyChart(container, t('chart.empty.year'));
+  const margin = { top: 8, right: 8, bottom: 20, left: 8 };
+  const innerW = CHART_W - margin.left - margin.right;
+  const innerH = CHART_H - margin.top - margin.bottom;
+  const maxV = Math.max(...items.map((d) => d.value), 1);
+  const barW = innerW / items.length;
+  const svg = svgNode('svg', { viewBox: `0 0 ${CHART_W} ${CHART_H}`, class: 'chart-svg' });
+
+  items.forEach((d, i) => {
+    const h = innerH * d.value / maxV;
+    const bar = svgNode('rect', {
+      class: 'bar', x: (margin.left + i * barW + 0.5).toFixed(1),
+      y: (margin.top + innerH - h).toFixed(1), width: Math.max(0.5, barW - 1).toFixed(1),
+      height: h.toFixed(1), rx: 1.5,
+    });
+    withTitle(bar, `${d.label}: ${num(d.value)}`);
+    svg.appendChild(bar);
+  });
+
+  const showEvery = Math.max(1, Math.ceil(items.length / 9));
+  items.forEach((d, i) => {
+    if (i % showEvery !== 0 && i !== items.length - 1) return;
+    const x = margin.left + i * barW + barW / 2;
+    const label = svgNode('text', { class: 'tick-label', x: x.toFixed(1), y: CHART_H - 5, 'text-anchor': 'middle' });
+    label.textContent = d.label;
+    svg.appendChild(label);
+  });
+
+  container.innerHTML = '';
+  container.appendChild(svg);
+}
+
+/** Median-per-band line+dots, oriented vertically: depth grows downward,
+ * latitude grows upward (north at the top, matching the map). */
+function renderProfile(container, points, opts) {
+  if (points.length < 2) return emptyChart(container, opts.emptyText);
+  const margin = { top: 10, right: 14, bottom: 8, left: 40 };
+  const innerW = CHART_W - margin.left - margin.right;
+  const innerH = CHART_H - margin.top - margin.bottom;
+  const ys = points.map((p) => p.y);
+  const xs = points.map((p) => p.value);
+  const yMin = Math.min(...ys), yMax = Math.max(...ys);
+  const xMin = Math.min(0, ...xs), xMax = Math.max(...xs) * 1.06 || 1;
+  const yPos = (y) => {
+    const frac = (y - yMin) / (yMax - yMin || 1);
+    return margin.top + innerH * (opts.topIsMin ? frac : 1 - frac);
+  };
+  const xPos = (x) => margin.left + innerW * (x - xMin) / (xMax - xMin || 1);
+
+  const svg = svgNode('svg', { viewBox: `0 0 ${CHART_W} ${CHART_H}`, class: 'chart-svg' });
+  if (xMin < 0) {
+    const zeroX = xPos(0);
+    svg.appendChild(svgNode('line', { class: 'gridline', x1: zeroX.toFixed(1), x2: zeroX.toFixed(1), y1: margin.top, y2: margin.top + innerH }));
+  }
+  const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${xPos(p.value).toFixed(1)},${yPos(p.y).toFixed(1)}`).join(' ');
+  svg.appendChild(svgNode('path', { class: 'line', d: path }));
+  points.forEach((p) => {
+    const dot = svgNode('circle', { class: 'dot', cx: xPos(p.value).toFixed(1), cy: yPos(p.y).toFixed(1), r: 3 });
+    withTitle(dot, `${opts.yFormat(p.y)}: ${fmtNum(p.value)} ${opts.unitLabel || ''} (n=${p.n})`);
+    svg.appendChild(dot);
+  });
+  svg.appendChild(svgNode('line', { class: 'axis', x1: margin.left, x2: margin.left, y1: margin.top, y2: margin.top + innerH }));
+
+  const labelPoints = points.length <= 4 ? points : [points[0], points[Math.floor(points.length / 2)], points[points.length - 1]];
+  labelPoints.forEach((p) => {
+    const label = svgNode('text', { class: 'tick-label', x: 2, y: (yPos(p.y) + 3).toFixed(1) });
+    label.textContent = opts.yFormat(p.y);
+    svg.appendChild(label);
+  });
+
+  container.innerHTML = '';
+  container.appendChild(svg);
+}
+
+/** Fetch a property's four chart datasets from the in-browser database.
+ * Whether the histogram/profile use ``value_normalized`` (converted, proven
+ * unit) or ``value_raw`` (printed, unconverted) depends on how much of the
+ * property's own layer has a proven unit: below 30% the converted subset is
+ * too small and too self-selected to represent the property honestly. */
+async function fetchPropertyCharts(pid, useMetric) {
+  const valueExpr = useMetric ? 'value_normalized' : 'value_raw';
+  const metricFilter = useMetric ? 'AND metric=1' : '';
+
+  const values = db.exec(`
+    SELECT ${valueExpr} FROM observation
+    WHERE property_id=? AND trusted=1 ${metricFilter} AND ${valueExpr} IS NOT NULL`,
+    [pid])[0]?.values.map((r) => r[0]) || [];
+
+  const depthRows = db.exec(`
+    SELECT depth_top_cm, ${valueExpr} FROM observation
+    WHERE property_id=? AND trusted=1 ${metricFilter}
+      AND depth_top_cm IS NOT NULL AND depth_top_cm < 200 AND ${valueExpr} IS NOT NULL`,
+    [pid])[0]?.values || [];
+
+  const latRows = db.exec(`
+    SELECT context_latitude, ${valueExpr} FROM observation
+    WHERE property_id=? AND trusted=1 ${metricFilter}
+      AND context_latitude BETWEEN 41 AND 82 AND ${valueExpr} IS NOT NULL`,
+    [pid])[0]?.values || [];
+
+  const yearRows = db.exec(`
+    SELECT publication_year, COUNT(*) FROM observation
+    WHERE property_id=? AND trusted=1 AND publication_year IS NOT NULL
+    GROUP BY publication_year ORDER BY publication_year`,
+    [pid])[0]?.values || [];
+
+  return { values, depthRows, latRows, yearRows };
+}
+
+function binMedian(rows, keyFn, binSize, minCount, domain) {
+  const buckets = new Map();
+  rows.forEach(([key, value]) => {
+    if (domain && (key < domain[0] || key > domain[1])) return;
+    const bin = binKeyOf(key, binSize);
+    if (!buckets.has(bin)) buckets.set(bin, []);
+    buckets.get(bin).push(value);
+  });
+  const points = [];
+  for (const [bin, vals] of buckets) {
+    if (vals.length < minCount) continue;
+    const sorted = [...vals].sort((a, b) => a - b);
+    points.push({ y: keyFn(bin), value: median(sorted), n: vals.length });
+  }
+  return points.sort((a, b) => a.y - b.y);
+}
+
+function binKeyOf(value, binSize) {
+  return Math.floor(value / binSize) * binSize;
+}
+
+let chartCache = new Map();
+
+async function selectProperty(pid) {
+  selectedProperty = pid;
+  document.querySelectorAll('#props-table tbody tr').forEach((row) =>
+    row.setAttribute('aria-selected', String(row.dataset.propertyId === pid)));
+
+  const meta = AGG.properties.find((row) => row.property_id === pid);
+  if (!meta) return;
+  document.getElementById('chart-title').textContent = propertyLabel(meta);
+  const status = document.getElementById('chart-status');
+  status.textContent = t('props.chart.loading');
+
+  const unitPct = meta.observations ? Math.round(100 * meta.normalized / meta.observations) : 0;
+  const useMetric = unitPct >= 30 && !!meta.unit_mode;
+  document.getElementById('chart-subtitle').textContent = fillTemplate(
+    t(useMetric ? 'chart.subtitle' : 'chart.subtitle.raw'),
+    { n: num(meta.observations), docs: num(meta.documents), unit: unitPct, mode: meta.unit_mode || '' });
+
+  try {
+    await loadDatabase();
+    status.textContent = '';
+    let data = chartCache.get(pid + (useMetric ? ':m' : ':r'));
+    if (!data) {
+      data = await fetchPropertyCharts(pid, useMetric);
+      chartCache.set(pid + (useMetric ? ':m' : ':r'), data);
+    }
+    renderPropertyCharts(meta, data, useMetric);
+  } catch (error) {
+    status.classList.add('error');
+    status.textContent = t('sql.error') + error.message;
+  }
+}
+
+function renderPropertyCharts(meta, data, useMetric) {
+  const unitLabel = useMetric ? (meta.unit_mode || '') : t('props.th.value');
+
+  document.getElementById('chart-hist-note').textContent =
+    t(useMetric ? 'chart.hist.note.metric' : 'chart.hist.note.raw').replace('{mode}', meta.unit_mode || '');
+  renderHistogram(document.getElementById('chart-hist'), data.values, unitLabel);
+
+  document.getElementById('chart-depth-note').textContent = t('chart.depth.note');
+  const depthPoints = binMedian(data.depthRows, (bin) => bin + 10, 20, 3);
+  renderProfile(document.getElementById('chart-depth'), depthPoints, {
+    topIsMin: true, emptyText: t('chart.empty.depth'), unitLabel,
+    yFormat: (y) => `${Math.round(y)} ${lang === 'ru' ? 'см' : 'cm'}`,
+  });
+
+  document.getElementById('chart-lat-note').textContent = t('chart.lat.note');
+  const latPoints = binMedian(data.latRows, (bin) => bin + 2, 4, 3, [41, 82]);
+  renderProfile(document.getElementById('chart-lat'), latPoints, {
+    topIsMin: false, emptyText: t('chart.empty.lat'), unitLabel,
+    yFormat: (y) => `${Math.round(y)}°`,
+  });
+
+  document.getElementById('chart-year-note').textContent = t('chart.year.note');
+  renderBars(document.getElementById('chart-year'),
+    data.yearRows.map(([year, count]) => ({ label: String(year), value: count })));
+}
+
 /* ------------------------------------------------------------------ shell */
 
 function applyLanguage() {
@@ -494,10 +842,14 @@ function applyLanguage() {
     const value = t(node.dataset.i18n);
     if (/<[a-z]/i.test(value)) node.innerHTML = value; else node.textContent = value;
   });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach((node) => {
+    node.placeholder = t(node.dataset.i18nPlaceholder);
+  });
   document.getElementById('lang-ru').setAttribute('aria-pressed', String(lang === 'ru'));
   document.getElementById('lang-en').setAttribute('aria-pressed', String(lang === 'en'));
   if (AGG) { renderOverview(); renderProperties(); renderQuality(); renderDownloads(); }
   if (MAP_DATA && map) renderMap();
+  if (selectedProperty) selectProperty(selectedProperty);
 }
 
 function selectTab(name) {
@@ -517,6 +869,9 @@ function selectTab(name) {
     status.classList.add('error');
     status.textContent = t('sql.error') + error.message;
   });
+  if (name === 'props' && !selectedProperty && AGG?.properties?.length) {
+    selectProperty(AGG.properties[0].property_id);
+  }
 }
 
 function applyTheme(theme) {
@@ -544,6 +899,11 @@ document.addEventListener('DOMContentLoaded', () => {
     button.onclick = () => selectTab(button.dataset.panel);
   });
   document.getElementById('prop-sort').onchange = renderProperties;
+  document.getElementById('prop-filter').oninput = renderProperties;
+  document.querySelector('#props-table tbody').addEventListener('click', (event) => {
+    const row = event.target.closest('tr[data-property-id]');
+    if (row) selectProperty(row.dataset.propertyId);
+  });
   document.getElementById('sql-run').onclick = runQuery;
   document.getElementById('sql-csv').onclick = downloadCsv;
   document.querySelectorAll('[data-example]').forEach((button) => {
@@ -556,7 +916,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetch('data/aggregates.json')
     .then((response) => response.json())
-    .then((data) => { AGG = data; applyLanguage(); })
+    .then((data) => {
+      AGG = data;
+      applyLanguage();
+      if (location.hash.replace('#', '') === 'props') selectTab('props');
+    })
     .catch((error) => {
       document.getElementById('overview-tiles').innerHTML =
         `<div class="callout warn">Не удалось загрузить aggregates.json: ${esc(error.message)}</div>`;

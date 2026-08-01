@@ -273,5 +273,119 @@
       "properties": 80,
       "precise_pct": 18.0
     }
-  ]
+  ],
+  "landscape": {
+    "total_properties": 101,
+    "best_unit_proven": [
+      {
+        "property": "pH in water",
+        "unit_proven_pct": 97.4,
+        "observations": 5024
+      },
+      {
+        "property": "base saturation",
+        "unit_proven_pct": 90.9,
+        "observations": 473
+      },
+      {
+        "property": "pH in KCl",
+        "unit_proven_pct": 89.6,
+        "observations": 1015
+      },
+      {
+        "property": "pH (method unspecified)",
+        "unit_proven_pct": 86.5,
+        "observations": 4688
+      },
+      {
+        "property": "total porosity",
+        "unit_proven_pct": 74.8,
+        "observations": 480
+      }
+    ],
+    "worst_unit_proven": [
+      {
+        "property": "fine silt 0.005-0.001 mm",
+        "unit_proven_pct": 0.0,
+        "observations": 1774
+      },
+      {
+        "property": "medium silt 0.01-0.005 mm",
+        "unit_proven_pct": 0.0,
+        "observations": 1770
+      },
+      {
+        "property": "magnesium",
+        "unit_proven_pct": 0.0,
+        "observations": 1507
+      },
+      {
+        "property": "potassium oxide K2O",
+        "unit_proven_pct": 0.0,
+        "observations": 686
+      },
+      {
+        "property": "magnesium oxide MgO",
+        "unit_proven_pct": 0.0,
+        "observations": 601
+      }
+    ],
+    "best_depth_coverage": [
+      {
+        "property": "wilting point",
+        "depth_pct": 88.3,
+        "observations": 291
+      },
+      {
+        "property": "base saturation",
+        "depth_pct": 71.7,
+        "observations": 473
+      },
+      {
+        "property": "aluminium ion Al3+",
+        "depth_pct": 70.3,
+        "observations": 306
+      },
+      {
+        "property": "exchangeable calcium",
+        "depth_pct": 68.7,
+        "observations": 837
+      },
+      {
+        "property": "carbonate ion CO3 2-",
+        "depth_pct": 67.8,
+        "observations": 214
+      }
+    ],
+    "best_spatial_coverage": [
+      {
+        "property": "wilting point",
+        "spatial_pct": 97.9,
+        "observations": 291
+      },
+      {
+        "property": "potassium oxide K2O",
+        "spatial_pct": 96.9,
+        "observations": 686
+      },
+      {
+        "property": "phosphorus pentoxide (P2O5)",
+        "spatial_pct": 95.5,
+        "observations": 626
+      },
+      {
+        "property": "sulfur",
+        "spatial_pct": 94.0,
+        "observations": 316
+      },
+      {
+        "property": "iron oxide Fe2O3",
+        "spatial_pct": 93.9,
+        "observations": 2665
+      }
+    ],
+    "median_unit_proven_pct": 3.3,
+    "properties_over_1000_obs": 40,
+    "properties_under_50_obs": 13
+  }
 }

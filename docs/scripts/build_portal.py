@@ -21,6 +21,7 @@ import argparse
 import csv
 import json
 import math
+import re
 import sqlite3
 import statistics
 from collections import Counter, defaultdict
@@ -28,6 +29,18 @@ from pathlib import Path
 
 EARTH_RADIUS_KM = 6371.0
 RUSSIA_AREA_KM2 = 17_098_246
+
+# Legacy rows carry absolute extraction paths from a machine that no longer
+# exists.  The file name is the useful part of that provenance; the host
+# directory is noise in a public release, so it is dropped on export.
+LEGACY_PATH = re.compile(r'/(?:home/linux|Users/[^/\s"]+|Volumes/[^/\s"]+)/(?:[^/\s"]+/)*')
+
+
+def strip_host_paths(value):
+    """Reduce an absolute extraction path to its file name."""
+    if isinstance(value, str) and '/' in value:
+        return LEGACY_PATH.sub('', value)
+    return value
 
 
 def haversine(first: tuple[float, float], second: tuple[float, float]) -> float:
@@ -89,6 +102,9 @@ CREATE TABLE observation (
   depth_bottom_cm REAL,
   context_latitude REAL,
   context_longitude REAL,
+  spatial_tier TEXT,
+  trusted INTEGER NOT NULL,
+  metric INTEGER NOT NULL,
   page_start INTEGER,
   table_label TEXT
 );
@@ -97,6 +113,9 @@ CREATE INDEX idx_obs_category ON observation(category);
 CREATE INDEX idx_obs_year ON observation(publication_year);
 CREATE INDEX idx_obs_quality ON observation(header_match_kind, value_plausibility);
 CREATE INDEX idx_obs_spatial ON observation(spatial_linkage);
+CREATE INDEX idx_obs_property_chart ON observation(property_id, trusted, metric);
+CREATE INDEX idx_obs_depth ON observation(property_id, depth_top_cm);
+CREATE INDEX idx_obs_geo ON observation(property_id, context_latitude);
 
 CREATE TABLE reported_site (
   site_id TEXT PRIMARY KEY,
@@ -137,14 +156,14 @@ SELECT o.observation_id, o.document_id, d.corpus, d.doi,
        f.header_match_kind, f.value_plausibility,
        o.spatial_linkage, o.row_label_raw, o.horizon_label_raw,
        o.depth_top_cm, o.depth_bottom_cm,
-       s.latitude, s.longitude, a.page_start, a.table_label
+       t.latitude, t.longitude, t.tier, a.page_start, a.table_label
 FROM table_observation o
 JOIN document d ON d.document_id = o.document_id
 JOIN property_definition p ON p.property_id = o.property_id
 JOIN observation_quality_flag f ON f.observation_id = o.observation_id
 JOIN source_artifact a ON a.artifact_id = o.artifact_id
 LEFT JOIN document_publication_year y ON y.document_id = o.document_id
-LEFT JOIN site s ON s.site_id = o.context_site_id
+LEFT JOIN document_spatial_tier t ON t.document_id = o.document_id
 """
 
 
@@ -161,18 +180,21 @@ def build_browser_database(source: sqlite3.Connection, target_path: Path,
          property_id, canonical, category, header, value_raw, unit_raw,
          value_normalized, unit_normalized, status, header_kind, plausibility,
          spatial, row_label, horizon, depth_top, depth_bottom,
-         latitude, longitude, page_start, table_label) = row
+         latitude, longitude, tier, page_start, table_label) = row
         localized = names.get(property_id, {})
+        trusted = int(header_kind != 'symbol_embedded' and plausibility == 'ok')
+        metric = int(status in ('exact', 'converted'))
         rows.append((
             observation_id, document_id, corpus, doi, year, year_confidence,
             property_id, canonical, localized.get('ru'), category,
             localized.get('category_ru'), header, value_raw, unit_raw,
             value_normalized, unit_normalized, status, header_kind, plausibility,
-            spatial, row_label, horizon, depth_top, depth_bottom,
-            latitude, longitude, page_start, table_label,
+            spatial, strip_host_paths(row_label), horizon, depth_top, depth_bottom,
+            latitude, longitude, tier, trusted, metric, page_start,
+            strip_host_paths(table_label),
         ))
     target.executemany(
-        f"INSERT INTO observation VALUES({','.join('?' * 28)})", rows)
+        f"INSERT INTO observation VALUES({','.join('?' * 31)})", rows)
 
     target.executemany(
         "INSERT INTO reported_site VALUES(?,?,?,?,?,?,?,?)",
@@ -280,6 +302,30 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
     corpus = dict(rows("SELECT corpus, COUNT(*) FROM document GROUP BY 1"))
     total_observations = rows("SELECT COUNT(*) FROM table_observation")[0][0]
 
+    # A property's own distribution needs a scan of its trusted+metric values,
+    # its depth coverage and its spatial coverage.  106 286 rows is cheap to
+    # walk once in Python; 101 separate queries would not be, and SQLite has
+    # no portable median, so percentiles are computed here instead of in SQL.
+    census: dict[str, dict] = defaultdict(lambda: {
+        'depth': 0, 'spatial': 0, 'values': [], 'units': Counter()})
+    for pid, value, unit, has_depth, is_metric, is_trusted, has_spatial in rows("""
+        SELECT o.property_id, o.value_normalized, o.unit_normalized,
+               CASE WHEN o.depth_top_cm IS NOT NULL THEN 1 ELSE 0 END,
+               CASE WHEN o.normalization_status IN ('exact','converted') THEN 1 ELSE 0 END,
+               CASE WHEN f.header_match_kind <> 'symbol_embedded'
+                         AND f.value_plausibility = 'ok' THEN 1 ELSE 0 END,
+               CASE WHEN t.document_id IS NOT NULL THEN 1 ELSE 0 END
+        FROM table_observation o
+        JOIN observation_quality_flag f ON f.observation_id = o.observation_id
+        LEFT JOIN document_spatial_tier t ON t.document_id = o.document_id
+    """):
+        entry = census[pid]
+        entry['depth'] += has_depth
+        entry['spatial'] += has_spatial
+        if is_metric and is_trusted and value is not None:
+            entry['values'].append(value)
+            entry['units'][unit] += 1
+
     properties = []
     for pid, canonical, category, count, normalized, clean, plausible, docs in rows("""
         SELECT o.property_id, p.canonical_name, p.category, COUNT(*),
@@ -293,6 +339,8 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
         GROUP BY 1,2,3 ORDER BY 4 DESC
     """):
         localized = names.get(pid, {})
+        entry = census[pid]
+        values = sorted(entry['values'])
         properties.append({
             'property_id': pid, 'property': canonical,
             'property_ru': localized.get('ru'),
@@ -300,6 +348,13 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
             'observations': count, 'normalized': normalized,
             'header_trusted': clean, 'value_plausible': plausible,
             'documents': docs,
+            'with_depth': entry['depth'],
+            'with_spatial': entry['spatial'],
+            'unit_mode': entry['units'].most_common(1)[0][0] if entry['units'] else None,
+            'median': round(percentile(values, 0.5), 4) if values else None,
+            'p25': round(percentile(values, 0.25), 4) if values else None,
+            'p75': round(percentile(values, 0.75), 4) if values else None,
+            'n_metric': len(values),
         })
 
     per_year = [
@@ -413,8 +468,9 @@ CSV_COLUMNS = [
     'property_header_raw', 'value_num_raw', 'unit_raw', 'value_normalized',
     'unit_normalized', 'normalization_status', 'header_match_kind',
     'value_plausibility', 'plausibility_rule', 'qa_status', 'spatial_linkage',
-    'context_latitude', 'context_longitude', 'row_label_raw', 'horizon_label_raw',
-    'depth_top_cm', 'depth_bottom_cm', 'page_start', 'table_label', 'evidence_locator',
+    'context_latitude', 'context_longitude', 'spatial_tier', 'row_label_raw',
+    'horizon_label_raw', 'depth_top_cm', 'depth_bottom_cm', 'page_start',
+    'table_label', 'evidence_locator',
 ]
 
 
@@ -429,7 +485,7 @@ def export_csv(source: sqlite3.Connection, path: Path, names: dict[str, dict[str
                    p.category, o.property_header_raw, o.value_num_raw, o.unit_raw,
                    o.value_normalized, o.unit_normalized, o.normalization_status,
                    f.header_match_kind, f.value_plausibility, f.plausibility_rule,
-                   o.qa_status, o.spatial_linkage, s.latitude, s.longitude,
+                   o.qa_status, o.spatial_linkage, t.latitude, t.longitude, t.tier,
                    o.row_label_raw, o.horizon_label_raw, o.depth_top_cm, o.depth_bottom_cm,
                    a.page_start, a.table_label, o.evidence_locator
             FROM table_observation o
@@ -438,15 +494,47 @@ def export_csv(source: sqlite3.Connection, path: Path, names: dict[str, dict[str
             JOIN observation_quality_flag f ON f.observation_id = o.observation_id
             JOIN source_artifact a ON a.artifact_id = o.artifact_id
             LEFT JOIN document_publication_year y ON y.document_id = o.document_id
-            LEFT JOIN site s ON s.site_id = o.context_site_id
+            LEFT JOIN document_spatial_tier t ON t.document_id = o.document_id
             ORDER BY o.observation_id
         """):
-            values = list(row)
+            values = [strip_host_paths(cell) for cell in row]
             property_id = values.pop(8)
             values.insert(8, names.get(property_id, {}).get('ru'))
             writer.writerow(values)
             written += 1
     return written
+
+
+def export_property_census(properties: list[dict], path: Path) -> int:
+    """Write the full per-property coverage table the analysis appendix reads.
+
+    Every property the pipeline recognises gets one row, not only the ones
+    prose in the report singles out — this is what makes "every property is
+    in the analysis" true rather than aspirational.
+    """
+    columns = [
+        'property_id', 'property', 'property_ru', 'category', 'category_ru',
+        'observations', 'documents', 'unit_proven_pct', 'header_trusted_pct',
+        'value_plausible_pct', 'with_depth_pct', 'with_spatial_pct',
+        'unit_mode', 'median', 'p25', 'p75', 'n_metric',
+    ]
+    with path.open('w', encoding='utf-8', newline='') as handle:
+        writer = csv.writer(handle)
+        writer.writerow(columns)
+        for row in properties:
+            n = row['observations'] or 1
+            writer.writerow([
+                row['property_id'], row['property'], row['property_ru'],
+                row['category'], row['category_ru'], row['observations'],
+                row['documents'], round(100 * row['normalized'] / n, 1),
+                round(100 * row['header_trusted'] / n, 1),
+                round(100 * row['value_plausible'] / n, 1),
+                round(100 * row['with_depth'] / n, 1),
+                round(100 * row['with_spatial'] / n, 1),
+                row['unit_mode'], row['median'], row['p25'], row['p75'],
+                row['n_metric'],
+            ])
+    return len(properties)
 
 
 def main() -> None:
@@ -475,12 +563,15 @@ def main() -> None:
     observations = build_browser_database(source, args.output / 'observatory.sqlite',
                                           names, generated_at)
     exported = export_csv(source, args.output / 'full_table_observations.csv', names)
+    census_rows = export_property_census(
+        aggregates['properties'], args.output / 'property_census.csv')
     source.close()
 
     print(json.dumps({
         'generated_at': generated_at,
         'browser_database_rows': observations,
         'csv_rows': exported,
+        'property_census_rows': census_rows,
         'map_points': len(payload['points']),
         'aggregate_properties': len(aggregates['properties']),
         'sizes_mb': {

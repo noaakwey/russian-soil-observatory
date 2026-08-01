@@ -472,6 +472,81 @@ def regional_table(frame: pd.DataFrame, output: Path) -> list[dict]:
     return rows
 
 
+# A 15-category palette, not the 5-series theme: the property landscape figure
+# needs one distinguishable colour per canonical category, not per chart series.
+CATEGORY_PALETTE = {
+    'light': ['#2a6fd6', '#e0632a', '#12946a', '#9a5bd6', '#c9a227', '#d6486f',
+              '#2aa6c9', '#7a8c1f', '#a15c2a', '#5c6bd6', '#c94f9e', '#3d9e3d',
+              '#8c6b4a', '#4a7ba1', '#a1524a'],
+    'dark': ['#5b9bf0', '#f08050', '#2fc191', '#b482ea', '#e0bd45', '#f07aa0',
+             '#5fc9e8', '#a8c14a', '#d68a4f', '#8f9af0', '#e884c8', '#6bcf6b',
+             '#c2a37e', '#7aa8d6', '#d68078'],
+}
+
+
+def property_landscape(frame: pd.DataFrame, output: Path) -> dict:
+    """Census every recognised property, not only the ones prose covers.
+
+    62 805 -> 106 286 observations came from teaching the header matcher four
+    new non-word forms (ions, Kachinsky fractions, oxides, ratios); this table
+    is what makes every one of the resulting 101 properties auditable, not
+    just the handful pH/SOC discussion singles out.
+    """
+    def pct(series: pd.Series) -> float:
+        return round(100 * series.mean(), 1) if len(series) else 0.0
+
+    rows = []
+    for pid, group in frame.groupby('property_id'):
+        rows.append({
+            'property_id': pid,
+            'property': group.property.iloc[0],
+            'category': group.category.iloc[0],
+            'observations': len(group),
+            'documents': int(group.document_id.nunique()),
+            'header_trusted_pct': pct(group.header_match_kind != 'symbol_embedded'),
+            'value_plausible_pct': pct(group.value_plausibility == 'ok'),
+            'unit_proven_pct': pct(group.metric),
+            'depth_pct': pct(group.depth_top_cm.notna()),
+            'spatial_pct': pct(group.latitude.notna()),
+        })
+    census = pd.DataFrame(rows).sort_values('observations', ascending=False)
+    census.to_csv(output / 'table_property_census.csv', index=False)
+
+    for theme_name, theme in THEMES.items():
+        apply_theme(theme)
+        categories = sorted(census.category.unique())
+        palette = dict(zip(categories, CATEGORY_PALETTE[theme_name]))
+        ordered = census.sort_values('observations')
+        fig, ax = plt.subplots(figsize=(9.6, max(9, 0.16 * len(ordered))))
+        ax.barh(ordered.property, ordered.observations,
+               color=[palette[c] for c in ordered.category], height=0.72)
+        ax.set_xscale('log')
+        ax.set_xlabel(('число наблюдений (лог. шкала)' if theme_name == 'light'
+                       else 'число наблюдений (лог. шкала)'))
+        ax.set_title('Все 101 распознанных свойства', pad=12)
+        ax.tick_params(axis='y', labelsize=7.2)
+        handles = [plt.Rectangle((0, 0), 1, 1, color=palette[c]) for c in categories]
+        ax.legend(handles, categories, loc='lower right', fontsize=7.4, frameon=False, ncol=1)
+        fig.tight_layout()
+        save(fig, output, 'fig6_property_landscape', theme_name)
+
+    proven = census[census.observations >= 200]
+    return {
+        'total_properties': int(len(census)),
+        'best_unit_proven': proven.nlargest(5, 'unit_proven_pct')[
+            ['property', 'unit_proven_pct', 'observations']].to_dict('records'),
+        'worst_unit_proven': proven.nsmallest(5, 'unit_proven_pct')[
+            ['property', 'unit_proven_pct', 'observations']].to_dict('records'),
+        'best_depth_coverage': proven.nlargest(5, 'depth_pct')[
+            ['property', 'depth_pct', 'observations']].to_dict('records'),
+        'best_spatial_coverage': proven.nlargest(5, 'spatial_pct')[
+            ['property', 'spatial_pct', 'observations']].to_dict('records'),
+        'median_unit_proven_pct': round(float(census.unit_proven_pct.median()), 1),
+        'properties_over_1000_obs': int((census.observations >= 1000).sum()),
+        'properties_under_50_obs': int((census.observations < 50).sum()),
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--db', type=Path, required=True)
@@ -505,6 +580,7 @@ def main() -> None:
         findings['time'] = figure_time(frame, args.output, theme_name, theme)
 
     findings['zones'] = regional_table(frame, args.output)
+    findings['landscape'] = property_landscape(frame, args.output)
 
     (args.output / 'insights.json').write_text(
         json.dumps(findings, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
