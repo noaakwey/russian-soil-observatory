@@ -9,7 +9,7 @@ ph_kcl,pH in KCl,658,43,False,-0.01934,-0.07292,0.03424,0.47932,0.59959,0.69719,
 porosity,total porosity,406,23,False,-0.00603,-1.72284,1.71078,0.9945,0.82914,0.9945,False
 organic_matter,organic matter/humus,2738,150,True,-0.00593,-0.02869,0.01683,0.60984,0.43589,0.75057,False
 bulk_density,bulk density,456,30,False,-0.00287,-0.0288,0.02307,0.82835,0.85305,0.94668,False
-soil_organic_carbon,soil organic carbon,2235,168,True,-0.00081,-0.03558,0.03395,0.9635,0.52124,0.9945,False
+soil_organic_carbon,soil organic carbon,2198,168,True,-0.00202,-0.03491,0.03087,0.90428,0.50095,0.96456,False
 iron_oxide_fe2o3,iron oxide Fe2O3,806,17,True,0.04396,-0.12122,0.20915,0.60194,0.72303,0.75057,False
 coarse_sand,coarse sand,921,49,True,0.11536,0.00275,0.22798,0.04466,0.63106,0.11864,False
 available_phosphorus,available phosphorus,173,18,True,0.12722,-0.00105,0.25549,0.0519,0.59971,0.11864,False

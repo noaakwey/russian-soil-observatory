@@ -55,6 +55,19 @@ PHYSICAL_RANGE: dict[str, tuple[float | None, float | None, str]] = {
     'ph_unspecified': (2.0, 12.0, 'soil pH 2–12'),
     'bulk_density': (0.05, 2.65, 'bulk density 0.05–2.65 g/cm3'),
     'particle_density': (1.0, 4.0, 'particle density 1.0–4.0 g/cm3'),
+    # Content-type properties normalized to g/kg had no upper bound at all,
+    # so a header correctly matched to the right property could still carry
+    # a value that cannot physically exist at that concentration (soil is
+    # not 68% total nitrogen). Found via descriptive statistics: several
+    # "Corg, %" / "Total N, %" cells report a value than makes sense as a
+    # percentage only in a different context (a ratio, a share of a pool, a
+    # normalization to a baseline) and %-to-g/kg conversion (x10) turns that
+    # into an impossible three- or four-digit g/kg figure. Bounds are set
+    # above the most organic-rich real soils (Histosols) to avoid flagging
+    # genuine extreme samples.
+    'soil_organic_carbon': (0.0, 600.0, 'organic carbon content 0–600 g/kg (Histosol ceiling)'),
+    'total_nitrogen': (0.0, 50.0, 'total nitrogen content 0–50 g/kg'),
+    'total_potassium': (0.0, 60.0, 'total potassium content 0–60 g/kg'),
 }
 
 # Fractions of a whole: meaningless outside 0–100 when the unit really is %.

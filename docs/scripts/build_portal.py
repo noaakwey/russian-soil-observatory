@@ -505,6 +505,25 @@ def export_csv(source: sqlite3.Connection, path: Path, names: dict[str, dict[str
     return written
 
 
+def export_document_links(source: sqlite3.Connection, path: Path) -> int:
+    """Export the Russian-original/translation correspondence table.
+
+    Documents are never merged, so this is the only place the correspondence
+    is visible: each row asserts that ``document_id_a`` and ``document_id_b``
+    describe the same article, with the evidence and confidence that
+    produced the link (see link_springer_translations.py).
+    """
+    rows = source.execute("""
+        SELECT document_id_a, document_id_b, relation, confidence, evidence_note
+        FROM document_link ORDER BY document_id_b
+    """).fetchall()
+    with path.open('w', encoding='utf-8', newline='') as handle:
+        writer = csv.writer(handle)
+        writer.writerow(['document_id_a', 'document_id_b', 'relation', 'confidence', 'evidence_note'])
+        writer.writerows(rows)
+    return len(rows)
+
+
 def export_property_census(properties: list[dict], path: Path) -> int:
     """Write the full per-property coverage table the analysis appendix reads.
 
@@ -565,6 +584,7 @@ def main() -> None:
     exported = export_csv(source, args.output / 'full_table_observations.csv', names)
     census_rows = export_property_census(
         aggregates['properties'], args.output / 'property_census.csv')
+    link_rows = export_document_links(source, args.output / 'document_links.csv')
     source.close()
 
     print(json.dumps({
@@ -572,6 +592,7 @@ def main() -> None:
         'browser_database_rows': observations,
         'csv_rows': exported,
         'property_census_rows': census_rows,
+        'document_link_rows': link_rows,
         'map_points': len(payload['points']),
         'aggregate_properties': len(aggregates['properties']),
         'sizes_mb': {

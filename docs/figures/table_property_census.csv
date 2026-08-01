@@ -1,102 +1,102 @@
-property_id,property,category,observations,documents,header_trusted_pct,value_plausible_pct,unit_proven_pct,depth_pct,spatial_pct
-organic_matter,organic matter/humus,organic,5717,304,100.0,98.3,61.3,36.0,76.6
-ph_h2o,pH in water,acid_base,5024,267,100.0,81.0,97.4,46.8,86.2
-soil_organic_carbon,soil organic carbon,organic,4761,315,100.0,97.9,67.9,36.3,70.2
-ph_unspecified,pH (method unspecified),acid_base,4688,314,100.0,72.1,86.5,22.4,50.1
-magnesium_ion,magnesium ion Mg2+,soil_solution,3952,169,100.0,99.6,0.7,49.5,84.4
-calcium_ion,calcium ion Ca2+,soil_solution,3690,160,100.0,99.7,6.3,51.2,82.9
-sodium_ion,sodium ion Na+,soil_solution,3337,114,100.0,99.7,2.1,40.6,84.7
-iron,iron,microelement,3103,128,49.6,99.1,3.3,23.9,77.0
-physical_clay,physical clay,particle_size,3035,185,100.0,99.4,15.8,54.4,87.3
-iron_oxide_fe2o3,iron oxide Fe2O3,geochemical,2665,91,100.0,99.7,31.9,40.5,93.9
-clay,clay,particle_size,2626,153,100.0,93.0,46.8,38.7,61.4
-boron,boron,microelement,2484,60,29.7,83.8,0.3,17.2,37.9
-fine_fraction_lt_0_001mm,fine fraction <0.001 mm,particle_size,2446,149,100.0,99.7,14.4,58.2,85.9
-carbon_nitrogen_ratio,C:N ratio,organic,2212,149,100.0,99.2,0.2,33.6,76.6
-electrical_conductivity,electrical conductivity,salinity,2142,56,100.0,98.5,7.2,6.9,6.6
-calcium,calcium,exchange,2077,101,63.9,96.8,0.7,17.9,66.6
-available_phosphorus,available phosphorus,macronutrient,2028,125,100.0,99.5,10.6,31.3,89.3
-zinc,zinc,microelement,1927,119,88.2,99.5,2.6,15.9,73.6
-copper,copper,microelement,1842,119,91.2,97.7,4.3,14.7,74.8
-fine_silt,fine silt 0.005-0.001 mm,particle_size,1774,101,100.0,100.0,0.0,67.7,90.2
-medium_silt,medium silt 0.01-0.005 mm,particle_size,1770,103,100.0,100.0,0.0,66.6,89.6
-fine_sand,fine sand,particle_size,1730,106,100.0,100.0,1.4,65.8,89.9
-potassium_ion,potassium ion K+,soil_solution,1684,74,100.0,99.3,3.0,44.1,79.6
-cation_exchange_capacity,cation exchange capacity,exchange,1671,72,100.0,99.8,0.3,25.6,82.6
-coarse_silt,coarse silt 0.05-0.01 mm,particle_size,1641,101,100.0,100.0,0.6,66.8,90.1
-coarse_sand,coarse sand,particle_size,1594,98,100.0,99.5,66.0,67.5,89.6
-silicon_dioxide,silicon dioxide,geochemical,1547,61,100.0,99.8,12.2,46.8,87.6
-magnesium,magnesium,exchange,1507,81,81.8,98.6,0.0,22.7,60.3
-aluminum_oxide_al2o3,aluminum oxide Al2O3,geochemical,1488,74,100.0,99.3,3.3,45.6,63.2
-manganese,manganese,microelement,1389,89,94.5,98.6,4.8,12.5,65.1
-silt,silt,particle_size,1374,97,100.0,97.5,28.7,23.0,46.2
-available_potassium,available potassium,macronutrient,1365,97,100.0,99.0,2.7,40.7,87.5
-lead,lead,contaminant,1325,90,93.1,97.4,1.7,15.6,83.4
-nickel,nickel,microelement,1321,84,89.0,97.4,3.9,18.5,77.7
-bulk_density,bulk density,physical,1295,73,100.0,92.7,57.5,52.4,69.8
-sand,sand,particle_size,1150,110,100.0,97.7,42.9,20.8,42.3
-chloride_ion,chloride ion Cl-,soil_solution,1148,63,100.0,99.1,1.2,60.9,80.8
-sulfate_ion,sulfate ion SO4 2-,soil_solution,1132,61,100.0,98.9,0.7,57.7,79.0
-ph_kcl,pH in KCl,acid_base,1015,77,100.0,90.2,89.6,45.6,73.0
-chromium,chromium,microelement,984,50,100.0,90.8,5.8,8.9,44.6
-cadmium,cadmium,contaminant,947,63,85.9,97.9,5.0,10.0,72.7
-exchangeable_calcium,exchangeable calcium,exchange,837,52,100.0,100.0,3.5,68.7,87.6
-calcium_oxide_cao,calcium oxide CaO,geochemical,731,64,100.0,99.0,4.5,48.8,85.5
-bicarbonate_ion,bicarbonate ion HCO3-,soil_solution,709,41,100.0,100.0,1.8,50.5,89.3
-potassium_oxide_k2o,potassium oxide K2O,geochemical,686,37,100.0,100.0,0.0,33.7,96.9
-carbonate_equivalent,carbonate equivalent (CaCO3),organic,685,52,100.0,99.1,60.1,41.6,70.9
-cobalt,cobalt,microelement,671,48,86.1,98.5,1.5,16.5,89.4
-phosphorus_pentoxide,phosphorus pentoxide (P2O5),elemental_oxide,626,38,100.0,99.2,5.3,42.0,95.5
-porosity,total porosity,physical,608,37,100.0,99.3,78.3,36.5,70.4
-magnesium_oxide_mgo,magnesium oxide MgO,geochemical,601,54,100.0,99.0,0.0,56.9,84.9
-arsenic,arsenic,contaminant,529,28,71.1,99.1,0.0,13.2,89.0
-hydrogen_ion,hydrogen ion H+,soil_solution,492,23,100.0,100.0,8.9,57.3,73.2
-base_saturation,base saturation,exchange,473,25,100.0,99.8,90.9,71.7,75.9
-basal_respiration,basal respiration,biological,385,20,100.0,92.7,0.0,5.7,61.8
-manganese_oxide_mno,manganese oxide MnO,geochemical,381,37,100.0,100.0,0.0,60.6,87.4
-titanium_dioxide,titanium dioxide TiO2,geochemical,357,36,100.0,100.0,0.0,61.6,87.1
-sulfur,sulfur,macronutrient,316,4,100.0,100.0,16.1,10.1,94.0
-total_nitrogen,total nitrogen,macronutrient,313,40,100.0,100.0,36.4,38.0,64.2
-aluminium_ion,aluminium ion Al3+,soil_solution,306,20,100.0,100.0,9.2,70.3,91.5
-wilting_point,wilting point,hydrophysical,291,13,100.0,99.7,3.1,88.3,97.9
-sodium_oxide_na2o,sodium oxide Na2O,geochemical,279,33,100.0,98.9,2.9,53.8,82.8
-nitrate_ion,nitrate ion NO3-,soil_solution,275,32,100.0,95.6,7.6,22.2,75.6
-total_phosphorus,total phosphorus,macronutrient,269,9,100.0,100.0,3.3,11.2,75.8
-very_coarse_sand,very coarse sand 3-1 mm,particle_size,249,11,100.0,97.6,8.8,27.7,73.5
-ammonium_ion,ammonium ion NH4+,soil_solution,229,23,100.0,96.1,16.6,22.7,83.0
-field_capacity,field capacity,hydrophysical,225,22,100.0,92.9,8.0,16.9,69.8
-carbonate_ion,carbonate ion CO3 2-,soil_solution,214,18,100.0,94.9,0.0,67.8,81.3
-urease_activity,urease activity,biological,207,12,100.0,91.3,0.0,52.2,83.6
-mercury,mercury,contaminant,195,13,87.2,97.9,11.8,5.6,92.3
-exchangeable_acidity,exchangeable acidity,acid_base,174,11,100.0,100.0,0.0,51.1,93.1
-hydrogen_carbon_ratio,H:C ratio,organic,164,22,100.0,100.0,0.0,4.3,88.4
-total_dissolved_solids,total dissolved solids,salinity,142,12,100.0,100.0,4.2,59.2,93.0
-sodium_adsorption_ratio,sodium adsorption ratio,salinity,139,9,100.0,100.0,0.0,7.9,20.9
-aggregate_stability,aggregate stability,physical,125,8,100.0,100.0,33.6,6.4,87.2
-dehydrogenase_activity,dehydrogenase activity,biological,121,12,100.0,100.0,0.0,35.5,86.8
-oxygen_carbon_ratio,O:C ratio,organic,112,19,100.0,97.3,0.0,6.2,86.6
-molybdenum,molybdenum,microelement,106,11,100.0,99.1,0.0,25.5,78.3
-carbon_phosphorus_ratio,C:P ratio,organic,96,4,100.0,100.0,0.0,3.1,43.8
-saturated_hydraulic_conductivity,saturated hydraulic conductivity,hydrophysical,95,11,100.0,100.0,3.2,51.6,76.8
-exchangeable_sodium_percentage,exchangeable sodium percentage,salinity,94,7,100.0,98.9,85.1,66.0,8.5
-gravimetric_water_content,gravimetric water content,hydrophysical,86,11,100.0,86.0,57.0,8.1,44.2
-redox_potential,redox potential,geochemical,76,9,100.0,100.0,36.8,19.7,50.0
-potassium_exchangeable,exchangeable potassium,exchange,70,5,100.0,100.0,0.0,4.3,22.9
-sodium,sodium,exchange,62,4,100.0,100.0,0.0,48.4,100.0
-exchangeable_hydrogen,exchangeable hydrogen,acid_base,60,4,100.0,100.0,0.0,80.0,100.0
-nitrate_n,nitrate nitrogen,macronutrient,57,8,100.0,100.0,17.5,1.8,96.5
-soil_temperature,soil temperature,environmental,57,9,100.0,100.0,0.0,3.5,66.7
-ammonium_n,ammonium nitrogen,macronutrient,54,5,100.0,100.0,0.0,1.9,85.2
-penetration_resistance,penetration resistance,physical,45,2,100.0,100.0,0.0,0.0,0.0
-exchangeable_magnesium,exchangeable magnesium,exchange,35,2,100.0,100.0,82.9,100.0,100.0
-microbial_biomass_carbon,microbial biomass carbon,biological,33,4,100.0,100.0,0.0,18.2,0.0
-inorganic_carbon,inorganic carbon,organic,29,5,100.0,100.0,55.2,20.7,100.0
-particle_density,particle density,physical,28,5,100.0,100.0,75.0,0.0,21.4
-total_potassium,total potassium,macronutrient,23,3,100.0,100.0,13.0,13.0,13.0
-mineral_nitrogen,mineral nitrogen,macronutrient,20,4,100.0,100.0,50.0,40.0,100.0
-calcium_ion_activity_paste,calcium ion activity in soil paste,soil_solution,16,1,100.0,100.0,100.0,62.5,100.0
-phosphatase_activity,phosphatase activity,biological,11,2,100.0,100.0,0.0,90.9,90.9
-selenium,selenium,contaminant,6,1,100.0,66.7,0.0,0.0,0.0
-aluminium_exchangeable,exchangeable aluminium,exchange,6,1,100.0,100.0,0.0,0.0,100.0
-water_holding_capacity,water holding capacity,hydrophysical,3,1,100.0,100.0,0.0,0.0,100.0
-microbial_biomass_nitrogen,microbial biomass nitrogen,biological,2,1,100.0,100.0,0.0,0.0,0.0
+property_id,property,category,observations,documents,header_trusted_pct,value_plausible_pct,unit_proven_pct,depth_pct,spatial_pct,unit,n_metric,mean,sd,min,p25,median,p75,max
+organic_matter,organic matter/humus,organic,5717,304,100.0,98.3,61.3,36.0,76.6,%,3475,5.0883,10.0464,0.0,1.3705,3.1,4.8,100.0
+ph_h2o,pH in water,acid_base,5024,267,100.0,81.0,97.4,46.8,86.2,pH,3947,6.4948,1.4338,2.2,5.4,6.42,7.7,11.4
+soil_organic_carbon,soil organic carbon,organic,4761,315,100.0,97.0,67.9,36.3,70.2,g/kg,3175,42.1262,80.7778,0.0,5.7,15.1,38.3,600.0
+ph_unspecified,pH (method unspecified),acid_base,4688,314,100.0,72.1,86.5,22.4,50.1,pH,2844,6.4979,1.7442,2.0,5.1,6.7,7.8,12.0
+magnesium_ion,magnesium ion Mg2+,soil_solution,3952,169,100.0,99.6,0.7,49.5,84.4,%,27,81.4815,10.5224,59.0,77.0,86.0,88.0,97.0
+calcium_ion,calcium ion Ca2+,soil_solution,3690,160,100.0,99.7,6.3,51.2,82.9,%,231,32.6397,25.8061,0.2,11.625,23.09,56.39,87.8
+sodium_ion,sodium ion Na+,soil_solution,3337,114,100.0,99.7,2.1,40.6,84.7,%,70,10.0,22.762,0.0,0.2,1.275,7.3,155.6
+iron,iron,microelement,3103,128,49.6,99.1,3.3,23.9,77.0,mg/kg,56,1152.2445,2124.2631,0.23,4.5825,140.5,278.0,7401.0
+physical_clay,physical clay,particle_size,3035,185,100.0,99.4,15.8,54.4,87.3,%,480,35.7634,16.2549,0.0,24.3375,34.4,47.25,80.5
+iron_oxide_fe2o3,iron oxide Fe2O3,geochemical,2665,91,100.0,99.7,31.9,40.5,93.9,%,849,2.6814,9.9224,0.0,0.03,0.27,1.23,90.9
+clay,clay,particle_size,2626,153,100.0,93.0,46.8,38.7,61.4,%,1132,22.2437,15.8291,0.0,9.0,22.0,33.0,100.0
+boron,boron,microelement,2484,60,29.7,83.8,0.3,17.2,37.9,,0,,,,,,,
+fine_fraction_lt_0_001mm,fine fraction <0.001 mm,particle_size,2446,149,100.0,99.7,14.4,58.2,85.9,%,353,17.3,10.8992,0.001,8.6,17.0,26.0,45.0
+carbon_nitrogen_ratio,C:N ratio,organic,2212,149,100.0,99.2,0.2,33.6,76.6,%,5,10.21,10.5189,2.36,2.42,2.84,20.93,22.5
+electrical_conductivity,electrical conductivity,salinity,2142,56,100.0,98.5,7.2,6.9,6.6,dS/m,154,2.344,2.9217,0.04,0.5438,1.1,3.1075,15.0
+calcium,calcium,exchange,2077,101,63.9,96.8,0.7,17.9,66.6,,0,,,,,,,
+available_phosphorus,available phosphorus,macronutrient,2028,125,100.0,99.5,10.6,31.3,89.3,mg/kg,214,177.2568,460.8049,3.2,39.425,67.0,184.75,5718.0
+zinc,zinc,microelement,1927,119,88.2,99.5,2.6,15.9,73.6,mg/kg,50,22.0504,21.7774,1.29,2.4075,12.78,37.75,68.0
+copper,copper,microelement,1842,119,91.2,97.7,4.3,14.7,74.8,mg/kg,64,631.2848,2065.8293,5.09,36.0,55.0,85.3575,11305.39
+fine_silt,fine silt 0.005-0.001 mm,particle_size,1774,101,100.0,100.0,0.0,67.7,90.2,,0,,,,,,,
+medium_silt,medium silt 0.01-0.005 mm,particle_size,1770,103,100.0,100.0,0.0,66.6,89.6,,0,,,,,,,
+fine_sand,fine sand,particle_size,1730,106,100.0,100.0,1.4,65.8,89.9,%,25,6.4,8.7464,0.0,0.0,1.0,13.0,31.0
+potassium_ion,potassium ion K+,soil_solution,1684,74,100.0,99.3,3.0,44.1,79.6,mg/kg,45,4.5446,6.3154,0.0,0.51,1.243,5.4,26.7
+cation_exchange_capacity,cation exchange capacity,exchange,1671,72,100.0,99.8,0.3,25.6,82.6,cmolc/kg,5,29.906,41.0562,0.8,1.0,17.8,29.93,100.0
+coarse_silt,coarse silt 0.05-0.01 mm,particle_size,1641,101,100.0,100.0,0.6,66.8,90.1,%,10,34.169,2.8182,30.86,32.065,32.73,37.025,38.17
+coarse_sand,coarse sand,particle_size,1594,98,100.0,99.5,66.0,67.5,89.6,%,1052,10.1117,18.2509,0.0,0.1,2.0,10.0,91.0
+silicon_dioxide,silicon dioxide,geochemical,1547,61,100.0,99.8,12.2,46.8,87.6,%,189,36.9415,33.2789,0.01,0.4,51.0,68.66,84.7
+magnesium,magnesium,exchange,1507,81,81.8,98.6,0.0,22.7,60.3,,0,,,,,,,
+aluminum_oxide_al2o3,aluminum oxide Al2O3,geochemical,1488,74,100.0,99.3,3.3,45.6,63.2,%,49,2.7835,5.7928,0.0,0.47,0.96,1.73,32.0
+manganese,manganese,microelement,1389,89,94.5,98.6,4.8,12.5,65.1,mg/kg,66,342.3115,237.0409,2.76,176.775,295.2,532.5,796.0
+silt,silt,particle_size,1374,97,100.0,97.5,28.7,23.0,46.2,%,393,21.446,18.1653,0.0001,2.72,22.0,32.2,98.34
+available_potassium,available potassium,macronutrient,1365,97,100.0,99.0,2.7,40.7,87.5,mg/kg,37,387.3908,652.6596,3.2,71.5,160.0,295.1,2620.57
+lead,lead,contaminant,1325,90,93.1,97.4,1.7,15.6,83.4,mg/kg,15,119.1333,171.1469,7.0,24.5,42.0,114.0,620.0
+nickel,nickel,microelement,1321,84,89.0,97.4,3.9,18.5,77.7,mg/kg,7,226.1429,207.698,96.0,152.5,158.0,165.0,694.0
+bulk_density,bulk density,physical,1295,73,100.0,92.7,57.5,52.4,69.8,g/cm3,650,1.1081,0.4987,0.05,1.0,1.27,1.4575,2.6
+sand,sand,particle_size,1150,110,100.0,97.7,42.9,20.8,42.3,%,481,39.7867,28.2005,0.0,16.0,39.4,61.83,99.3
+chloride_ion,chloride ion Cl-,soil_solution,1148,63,100.0,99.1,1.2,60.9,80.8,%,14,6.8529,11.3125,0.18,0.4725,0.835,4.625,36.0
+sulfate_ion,sulfate ion SO4 2-,soil_solution,1132,61,100.0,98.9,0.7,57.7,79.0,%,8,1.1175,0.2145,0.77,1.0475,1.08,1.175,1.5
+ph_kcl,pH in KCl,acid_base,1015,77,100.0,90.2,89.6,45.6,73.0,pH,829,5.2291,1.2658,2.2,4.4,5.1,5.84,11.4
+chromium,chromium,microelement,984,50,100.0,90.8,5.8,8.9,44.6,mg/kg,57,690.4526,706.9507,0.6,15.9,237.0,1308.0,1864.0
+cadmium,cadmium,contaminant,947,63,85.9,97.9,5.0,10.0,72.7,mg/kg,39,0.1367,0.219,0.01,0.025,0.05,0.145,1.0
+exchangeable_calcium,exchangeable calcium,exchange,837,52,100.0,100.0,3.5,68.7,87.6,mol(+)/kg,29,0.8597,1.3572,0.19,0.28,0.37,0.74,5.72
+calcium_oxide_cao,calcium oxide CaO,geochemical,731,64,100.0,99.0,4.5,48.8,85.5,%,33,14.9673,20.8168,0.37,1.97,7.33,11.6,63.0
+bicarbonate_ion,bicarbonate ion HCO3-,soil_solution,709,41,100.0,100.0,1.8,50.5,89.3,%,13,25.1754,34.3215,0.02,0.03,0.04,56.0,91.0
+potassium_oxide_k2o,potassium oxide K2O,geochemical,686,37,100.0,100.0,0.0,33.7,96.9,,0,,,,,,,
+carbonate_equivalent,carbonate equivalent (CaCO3),organic,685,52,100.0,99.1,60.1,41.6,70.9,%,412,6.8177,10.9303,0.0,0.4,2.1,9.0,58.0
+cobalt,cobalt,microelement,671,48,86.1,98.5,1.5,16.5,89.4,mg/kg,10,0.104,0.0749,0.01,0.0525,0.075,0.1575,0.25
+phosphorus_pentoxide,phosphorus pentoxide (P2O5),elemental_oxide,626,38,100.0,99.2,5.3,42.0,95.5,%,33,0.417,0.321,0.04,0.13,0.42,0.67,0.99
+porosity,total porosity,physical,608,37,100.0,99.3,78.3,36.5,70.4,%,472,44.0792,18.805,0.32,41.89,48.85,55.0,87.0
+magnesium_oxide_mgo,magnesium oxide MgO,geochemical,601,54,100.0,99.0,0.0,56.9,84.9,,0,,,,,,,
+arsenic,arsenic,contaminant,529,28,71.1,99.1,0.0,13.2,89.0,,0,,,,,,,
+hydrogen_ion,hydrogen ion H+,soil_solution,492,23,100.0,100.0,8.9,57.3,73.2,%,44,21.7682,40.7037,0.6,1.925,5.8,11.25,170.8
+base_saturation,base saturation,exchange,473,25,100.0,99.8,90.9,71.7,75.9,%,429,57.6014,31.5531,0.33,24.91,66.0,85.2,100.0
+basal_respiration,basal respiration,biological,385,20,100.0,92.7,0.0,5.7,61.8,,0,,,,,,,
+manganese_oxide_mno,manganese oxide MnO,geochemical,381,37,100.0,100.0,0.0,60.6,87.4,,0,,,,,,,
+titanium_dioxide,titanium dioxide TiO2,geochemical,357,36,100.0,100.0,0.0,61.6,87.1,,0,,,,,,,
+sulfur,sulfur,macronutrient,316,4,100.0,100.0,16.1,10.1,94.0,mg/kg,51,1624.7059,2371.2598,1.0,8.0,111.0,2735.0,8730.0
+total_nitrogen,total nitrogen,macronutrient,313,40,100.0,94.9,36.4,38.0,64.2,g/kg,98,4.1802,8.9036,0.062,0.5625,1.58,2.775,50.0
+aluminium_ion,aluminium ion Al3+,soil_solution,306,20,100.0,100.0,9.2,70.3,91.5,%,28,1.0893,1.4133,0.2,0.6,0.65,0.8,7.0
+wilting_point,wilting point,hydrophysical,291,13,100.0,99.7,3.1,88.3,97.9,%,8,20.7212,2.4805,16.98,19.425,20.6,22.1225,24.4
+sodium_oxide_na2o,sodium oxide Na2O,geochemical,279,33,100.0,98.9,2.9,53.8,82.8,%,8,0.9237,0.6005,0.23,0.47,0.805,1.2825,1.8
+nitrate_ion,nitrate ion NO3-,soil_solution,275,32,100.0,95.6,7.6,22.2,75.6,mg/kg,21,6.3762,6.2193,0.3,2.5,4.5,8.2,26.0
+total_phosphorus,total phosphorus,macronutrient,269,9,100.0,100.0,3.3,11.2,75.8,g/kg,9,1.3294,0.4578,0.305,1.2,1.33,1.72,1.81
+very_coarse_sand,very coarse sand 3-1 mm,particle_size,249,11,100.0,97.6,8.8,27.7,73.5,%,22,0.3727,0.5551,0.0,0.03,0.085,0.715,1.5
+ammonium_ion,ammonium ion NH4+,soil_solution,229,23,100.0,96.1,16.6,22.7,83.0,mg/kg,38,8.6713,8.1355,0.46,3.47,5.5,10.45,34.3
+field_capacity,field capacity,hydrophysical,225,22,100.0,92.9,8.0,16.9,69.8,%,16,17.1737,10.3232,4.8,8.0,16.65,24.16,36.28
+carbonate_ion,carbonate ion CO3 2-,soil_solution,214,18,100.0,94.9,0.0,67.8,81.3,,0,,,,,,,
+urease_activity,urease activity,biological,207,12,100.0,91.3,0.0,52.2,83.6,,0,,,,,,,
+mercury,mercury,contaminant,195,13,87.2,97.9,11.8,5.6,92.3,mg/kg,23,23347.831,23517.1235,0.01,0.0235,21000.0,32000.0,90000.0
+exchangeable_acidity,exchangeable acidity,acid_base,174,11,100.0,100.0,0.0,51.1,93.1,,0,,,,,,,
+hydrogen_carbon_ratio,H:C ratio,organic,164,22,100.0,100.0,0.0,4.3,88.4,,0,,,,,,,
+total_dissolved_solids,total dissolved solids,salinity,142,12,100.0,100.0,4.2,59.2,93.0,g/L,6,55.25,39.8192,15.3,31.4,37.65,85.75,109.8
+sodium_adsorption_ratio,sodium adsorption ratio,salinity,139,9,100.0,100.0,0.0,7.9,20.9,,0,,,,,,,
+aggregate_stability,aggregate stability,physical,125,8,100.0,100.0,33.6,6.4,87.2,%,42,3.6012,3.7801,0.2,1.0,2.27,4.95,19.5
+dehydrogenase_activity,dehydrogenase activity,biological,121,12,100.0,100.0,0.0,35.5,86.8,,0,,,,,,,
+oxygen_carbon_ratio,O:C ratio,organic,112,19,100.0,97.3,0.0,6.2,86.6,,0,,,,,,,
+molybdenum,molybdenum,microelement,106,11,100.0,99.1,0.0,25.5,78.3,,0,,,,,,,
+carbon_phosphorus_ratio,C:P ratio,organic,96,4,100.0,100.0,0.0,3.1,43.8,,0,,,,,,,
+saturated_hydraulic_conductivity,saturated hydraulic conductivity,hydrophysical,95,11,100.0,100.0,3.2,51.6,76.8,cm/day,3,14.2,10.4159,7.5,8.2,8.9,17.55,26.2
+exchangeable_sodium_percentage,exchangeable sodium percentage,salinity,94,7,100.0,98.9,85.1,66.0,8.5,%,80,20.7855,23.4201,0.77,3.1875,11.07,27.725,97.0
+gravimetric_water_content,gravimetric water content,hydrophysical,86,11,100.0,86.0,57.0,8.1,44.2,%,49,26.9245,14.4819,0.0,15.0,30.0,45.0,52.8
+redox_potential,redox potential,geochemical,76,9,100.0,100.0,36.8,19.7,50.0,mV,28,82.4286,248.1994,-243.0,-140.5,-30.0,319.75,467.0
+potassium_exchangeable,exchangeable potassium,exchange,70,5,100.0,100.0,0.0,4.3,22.9,,0,,,,,,,
+sodium,sodium,exchange,62,4,100.0,100.0,0.0,48.4,100.0,,0,,,,,,,
+exchangeable_hydrogen,exchangeable hydrogen,acid_base,60,4,100.0,100.0,0.0,80.0,100.0,,0,,,,,,,
+nitrate_n,nitrate nitrogen,macronutrient,57,8,100.0,100.0,17.5,1.8,96.5,mg/kg,10,65.4,27.2568,34.0,41.0,57.0,92.0,100.0
+soil_temperature,soil temperature,environmental,57,9,100.0,100.0,0.0,3.5,66.7,,0,,,,,,,
+ammonium_n,ammonium nitrogen,macronutrient,54,5,100.0,100.0,0.0,1.9,85.2,,0,,,,,,,
+penetration_resistance,penetration resistance,physical,45,2,100.0,100.0,0.0,0.0,0.0,,0,,,,,,,
+exchangeable_magnesium,exchangeable magnesium,exchange,35,2,100.0,100.0,82.9,100.0,100.0,mol(+)/kg,29,0.3455,0.2253,0.09,0.16,0.28,0.55,0.84
+microbial_biomass_carbon,microbial biomass carbon,biological,33,4,100.0,100.0,0.0,18.2,0.0,,0,,,,,,,
+inorganic_carbon,inorganic carbon,organic,29,5,100.0,100.0,55.2,20.7,100.0,g/kg,16,6.1188,5.7125,0.1,1.8,5.25,8.0,17.9
+particle_density,particle density,physical,28,5,100.0,100.0,75.0,0.0,21.4,g/cm3,21,2.5219,0.1325,2.18,2.495,2.535,2.58,2.75
+total_potassium,total potassium,macronutrient,23,3,100.0,91.3,13.0,13.0,13.0,g/kg,1,46.0,,46.0,46.0,46.0,46.0,46.0
+mineral_nitrogen,mineral nitrogen,macronutrient,20,4,100.0,100.0,50.0,40.0,100.0,mg/kg,10,13.0,12.1381,2.0,4.0,9.5,19.25,39.0
+calcium_ion_activity_paste,calcium ion activity in soil paste,soil_solution,16,1,100.0,100.0,100.0,62.5,100.0,mmol/L,16,0.0398,0.0354,0.001,0.0075,0.0325,0.0645,0.126
+phosphatase_activity,phosphatase activity,biological,11,2,100.0,100.0,0.0,90.9,90.9,,0,,,,,,,
+selenium,selenium,contaminant,6,1,100.0,66.7,0.0,0.0,0.0,,0,,,,,,,
+aluminium_exchangeable,exchangeable aluminium,exchange,6,1,100.0,100.0,0.0,0.0,100.0,,0,,,,,,,
+water_holding_capacity,water holding capacity,hydrophysical,3,1,100.0,100.0,0.0,0.0,100.0,,0,,,,,,,
+microbial_biomass_nitrogen,microbial biomass nitrogen,biological,2,1,100.0,100.0,0.0,0.0,0.0,,0,,,,,,,

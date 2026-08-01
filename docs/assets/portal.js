@@ -65,7 +65,7 @@ const STRINGS = {
     'about.rule1': 'Значение со статусом <code>missing_unit</code> не имеет подставленной «по смыслу» единицы.',
     'about.rule2': 'Единственная координата в статье — это контекст документа, а не GPS каждой строки таблицы.',
     'about.rule3': 'pH(H₂O), pH(KCl) и pH без указания метода — три разных показателя.',
-    'about.rule4': 'Русский оригинал и его перевод в Eurasian Soil Science не объединены: доказанного соответствия между ними пока нет.',
+    'about.rule4': 'Для 47 пар статей соответствие «русский оригинал ↔ перевод в Eurasian Soil Science» установлено по отпечатку числовых значений таблиц (статус candidate, документы не объединяются). Для остальных доказанного соответствия пока нет — верхняя граница риска двойного учёта: 1.3% слоя.',
     'about.rule5': 'Набор точек не является вероятностной выборкой по территории России.',
     'about.downloads': 'Данные для скачивания', 'about.dl.file': 'Файл', 'about.dl.what': 'Что это',
     'about.dl.size': 'Размер', 'about.repro': 'Воспроизведение',
@@ -152,7 +152,7 @@ const STRINGS = {
     'about.rule1': 'A value with status <code>missing_unit</code> has no unit assigned "by meaning".',
     'about.rule2': 'A single coordinate in an article is document context, not a GPS fix for every table row.',
     'about.rule3': 'pH(H₂O), pH(KCl) and pH with unstated method are three different variables.',
-    'about.rule4': 'A Russian original and its Eurasian Soil Science translation are not merged: no proven correspondence between them exists yet.',
+    'about.rule4': 'For 47 article pairs, correspondence between the Russian original and its Eurasian Soil Science translation has been established by table-value fingerprint (status candidate, documents are not merged). For the rest no proven correspondence exists yet — upper bound on double-counting risk: 1.3% of the layer.',
     'about.rule5': 'The point set is not a probability sample of Russian territory.',
     'about.downloads': 'Downloads', 'about.dl.file': 'File', 'about.dl.what': 'What it is',
     'about.dl.size': 'Size', 'about.repro': 'Reproducing this build',
@@ -331,6 +331,9 @@ const DOWNLOADS = [
   ['data/property_census.csv', {
     ru: 'Перепись всех 101 свойств: охват единицей, глубиной, координатой',
     en: 'Census of all 101 properties: unit, depth and spatial coverage' }, '17 KB'],
+  ['data/document_links.csv', {
+    ru: 'Сопоставленные пары «русский оригинал ↔ перевод Springer» (47 пар)',
+    en: 'Matched Russian-original / Springer-translation article pairs (47 pairs)' }, '5 KB'],
   ['data/full_table_observation_audit.json', {
     ru: 'Аудит полноты слоя наблюдений', en: 'Observation layer coverage audit' }, '1 KB'],
   ['data/observation_quality_audit.json', {

@@ -1,7 +1,7 @@
 property_id,property,property_ru,category,category_ru,observations,documents,unit_proven_pct,header_trusted_pct,value_plausible_pct,with_depth_pct,with_spatial_pct,unit_mode,median,p25,p75,n_metric
 organic_matter,organic matter/humus,органическое вещество (гумус),organic,органическое вещество и углерод,5717,304,61.3,100.0,98.3,36.0,77.7,%,3.1,1.361,4.8,3475
 ph_h2o,pH in water,pH водной вытяжки,acid_base,кислотно-основные,5024,267,97.4,100.0,81.0,46.8,87.6,pH,6.42,5.4,7.7,3947
-soil_organic_carbon,soil organic carbon,органический углерод почвы,organic,органическое вещество и углерод,4761,315,67.9,100.0,97.9,36.3,72.9,g/kg,15.8,5.8,40.0,3221
+soil_organic_carbon,soil organic carbon,органический углерод почвы,organic,органическое вещество и углерод,4761,315,67.9,100.0,97.0,36.3,72.9,g/kg,15.1,5.7,38.3,3175
 ph_unspecified,pH (method unspecified),pH (экстрагент не указан автором),acid_base,кислотно-основные,4688,314,86.5,100.0,72.1,22.4,54.8,pH,6.7,5.1,7.8,2844
 magnesium_ion,magnesium ion Mg2+,ион магния Mg2+ (метод не указан),soil_solution,почвенный раствор,3952,169,0.7,100.0,99.6,49.5,85.2,%,86.0,73.0,88.0,27
 calcium_ion,calcium ion Ca2+,ион кальция Ca2+ (метод не указан),soil_solution,почвенный раствор,3690,160,6.3,100.0,99.7,51.2,84.4,%,23.09,11.41,55.78,231
@@ -56,7 +56,7 @@ basal_respiration,basal respiration,базальное дыхание,biological
 manganese_oxide_mno,manganese oxide MnO,оксид марганца MnO,geochemical,геохимия,381,37,0.0,100.0,100.0,60.6,92.1,,,,,0
 titanium_dioxide,titanium dioxide TiO2,диоксид титана TiO2,geochemical,геохимия,357,36,0.0,100.0,100.0,61.6,92.2,,,,,0
 sulfur,sulfur,общая сера,macronutrient,макроэлементы,316,4,16.1,100.0,100.0,10.1,94.0,mg/kg,111.0,7.0,2550.0,51
-total_nitrogen,total nitrogen,общий азот,macronutrient,макроэлементы,313,40,36.4,100.0,100.0,38.0,72.2,g/kg,2.0,0.9,3.2,114
+total_nitrogen,total nitrogen,общий азот,macronutrient,макроэлементы,313,40,36.4,100.0,94.9,38.0,72.2,g/kg,1.58,0.53,2.7,98
 aluminium_ion,aluminium ion Al3+,ион алюминия Al3+ (метод не указан),soil_solution,почвенный раствор,306,20,9.2,100.0,100.0,70.3,91.5,%,0.6,0.6,0.8,28
 wilting_point,wilting point,влажность завядания,hydrophysical,гидрофизические свойства,291,13,3.1,100.0,99.7,88.3,97.9,%,20.0,18.3,21.7,8
 sodium_oxide_na2o,sodium oxide Na2O,оксид натрия (Na₂O),geochemical,геохимические свойства,279,33,2.9,100.0,98.9,53.8,90.7,%,0.55,0.41,1.14,8
@@ -92,7 +92,7 @@ exchangeable_magnesium,exchangeable magnesium,обменный магний,exch
 microbial_biomass_carbon,microbial biomass carbon,углерод микробной биомассы,biological,биологические свойства,33,4,0.0,100.0,100.0,18.2,18.2,,,,,0
 inorganic_carbon,inorganic carbon,неорганический углерод,organic,органическое вещество и углерод,29,5,55.2,100.0,100.0,20.7,100.0,g/kg,4.9,1.2,7.0,16
 particle_density,particle density,плотность твёрдой фазы,physical,физические свойства,28,5,75.0,100.0,100.0,0.0,21.4,g/cm3,2.535,2.495,2.58,21
-total_potassium,total potassium,общий калий,macronutrient,макроэлементы,23,3,13.0,100.0,100.0,13.0,30.4,g/kg,88.0,46.0,88.0,3
+total_potassium,total potassium,общий калий,macronutrient,макроэлементы,23,3,13.0,100.0,91.3,13.0,30.4,g/kg,46.0,46.0,46.0,1
 mineral_nitrogen,mineral nitrogen,минеральный азот,macronutrient,макроэлементы,20,4,50.0,100.0,100.0,40.0,100.0,mg/kg,7.0,4.0,14.0,10
 calcium_ion_activity_paste,calcium ion activity in soil paste,активность ионов кальция в почвенной пасте,soil_solution,почвенный раствор,16,1,100.0,100.0,100.0,62.5,100.0,mmol/L,0.032,0.003,0.063,16
 phosphatase_activity,phosphatase activity,фосфатазная активность,biological,биологические свойства,11,2,0.0,100.0,100.0,90.9,90.9,,,,,0
