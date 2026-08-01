@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пространство, компоненты, время — Russian Soil Observatory</title>
+<link rel="stylesheet" href="assets/portal.css?v=20260801b">
+<style>
+  main { max-width: 82ch; }
+  main h1 { font-size: 1.7rem; margin-top: .2em; }
+  main h2 { margin-top: 1.9em; padding-top: .3em; border-top: 1px solid var(--border); }
+  main h3 { margin-top: 1.4em; }
+  main table.data td, main table.data th { white-space: normal; }
+  main table.data td.num, main table.data th.num { white-space: nowrap; }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+  main pre.mono { background: var(--surface-2); padding: .85rem 1rem; border-radius: 9px;
+                   overflow-x: auto; font-size: .8rem; line-height: 1.5; }
+  main figure { margin: 1.9em 0; }
+  main figure img { width: 100%; max-width: 100%; height: auto; border-radius: 8px;
+                     border: 1px solid var(--border); }
+  main figcaption { margin-top: .6rem; font-size: .84rem; color: var(--text-muted);
+                     line-height: 1.5; }
+  .fig-dark { display: none; }
+  @media (prefers-color-scheme: dark) {
+    .fig-light { display: none; } .fig-dark { display: block; }
+  }
+  :root[data-theme="light"] .fig-light { display: block; }
+  :root[data-theme="light"] .fig-dark { display: none; }
+  :root[data-theme="dark"] .fig-light { display: none; }
+  :root[data-theme="dark"] .fig-dark { display: block; }
+</style>
+</head>
+<body>
+<header class="masthead"><div class="masthead-inner">
+  <h1 class="brand">Russian Soil Observatory<small>научный анализ базы данных</small></h1>
+  <span class="masthead-spacer"></span>
+  <a class="pill" href="index.html">← к геопорталу</a>
+</div></header>
+<main>
+<h1>Пространство, компоненты, время: что говорят 62 805 наблюдений</h1>
+<p><strong>Russian Soil Observatory · 1 августа 2026 г.</strong></p>
+<div class="callout"><strong>Abstract.</strong> Analysis of 62 805 soil measurements mined from 4 180 Russian soil-science publications. Recovering study locations from article prose lifted spatial coverage from 6.7% to 73% of the layer; coordinates printed in Methods sections validate at 0.2 km median error against the curated layer. The resulting picture contains one strongly positive and one strongly negative result. Soil pH retains a clear zonal signal recoverable from literature alone (ρ = −0.43, −0.083 pH per degree of latitude), with a carbonate maximum in the 48–52° steppe belt and an unexpected rise again above 68°. Soil organic carbon retains <strong>none</strong> (R² = 0.002 linear, 0.009 quadratic): within-zone variance from land use and experimental contrast completely swamps the latitudinal gradient. The two properties behave just as differently down the profile — carbon in the south drops twenty-fold over 130 cm, while northern profiles are effectively uniform. Co-occurrence analysis shows properties are measured in fixed packages rather than individually, which constrains what any literature-mined dataset can cover.</div>
+<hr>
+<h2>0. Что изменилось перед анализом</h2>
+<p>Прежний слой позволял пространственный анализ только для 6.7% наблюдений — тех, где авторы напечатали координату. Оставшиеся 73.8% числились «без данных о локации». Это оказалось неверно: проверка полных текстов показала, что <strong>84.6% таких статей называют район работ прямо в тексте</strong>, а часть печатает и точные координаты в разделе Methods. Экстрактор просто никогда не запускался по текстовым артефактам.</p>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Слой привязки</th><th class="num">Публикаций</th><th class="num">Наблюдений</th><th class="num">Медианная ошибка</th></tr></thead><tbody><tr><td class="">Сообщённая координата (курированный слой)</td><td class="num">444</td><td class="num">4 219</td><td class="num">— (эталон)</td></tr><tr><td class=""><strong>Координаты DMS из текста статьи</strong></td><td class="num"><strong>278</strong></td><td class="num"><strong>3 779</strong></td><td class="num"><strong>0.2 км</strong></td></tr><tr><td class=""><strong>Центроид названного региона</strong></td><td class="num"><strong>2 123</strong></td><td class="num"><strong>37 913</strong></td><td class="num"><strong>174 км</strong></td></tr><tr><td class=""><strong>Итого</strong></td><td class="num"><strong>2 845</strong></td><td class="num"><strong>45 911 (73.1%)</strong></td><td class="num"></td></tr></tbody></table></div>
+<p>DMS-извлечение проверено на 216 публикациях, где известны оба источника: медиана расхождения <strong>0.2 км</strong>, для статей с единственной площадкой — <strong>0.0 км</strong>. Региональные центроиды проверены на 294 публикациях: медиана 174 км, 90% в пределах 1000 км. Это разные инструменты, и ниже они используются по-разному: точные градиенты считаются только по точным слоям, зональный состав — по всем.</p>
+<p>Побочная находка: <strong>160 публикаций описывают зарубежные площадки</strong> — Антарктиду, Вьетнам, Чили, Израиль, Германию. Это не ошибки распознавания, а реальная международная тематика российских журналов. Из зонального анализа они исключены по границам (41–82° с. ш., 19–190° в. д.).</p>
+<hr>
+<h2>1. География исследовательского усилия</h2>
+<figure><img class="fig-light" src="figures/fig1_effort_light.png" alt="Распределение изученных площадок. Слева — положение публикаций по трём слоям привязки; справа — сколько публикаций приходится на каждые 10° долготы."><img class="fig-dark" src="figures/fig1_effort_dark.png" alt="Распределение изученных площадок. Слева — положение публикаций по трём слоям привязки; справа — сколько публикаций приходится на каждые 10° долготы."><figcaption>Распределение изученных площадок. Слева — положение публикаций по трём слоям привязки; справа — сколько публикаций приходится на каждые 10° долготы.</figcaption></figure>
+<p><strong>73.1% публикаций относятся к Европейской России</strong> (западнее 60° в. д.), которая составляет около 23% территории страны. Восточнее 100° в. д. — всего 93 публикации из 809 привязанных.</p>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Природная зона (по широте)</th><th class="num">Публикаций</th><th class="num">Наблюдений</th><th class="num">Свойств</th><th class="num">Точная привязка</th></tr></thead><tbody><tr><td class="">Арктика и субарктика (&gt;66°)</td><td class="num">70</td><td class="num">3 785</td><td class="num">38</td><td class="num">51%</td></tr><tr><td class="">Северная тайга (60–66°)</td><td class="num">82</td><td class="num">3 421</td><td class="num">46</td><td class="num">30%</td></tr><tr><td class="">Средняя тайга (56–60°)</td><td class="num">173</td><td class="num">8 134</td><td class="num">51</td><td class="num">13%</td></tr><tr><td class="">Южная тайга и лесостепь (52–56°)</td><td class="num">266</td><td class="num">14 658</td><td class="num">55</td><td class="num">13%</td></tr><tr><td class="">Степь (48–52°)</td><td class="num">107</td><td class="num">3 829</td><td class="num">42</td><td class="num">28%</td></tr><tr><td class="">Сухая степь и предгорья (&lt;48°)</td><td class="num">117</td><td class="num">4 092</td><td class="num">50</td><td class="num">18%</td></tr></tbody></table></div>
+<p>Здесь видна закономерность, которую стоит назвать прямо: <strong>доля точных координат максимальна в Арктике (51%) и минимальна в освоенной полосе (13%)</strong>. Чем экзотичнее и труднодоступнее объект, тем аккуратнее авторы фиксируют, где именно он находится. В густо изученной средней полосе место работ описывается словами — «опытное поле», «стационар», «Курская область» — потому что автор считает его известным читателю. Для машинного анализа литературы это означает, что качество пространственной привязки систематически связано с типом объекта, а не случайно.</p>
+<hr>
+<h2>2. Зональность: pH сохраняется, углерод — нет</h2>
+<figure><img class="fig-light" src="figures/fig2_zonal_light.png" alt="Широтные градиенты. Слева — pH по публикациям с точной привязкой; в центре — средние по 4-градусным полосам с разбросом; справа — органический углерод верхнего слоя в логарифмическом масштабе."><img class="fig-dark" src="figures/fig2_zonal_dark.png" alt="Широтные градиенты. Слева — pH по публикациям с точной привязкой; в центре — средние по 4-градусным полосам с разбросом; справа — органический углерод верхнего слоя в логарифмическом масштабе."><figcaption>Широтные градиенты. Слева — pH по публикациям с точной привязкой; в центре — средние по 4-градусным полосам с разбросом; справа — органический углерод верхнего слоя в логарифмическом масштабе.</figcaption></figure>
+<h3>2.1. Реакция среды подчиняется зональности</h3>
+<p>По 90 публикациям с точной координатой: <strong>ρ = −0.43, p = 2.9·10⁻⁵, наклон −0.083 единицы pH на градус широты</strong> (R² = 0.17). Это устойчивый и статистически надёжный зональный сигнал, восстановленный исключительно из литературы.</p>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Полоса широт</th><th class="num">Публикаций</th><th class="num">Средний pH</th><th class="num">σ</th></tr></thead><tbody><tr><td class="">40–44°</td><td class="num">11</td><td class="num">7.38</td><td class="num">1.30</td></tr><tr><td class="">44–48°</td><td class="num">44</td><td class="num">6.82</td><td class="num">1.38</td></tr><tr><td class=""><strong>48–52°</strong></td><td class="num">29</td><td class="num"><strong>7.48</strong></td><td class="num">1.08</td></tr><tr><td class="">52–56°</td><td class="num">129</td><td class="num">6.51</td><td class="num">1.27</td></tr><tr><td class="">56–60°</td><td class="num">83</td><td class="num">5.78</td><td class="num">1.02</td></tr><tr><td class="">60–64°</td><td class="num">43</td><td class="num">5.59</td><td class="num">1.41</td></tr><tr><td class="">64–68°</td><td class="num">28</td><td class="num">5.71</td><td class="num">1.56</td></tr><tr><td class=""><strong>68–72°</strong></td><td class="num">13</td><td class="num"><strong>6.05</strong></td><td class="num">1.42</td></tr></tbody></table></div>
+<p>Кривая не монотонна, и обе неровности содержательны:</p>
+<p><strong>Максимум 7.48 в полосе 48–52°</strong> — это чернозёмно-каштановый пояс с карбонатным горизонтом в пределах профиля. Он выше, чем в более южной полосе 44–48° (6.82), куда попадают кислые почвы Черноморского побережья и горных районов Кавказа. То есть «чем южнее, тем щелочнее» неверно: максимум щёлочности приходится не на юг, а на сухую степь.</p>
+<p><strong>Подъём до 6.05 выше 68°</strong> — контринтуитивный результат: самые северные почвы оказываются менее кислыми, чем почвы 60–64° (5.59). Правдоподобное объяснение — криогенное перемешивание, поднимающее карбонатсодержащий материал к поверхности, слабое промывание в условиях многолетней мерзлоты и карбонатные почвообразующие породы значительной части Арктики. Выборка мала (13 публикаций), но разница превышает половину стандартного отклонения.</p>
+<h3>2.2. Органический углерод зональности не показывает вообще</h3>
+<p>Это главный отрицательный результат работы. По 165 публикациям с привязкой:</p>
+<ul class="clean">
+<li>линейная зависимость log(C) от широты: <strong>R² = 0.002, p = 0.70</strong>;</li>
+<li>квадратичная (на случай максимума в чернозёмной полосе): <strong>R² = 0.009</strong>.</li>
+</ul>
+<p>Сигнала нет ни в каком виде. Правая панель рисунка 2 показывает почему: при любой широте значения занимают почти три порядка — от 1 до 500 г/кг.</p>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Полоса широт</th><th class="num">Публикаций</th><th class="num">Медиана C, г/кг</th><th class="">Межквартильный размах</th></tr></thead><tbody><tr><td class="">44–48°</td><td class="num">11</td><td class="num">21.8</td><td class="">11.0–25.0</td></tr><tr><td class="">48–52°</td><td class="num">29</td><td class="num">22.0</td><td class="">6.8–41.0</td></tr><tr><td class="">52–56°</td><td class="num">52</td><td class="num">24.2</td><td class="">13.9–36.3</td></tr><tr><td class="">56–60°</td><td class="num">44</td><td class="num">16.4</td><td class="">6.8–30.6</td></tr><tr><td class="">60–64°</td><td class="num">13</td><td class="num">14.5</td><td class="">7.5–47.5</td></tr><tr><td class="">64–68°</td><td class="num">7</td><td class="num">22.5</td><td class="">13.5–59.1</td></tr></tbody></table></div>
+<p>Причина не в качестве извлечения — эти значения прошли и проверку единицы, и проверку правдоподобности. Причина в том, <strong>что именно публикуют</strong>. Статья о почвенном углероде почти никогда не описывает «фоновую почву зоны»: она сравнивает пашню с залежью, удобренный вариант с контролем, эродированный склон с ненарушенным, торфяник с минеральной почвой. Внутризональная изменчивость, которую авторы создают своим дизайном, на порядок превышает межзональную.</p>
+<p><strong>Практический вывод.</strong> Литературные данные по pH пригодны для зонального картографирования напрямую. Литературные данные по органическому углероду — нет: без стратификации по угодью, типу почвы и виду воздействия они дают шум. Это существенное ограничение для любых попыток строить карты запасов углерода по опубликованным источникам.</p>
+<hr>
+<h2>3. Профиль: юг и север устроены по-разному</h2>
+<figure><img class="fig-light" src="figures/fig4_depth_light.png" alt="Поведение свойств по глубине. Слева — медианный органический углерод в логарифмическом масштабе для северных (&gt;58°) и южных (&lt;54°) публикаций; справа — pH водной и солевой вытяжки."><img class="fig-dark" src="figures/fig4_depth_dark.png" alt="Поведение свойств по глубине. Слева — медианный органический углерод в логарифмическом масштабе для северных (&gt;58°) и южных (&lt;54°) публикаций; справа — pH водной и солевой вытяжки."><figcaption>Поведение свойств по глубине. Слева — медианный органический углерод в логарифмическом масштабе для северных (&gt;58°) и южных (&lt;54°) публикаций; справа — pH водной и солевой вытяжки.</figcaption></figure>
+<p><strong>Углерод.</strong> В южных профилях содержание падает от ~50 г/кг в верхнем горизонте до ~2.5 г/кг на 130 см — <strong>двадцатикратное убывание</strong>, экспоненциальная посадка даёт характерную глубину 49 см (R² = 0.38). В северных профилях зависимости от глубины практически нет (R² = 0.01): углерод держится на уровне 8–14 г/кг по всей толще.</p>
+<p>Это количественное выражение принципиально разного механизма. На юге органика сосредоточена в гумусовом горизонте и быстро убывает — классический аккумулятивный профиль. На севере криотурбация, оглеение и погребённые органогенные горизонты распределяют углерод по всему профилю. Отсюда прямое следствие для инвентаризации: <strong>оценка запасов углерода по одному верхнему слою 0–20 см систематически занижает северные запасы и приемлема для южных</strong>.</p>
+<p><strong>Реакция среды.</strong> pH(H₂O) растёт с 5.75 в верхнем слое до 8.2 ниже 100 см — подщелачивание и карбонатонакопление в нижней части профиля. Разница между водной и солевой вытяжкой составляет <strong>1.17 единицы</strong> (6.51 против 5.24), что совпадает с общеизвестным соотношением. Это независимая проверка того, что восстановление метода pH из LaTeX-разметки (см. <a href="data_audit.md">аудит базы</a>, раздел 2.3) выполнено верно: если бы методы перепутались, разница схлопнулась бы.</p>
+<hr>
+<h2>4. Компонентная структура: свойства измеряют пакетами</h2>
+<figure><img class="fig-light" src="figures/fig3_cooccurrence_light.png" alt="Совместная встречаемость свойств в одной таблице, индекс Жаккара. Тёмные клетки — свойства, которые почти всегда печатают вместе."><img class="fig-dark" src="figures/fig3_cooccurrence_dark.png" alt="Совместная встречаемость свойств в одной таблице, индекс Жаккара. Тёмные клетки — свойства, которые почти всегда печатают вместе."><figcaption>Совместная встречаемость свойств в одной таблице, индекс Жаккара. Тёмные клетки — свойства, которые почти всегда печатают вместе.</figcaption></figure>
+<p>Единица совместного измерения — таблица: свойства, напечатанные в одной таблице, определены по одному набору образцов. Анализ выявляет устойчивые блоки:</p>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Пара свойств</th><th class="num">Индекс Жаккара</th><th class="num">Таблиц</th></tr></thead><tbody><tr><td class="">кальций — магний</td><td class="num">0.725</td><td class="num">74</td></tr><tr><td class="">медь — цинк</td><td class="num">0.725</td><td class="num">132</td></tr><tr><td class="">подвижный фосфор — подвижный калий</td><td class="num">0.692</td><td class="num">90</td></tr><tr><td class="">свинец — цинк</td><td class="num">0.647</td><td class="num">110</td></tr><tr><td class="">песок — пыль</td><td class="num">0.645</td><td class="num">80</td></tr><tr><td class="">медь — свинец</td><td class="num">0.624</td><td class="num">106</td></tr><tr><td class="">свинец — никель</td><td class="num">0.621</td><td class="num">90</td></tr><tr><td class="">медь — никель</td><td class="num">0.592</td><td class="num">100</td></tr><tr><td class="">ил — пыль</td><td class="num">0.544</td><td class="num">86</td></tr><tr><td class="">хром — никель</td><td class="num">0.500</td><td class="num">62</td></tr></tbody></table></div>
+<p>Просматриваются четыре почти не пересекающихся «синдрома измерения»:</p>
+<ul class="clean">
+<li><strong>Тяжёлые металлы</strong> — Cu, Zn, Pb, Ni, Cr связаны попарно с индексом 0.5–0.73. Это самый плотный блок: если статья определяет один металл, она почти наверняка определяет и остальные четыре.</li>
+<li><strong>Гранулометрия</strong> — песок, пыль, ил, связанные логикой суммы фракций.</li>
+<li><strong>Агрохимия</strong> — подвижные фосфор и калий (0.69), часто с азотом.</li>
+<li><strong>Обменные основания</strong> — кальций и магний (0.73).</li>
+</ul>
+<p>Практическое следствие для пользователя базы: <strong>запрашивать редкое свойство в отрыве от его блока бессмысленно</strong>. Если нужен никель, данные придут вместе с медью, цинком и свинцом — и почти никогда вместе с гранулометрией или агрохимией. Это же объясняет, почему сочетание «тяжёлые металлы + физические свойства» в базе почти отсутствует, хотя каждое из них представлено тысячами значений: их измеряют разные лаборатории для разных задач.</p>
+<hr>
+<h2>5. Время: тематика меняется, география — медленно</h2>
+<figure><img class="fig-light" src="figures/fig5_time_light.png" alt="Временная динамика. Слева — состав измеряемых свойств по годам; справа — медианная долгота исследованных площадок."><img class="fig-dark" src="figures/fig5_time_dark.png" alt="Временная динамика. Слева — состав измеряемых свойств по годам; справа — медианная долгота исследованных площадок."><figcaption>Временная динамика. Слева — состав измеряемых свойств по годам; справа — медианная долгота исследованных площадок.</figcaption></figure>
+<p><strong>Тематический сдвиг.</strong> Доля наблюдений по микроэлементам и загрязнителям выросла с <strong>17.7%</strong> (2006–2010) до <strong>21.8%</strong> (2020–2025). Сдвиг реальный, но умеренный: корпус остаётся в основном классически-почвоведческим, ядро из pH, органического вещества и гранулометрии сохраняет доминирование все двадцать лет.</p>
+<p><strong>Географический сдвиг.</strong> Медианная долгота изученных площадок смещается на восток со скоростью <strong>+0.36° в год</strong> (p = 0.042): с 41.0° в. д. в 2006–2010 до 44.0° в. д. в 2020–2025. Тренд статистически значим, но по величине скромен — за двадцать лет фронт исследований сдвинулся примерно на 300 км. Дисбаланс между Европейской и Азиатской Россией сокращается, но темпами, при которых он сохранится ещё несколько десятилетий.</p>
+<hr>
+<h2>6. Что из этого следует</h2>
+<p><strong>Для тех, кто пользуется базой.</strong></p>
+<ul class="clean">
+<li>pH — надёжный зональный показатель, пригодный для картографирования по литературе. Органический углерод — нет, без стратификации по угодью.</li>
+<li>Свойства приходят блоками; планируйте выборку по блокам, а не по отдельным показателям.</li>
+<li>Пространственная привязка неоднородна по качеству и это связано с объектом исследования: используйте поле <code>tier</code> и не смешивайте точные координаты с региональными центроидами в одном анализе.</li>
+<li>160 публикаций описывают зарубежные площадки — фильтруйте по границам, если нужен только российский материал.</li>
+</ul>
+<p><strong>Для развития базы.</strong></p>
+<ul class="clean">
+<li><strong>Единицы из подписей к таблицам</strong> — по-прежнему главный резерв: 55.9% значений не имеют доказанной единицы, а подпись уже хранится в базе.</li>
+<li><strong>Извлечение угодья и вида воздействия</strong> из текста (пашня / залежь / лес / удобрено / загрязнено). Именно этот признак, а не координата, объясняет разброс углерода — без него углеродная часть базы аналитически неполна.</li>
+<li><strong>Множественные координаты на статью.</strong> Сейчас берётся первая пара DMS; статьи с несколькими площадками привязываются к одной из них. Извлечено 1 081 координатных пар при 508 использованных.</li>
+<li><strong>Распознавание генетических горизонтов</strong> — заполнено у 12 наблюдений из 62 805, что делает невозможным горизонт-ориентированный анализ.</li>
+</ul>
+<hr>
+<h2>Воспроизведение</h2>
+<pre class="mono"><code>python3 observatory_v1/infer_document_study_region.py --db DB
+python3 observatory_v1/infer_document_precise_coordinates.py --db DB
+python3 observatory_v1/merge_spatial_layers.py --db DB
+python3 docs/scripts/build_insight_analysis.py --db DB --output docs/figures</code></pre>
+<p>Все числа и рисунки этого отчёта воспроизводятся указанной последовательностью; сводка — в <a href="figures/insights.json"><code>figures/insights.json</code></a>. Методика построения слоя наблюдений и его ограничения описаны отдельно в <a href="data_audit.md">аудите базы</a>.</p>
+</main>
+<footer><div class="inner">Russian Soil Observatory · CC BY 4.0</div></footer>
+</body>
+</html>

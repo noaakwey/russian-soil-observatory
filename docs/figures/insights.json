@@ -1,0 +1,277 @@
+{
+  "layer": {
+    "observations": 62805,
+    "trusted": 53856,
+    "metric": 19918,
+    "located": 42902,
+    "precise": 4989,
+    "documents_outside_russia": 160
+  },
+  "effort": {
+    "documents_located": 809,
+    "observations_located": 37524,
+    "european_documents_pct": 73.1,
+    "european_area_pct": 23.0,
+    "documents_east_of_100E": 93,
+    "by_tier": {
+      "region": 645,
+      "reported": 137,
+      "dms": 27
+    }
+  },
+  "zonal": {
+    "ph_latitude": {
+      "n_documents": 90,
+      "spearman_rho": -0.426,
+      "p_value": 2.86e-05,
+      "slope_per_degree": -0.0828,
+      "r_squared": 0.17
+    },
+    "ph_bands": [
+      {
+        "band": "40–44",
+        "n_documents": 11,
+        "mean_ph": 7.38,
+        "sd": 1.3
+      },
+      {
+        "band": "44–48",
+        "n_documents": 44,
+        "mean_ph": 6.82,
+        "sd": 1.38
+      },
+      {
+        "band": "48–52",
+        "n_documents": 29,
+        "mean_ph": 7.48,
+        "sd": 1.08
+      },
+      {
+        "band": "52–56",
+        "n_documents": 129,
+        "mean_ph": 6.51,
+        "sd": 1.27
+      },
+      {
+        "band": "56–60",
+        "n_documents": 83,
+        "mean_ph": 5.78,
+        "sd": 1.02
+      },
+      {
+        "band": "60–64",
+        "n_documents": 43,
+        "mean_ph": 5.59,
+        "sd": 1.41
+      },
+      {
+        "band": "64–68",
+        "n_documents": 28,
+        "mean_ph": 5.71,
+        "sd": 1.56
+      },
+      {
+        "band": "68–72",
+        "n_documents": 13,
+        "mean_ph": 6.05,
+        "sd": 1.42
+      }
+    ],
+    "soc_latitude": {
+      "n_documents": 165,
+      "spearman_rho": -0.031,
+      "p_value": 0.697,
+      "median_g_per_kg": 20.6
+    }
+  },
+  "cooccurrence": {
+    "tables_with_multiple_properties": 930,
+    "strongest_pairs": [
+      {
+        "a": "calcium",
+        "b": "magnesium",
+        "jaccard": 0.725,
+        "tables": 74
+      },
+      {
+        "a": "copper",
+        "b": "zinc",
+        "jaccard": 0.725,
+        "tables": 132
+      },
+      {
+        "a": "available phosphorus",
+        "b": "available potassium",
+        "jaccard": 0.692,
+        "tables": 90
+      },
+      {
+        "a": "lead",
+        "b": "zinc",
+        "jaccard": 0.647,
+        "tables": 110
+      },
+      {
+        "a": "sand",
+        "b": "silt",
+        "jaccard": 0.645,
+        "tables": 80
+      },
+      {
+        "a": "copper",
+        "b": "lead",
+        "jaccard": 0.624,
+        "tables": 106
+      },
+      {
+        "a": "lead",
+        "b": "nickel",
+        "jaccard": 0.621,
+        "tables": 90
+      },
+      {
+        "a": "copper",
+        "b": "nickel",
+        "jaccard": 0.592,
+        "tables": 100
+      },
+      {
+        "a": "clay",
+        "b": "silt",
+        "jaccard": 0.544,
+        "tables": 86
+      },
+      {
+        "a": "nickel",
+        "b": "zinc",
+        "jaccard": 0.5,
+        "tables": 91
+      },
+      {
+        "a": "chromium",
+        "b": "nickel",
+        "jaccard": 0.5,
+        "tables": 62
+      },
+      {
+        "a": "clay",
+        "b": "sand",
+        "jaccard": 0.491,
+        "tables": 83
+      },
+      {
+        "a": "cadmium",
+        "b": "lead",
+        "jaccard": 0.485,
+        "tables": 64
+      },
+      {
+        "a": "manganese",
+        "b": "zinc",
+        "jaccard": 0.484,
+        "tables": 89
+      },
+      {
+        "a": "copper",
+        "b": "manganese",
+        "jaccard": 0.478,
+        "tables": 87
+      },
+      {
+        "a": "chromium",
+        "b": "lead",
+        "jaccard": 0.462,
+        "tables": 61
+      },
+      {
+        "a": "iron",
+        "b": "manganese",
+        "jaccard": 0.461,
+        "tables": 65
+      },
+      {
+        "a": "calcium",
+        "b": "iron",
+        "jaccard": 0.444,
+        "tables": 56
+      },
+      {
+        "a": "cadmium",
+        "b": "nickel",
+        "jaccard": 0.421,
+        "tables": 56
+      },
+      {
+        "a": "cadmium",
+        "b": "zinc",
+        "jaccard": 0.401,
+        "tables": 67
+      }
+    ]
+  },
+  "depth": {
+    "soc_decay_north": {
+      "n": 231,
+      "e_folding_depth_cm": 289.7,
+      "r_squared": 0.01
+    },
+    "soc_decay_south": {
+      "n": 285,
+      "e_folding_depth_cm": 48.6,
+      "r_squared": 0.38
+    },
+    "ph_h2o_minus_kcl": 1.17
+  },
+  "time": {
+    "metal_share_2006_2010": 17.7,
+    "metal_share_2020_2025": 21.8,
+    "longitude_drift_per_year": 0.357,
+    "longitude_drift_p": 0.0424,
+    "median_longitude_2006_2010": 41.0,
+    "median_longitude_2020_2025": 44.0
+  },
+  "zones": [
+    {
+      "zone": "Арктика и субарктика (>66°)",
+      "documents": 69,
+      "observations": 3732,
+      "properties": 38,
+      "precise_pct": 51.0
+    },
+    {
+      "zone": "Северная тайга (60–66°)",
+      "documents": 82,
+      "observations": 3421,
+      "properties": 46,
+      "precise_pct": 30.0
+    },
+    {
+      "zone": "Средняя тайга (56–60°)",
+      "documents": 173,
+      "observations": 8134,
+      "properties": 51,
+      "precise_pct": 13.0
+    },
+    {
+      "zone": "Южная тайга и лесостепь (52–56°)",
+      "documents": 263,
+      "observations": 14470,
+      "properties": 55,
+      "precise_pct": 12.0
+    },
+    {
+      "zone": "Степь (48–52°)",
+      "documents": 106,
+      "observations": 3820,
+      "properties": 42,
+      "precise_pct": 27.0
+    },
+    {
+      "zone": "Сухая степь и предгорья (<48°)",
+      "documents": 116,
+      "observations": 3947,
+      "properties": 48,
+      "precise_pct": 17.0
+    }
+  ]
+}

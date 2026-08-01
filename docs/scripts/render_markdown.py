@@ -14,6 +14,9 @@ import re
 from pathlib import Path
 
 INLINE_CODE = re.compile(r'`([^`]+)`')
+# ``![caption](figures/name)`` with no file extension expands to the light and
+# dark rendering of that figure; CSS shows whichever matches the viewer.
+FIGURE = re.compile(r'^!\[([^\]]*)\]\(([^)\s]+?)(\.\w+)?\)$')
 BOLD = re.compile(r'\*\*([^*]+)\*\*')
 ITALIC = re.compile(r'(?<![*\w])\*([^*]+)\*(?!\*)')
 LINK = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
@@ -100,6 +103,23 @@ def render(markdown: str) -> str:
             index += 1
             continue
 
+        figure = FIGURE.match(stripped)
+        if figure:
+            close_list()
+            caption, path, extension = figure.groups()
+            index += 1
+            if extension:
+                images = f'<img src="{html.escape(path + extension)}" alt="{inline(caption)}">'
+            else:
+                images = (
+                    f'<img class="fig-light" src="{html.escape(path)}_light.png" '
+                    f'alt="{inline(caption)}">'
+                    f'<img class="fig-dark" src="{html.escape(path)}_dark.png" '
+                    f'alt="{inline(caption)}">')
+            out.append(f'<figure>{images}'
+                       f'<figcaption>{inline(caption)}</figcaption></figure>')
+            continue
+
         heading = re.match(r'(#{1,4})\s+(.*)', stripped)
         if heading:
             close_list()
@@ -163,6 +183,19 @@ PAGE = """<!doctype html>
   main hr {{ border: 0; border-top: 1px solid var(--border); margin: 2em 0; }}
   main pre.mono {{ background: var(--surface-2); padding: .85rem 1rem; border-radius: 9px;
                    overflow-x: auto; font-size: .8rem; line-height: 1.5; }}
+  main figure {{ margin: 1.9em 0; }}
+  main figure img {{ width: 100%; max-width: 100%; height: auto; border-radius: 8px;
+                     border: 1px solid var(--border); }}
+  main figcaption {{ margin-top: .6rem; font-size: .84rem; color: var(--text-muted);
+                     line-height: 1.5; }}
+  .fig-dark {{ display: none; }}
+  @media (prefers-color-scheme: dark) {{
+    .fig-light {{ display: none; }} .fig-dark {{ display: block; }}
+  }}
+  :root[data-theme="light"] .fig-light {{ display: block; }}
+  :root[data-theme="light"] .fig-dark {{ display: none; }}
+  :root[data-theme="dark"] .fig-light {{ display: none; }}
+  :root[data-theme="dark"] .fig-dark {{ display: block; }}
 </style>
 </head>
 <body>

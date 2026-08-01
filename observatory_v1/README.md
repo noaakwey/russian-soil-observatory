@@ -1,35 +1,54 @@
-# Russian Soil Observatory v1
+# observatory_v1 — extraction pipeline
 
-This is a provenance-first operational database for confirmed soil observation
-points in Russia, built from Springer and `Почвоведение` separately.
+Provenance-first pipeline behind the Russian Soil Observatory. Core rules that
+every stage obeys:
 
-Rules:
-
-- A translation and its original are separate `document` rows; use
-  `document_link` only after a relationship is checked.
-- OCR/table output is evidence, not an observation. It enters `extraction`
-  before it can create a site, profile, horizon, or measurement.
+- OCR/table output is **evidence, not an observation**: it enters `extraction`
+  before it can create a site, profile, horizon or measurement.
+- A translation and its original stay separate `document` rows; `document_link`
+  is used only after a relationship is actually checked.
 - Operational `site` rows must be Russian (`country_code = 'RU'`) and carry a
   spatial-confidence class.
-- `profile`, `horizon`, `sample` and `laboratory_analysis` are separate: a
+- `profile`, `horizon`, `sample` and `laboratory_analysis` stay separate: a
   sample label or a method is never discarded when a result is normalized.
-- Every accepted measurement must lead back to an artifact and, where used, an
-  extraction record.
+- Every accepted measurement leads back to an artifact and its extraction record.
 
-`bootstrap.py` creates `russian_soil_observatory.sqlite`. Source profiling and
-ingestion will be added as reproducible stages; no legacy "final" JSON is
-treated as ground truth.
+## Воспроизводимый пайплайн (верхний уровень)
 
-## Staged workflow
+Запускается в этом порядке и полностью пересобирает публикуемый слой из
+`table_cell` — матриц OCR-таблиц:
 
-1. `ingest_*_text.py` and the Springer OCR index create candidates only.
-2. `country_triage.py` checks every explicit coordinate against a pinned
-   country-boundary GeoJSON and writes `location_validation`. It never creates
-   an operational point; border and unmatched cases remain unresolved.
-3. A promotion step may create a Russian `site`, `profile`, `horizon`, and
-   `measurement` only when their document evidence can be linked without
-   guessing. `v_ready_measurements` is the only ready-to-use data view.
+| Скрипт | Что делает |
+|---|---|
+| `extract_table_measurement_candidates.py` | находит числовые ячейки под распознанным заголовком свойства |
+| `normalize_table_measurement_candidates.py` | приводит единицы там, где преобразование обратимо |
+| `materialize_full_table_observations.py` | строит `table_observation` со статусом пространственной привязки |
+| `audit_full_table_observations.py` | проверяет, что не потеряна ни одна ячейка |
+| `flag_observation_quality.py` | помечает ненадёжные заголовки и физически невозможные значения |
+| `infer_springer_publication_year.py` | восстанавливает год публикации из Pleiades DOI |
+| `export_analysis_package.py` | выгружает CSV-пакет |
 
-The boundary file is an external reference input. Store its dataset name,
-version, URL and SHA-256 next to the database before triage, so that a country
-decision can be repeated later.
+Вспомогательные модули верхнего уровня — не запускаются напрямую:
+`table_property_patterns.py` (шаблоны заголовков и LaTeX-нормализация),
+`property_catalog.py`, `method_catalog.py` (канонические словари),
+`normalize_measurement_candidates.py` (преобразование единиц),
+`ingest_pochvovedenie_text.py` (шаблоны глубин и горизонтов).
+
+`schema.sql` — полная схема рабочей базы.
+`v_ready_measurements` — единственное представление, готовое к прямому использованию.
+
+> **Осторожно:** `extract_table_measurement_candidates.py --replace-existing`
+> пересоздаёт слой кандидатов и **не сохраняет ручные переклассификации**.
+> Порядок сохраняющей пересборки — раздел 2.1 в [`../docs/data_audit.md`](../docs/data_audit.md).
+
+## `archive/` — история сборки корпуса
+
+126 скриптов, которыми корпус собирался и курировался: загрузка PDF и OCR,
+извлечение координат из текста, карт и таблиц, геокодирование по внешней
+границе РФ, слияние дубликатов профилей, десятки аудитов и ручные
+переклассификации отдельных статей (`reclassify_*`, `stage_vanchikova_*`).
+
+Они сохранены не для повторного запуска, а как доказательная линия: часть
+записей в базе существует именно потому, что человек принял по ним решение, и
+эти решения задокументированы здесь. Многие скрипты рассчитывают на исходные
+PDF и промежуточные CSV, которых нет в репозитории.
