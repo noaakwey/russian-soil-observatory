@@ -1,0 +1,13 @@
+# The working database is 1.2 GB and is rebuilt, not versioned.
+*.sqlite
+!docs/data/observatory.sqlite.gz
+*.sqlite-journal
+*.sqlite-wal
+
+__pycache__/
+*.pyc
+.DS_Store
+
+# Never publish credentials.
+API.txt
+*.env

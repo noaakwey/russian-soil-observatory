@@ -1,0 +1,10 @@
+{
+  "natural_earth_admin0_50m": {
+    "dataset": "Natural Earth Admin 0 Countries",
+    "version": "50m vector, repository snapshot retrieved 2026-07-17",
+    "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson",
+    "filename": "ne_50m_admin_0_countries.geojson",
+    "sha256": "3e458fc036ad0a66411f2c1e6cac49c5d7bfb81cb1123bc513b22511a2b7fdeb",
+    "purpose": "Country validation for explicitly reported coordinate candidates; it is not used to geocode a site."
+  }
+}

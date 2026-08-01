@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Научный анализ базы Russian Soil Observatory</title>
+<link rel="stylesheet" href="assets/portal.css?v=20260801b">
+<style>
+  main { max-width: 82ch; }
+  main h1 { font-size: 1.7rem; margin-top: .2em; }
+  main h2 { margin-top: 1.9em; padding-top: .3em; border-top: 1px solid var(--border); }
+  main h3 { margin-top: 1.4em; }
+  main table.data td, main table.data th { white-space: normal; }
+  main table.data td.num, main table.data th.num { white-space: nowrap; }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+  main pre.mono { background: var(--surface-2); padding: .85rem 1rem; border-radius: 9px;
+                   overflow-x: auto; font-size: .8rem; line-height: 1.5; }
+</style>
+</head>
+<body>
+<header class="masthead"><div class="masthead-inner">
+  <h1 class="brand">Russian Soil Observatory<small>научный анализ базы данных</small></h1>
+  <span class="masthead-spacer"></span>
+  <a class="pill" href="index.html">← к геопорталу</a>
+</div></header>
+<main>
+<h1>Научный анализ базы Russian Soil Observatory</h1>
+<p><strong>Версия слоя наблюдений: 1 августа 2026 г. · 62 805 табличных наблюдений из 1 288 публикаций</strong></p>
+<div class="callout"><strong>Abstract.</strong> This report audits a database of soil measurements extracted from the full text of 4 180 Russian soil-science publications. Rebuilding the observation layer with the current header matcher removed 10 220 confirmed false positives (chemical symbols matched inside unrelated headers), recovered the analytical method for 1 731 pH cells lost to LaTeX markup, and restored 1 337 cells that a naive rebuild would have destroyed — including the anchors of all 147 manually verified measurements. The publication year, previously absent for the entire translated corpus, was recovered from the Pleiades DOI and validated against Crossref. Two structural limits dominate any downstream use: 56 % of values carry no provable unit, and the 790 reported coordinates are strongly clustered (Clark–Evans R = 0.34, ≈ 302 independent localities), so the point set is not a probability sample of Russian territory.</div>
+<hr>
+<h2>Резюме</h2>
+<ul class="clean">
+<li><strong>Слой наблюдений был построен из устаревших кандидатов.</strong> 22.9% записей не соответствовали действующему коду извлечения. После пересборки — 62 805 наблюдений вместо 70 828.</li>
+<li><strong>Удалено 10 220 подтверждённых ложных срабатываний.</strong> Главный источник — односимвольные химические символы, найденные внутри произвольного текста заголовка. «Бор» был вторым по частоте свойством базы; в действительности это были горизонт B, плотность сложения (B.d) и изотопные отношения δ¹³C.</li>
+<li><strong>Восстановлен аналитический метод pH.</strong> OCR Springer сохраняет LaTeX‑разметку (<code>pH\( _{H_2O} \)</code>), из‑за чего 1 731 ячейка теряла указание метода и деградировала в «pH без указания метода».</li>
+<li><strong>Восстановлена временная ось корпуса.</strong> У всех 3 555 переводных публикаций отсутствовал год; он декодирован из идентификатора статьи Pleiades DOI. Корпус охватывает 2006–2026 гг., а не 2019–2023, как выглядело раньше.</li>
+<li><strong>Пространственная выборка сильно кластеризована</strong> и не является репрезентативной для территории России.</li>
+<li><strong>Ни одно значение не удалено «по подозрению».</strong> Всё, что нельзя доказать, помечено флагом и остаётся в базе вместе со ссылкой на исходную ячейку.</li>
+</ul>
+<hr>
+<h2>1. Состав корпуса</h2>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Слой</th><th class="num">Объём</th></tr></thead><tbody><tr><td class="">Полнотекстовые публикации</td><td class="num">4 180</td></tr><tr><td class="">— «Почвоведение» (русский оригинал)</td><td class="num">625</td></tr><tr><td class="">— Springer / <em>Eurasian Soil Science</em> (перевод)</td><td class="num">3 555</td></tr><tr><td class="">Исходных артефактов (страницы, таблицы, тексты)</td><td class="num">37 972</td></tr><tr><td class="">OCR‑таблиц</td><td class="num">12 280</td></tr><tr><td class="">Публикаций, давших числовые наблюдения</td><td class="num">1 288</td></tr><tr><td class="">Табличных наблюдений</td><td class="num">62 805</td></tr><tr><td class="">Канонических свойств</td><td class="num">70</td></tr></tbody></table></div>
+<p><strong>Оба корпуса — один журнал.</strong> Все 2 191 DOI переводного корпуса имеют префикс <code>10.1134</code> (Pleiades Publishing), то есть <em>Eurasian Soil Science</em> — англоязычная версия «Почвоведения». Это меняет интерпретацию базы: это не два независимых источника, а один журнал в двух языковых версиях.</p>
+<p><strong>Метаданные асимметричны и неполны.</strong> У переводного корпуса нет ни одного заголовка статьи и ни одного списка авторов; у русского корпуса нет ни одного DOI. Это ограничивает и цитируемость, и возможность связать оригинал с переводом.</p>
+<hr>
+<h2>2. Пересборка слоя наблюдений</h2>
+<p>Аудит полноты в прежней сборке сообщал <code>coverage_gap: 0, ready: true</code>. Проверка покрытия — это проверка того, что ни одна строка не потерялась; она ничего не говорит о том, правильно ли распознано свойство. Прогон сохранённых заголовков через действующий код извлечения показал расхождение в <strong>22.9%</strong> записей.</p>
+<h3>2.1. Что дала пересборка</h3>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Операция</th><th class="num">Ячеек</th></tr></thead><tbody><tr><td class="">Было в прежнем слое</td><td class="num">70 828</td></tr><tr><td class="">Удалено как подтверждённые ложные срабатывания</td><td class="num">−10 220</td></tr><tr><td class="">Восстановлено: якоря проверенных вручную измерений</td><td class="num">+147</td></tr><tr><td class="">Восстановлено: корректный заголовок, потерянный эвристикой границы шапки</td><td class="num">+1 190</td></tr><tr><td class="">Добавлено: заголовки, ставшие распознаваемыми после LaTeX‑нормализации</td><td class="num">+860</td></tr><tr><td class=""><strong>Стало</strong></td><td class="num"><strong>62 805</strong></td></tr></tbody></table></div>
+<p>Прямолинейный запуск <code>--replace-existing</code> разрушил бы ручную кураторскую работу: он уничтожал якоря 147 проверенных измерений, включая 74 записи обменных Ca²⁺/Mg²⁺ и активности Ca²⁺, добавленные ручной переклассификацией. Поэтому пересборка сделана сохраняющей: кандидат восстанавливается, если он либо привязан к верифицированному измерению, либо его напечатанный заголовок действующий код по‑прежнему считает корректным. Доказательная цепочка строгого слоя не пострадала: <strong>0 из 1 214 привязок потеряно</strong>.</p>
+<h3>2.2. Природа ложных срабатываний</h3>
+<p>Химический символ из одной‑двух букв опознавался как элемент, даже если он был частью совсем другого текста:</p>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Заголовок в таблице</th><th class="">Опознавалось как</th><th class="">Что это на самом деле</th></tr></thead><tbody><tr><td class=""><code>B.C.</code> (1 196 ячеек)</td><td class="">бор</td><td class="">обозначение образца</td></tr><tr><td class=""><code>Thickness of horizons, cm A + B</code></td><td class="">бор</td><td class="">мощность горизонтов</td></tr><tr><td class=""><code>\( B/C_{6} \), %</code></td><td class="">бор</td><td class="">изотопное отношение δ¹³C (значения ≈ −23‰)</td></tr><tr><td class=""><code>Excipitating minerals Ca</code></td><td class="">кальций</td><td class="">минералогический состав</td></tr><tr><td class=""><code>Mn/Fe</code></td><td class="">железо</td><td class="">отношение, а не концентрация</td></tr></tbody></table></div>
+<p>Удалено 10 220 таких ячеек, из них 3 635 «бора», 2 401 «кальция», 1 899 «магния».</p>
+<h3>2.3. Восстановление метода pH</h3>
+<p><code>pH\( H_2O \)</code>, <code>pH\( _{H_2O} \)</code>, <code>pH\( _{water} \)</code> — один и тот же показатель в разной LaTeX‑записи. Действующий шаблон требовал <code>H2O</code> без разметки и не срабатывал, поэтому значение уходило в «pH без указания метода». Введена типографская нормализация заголовка: снимается только LaTeX‑обёртка, ни один токен не добавляется и не переинтерпретируется. Эффект — ровно 1 731 ячейка, все переходы только из <code>ph_unspecified</code> в <code>ph_h2o</code> (1 678) и <code>ph_kcl</code> (53), без побочных изменений.</p>
+<p>Корректность разделения подтверждается самими данными: средний pH(KCl) = 5.24 при pH(H₂O) = 6.51. Разница в 1.27 единицы — общеизвестное соотношение между солевой и водной вытяжкой, воспроизведённое здесь независимо.</p>
+<hr>
+<h2>3. Спектр свойств</h2>
+<p>70 канонических свойств в 15 группах. Десять самых массовых:</p>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Свойство</th><th class="num">Наблюдений</th><th class="num">Единица доказана</th></tr></thead><tbody><tr><td class="">органическое вещество / гумус</td><td class="num">5 717</td><td class="num">61%</td></tr><tr><td class="">pH водный</td><td class="num">5 024</td><td class="num">97%</td></tr><tr><td class="">органический углерод почвы</td><td class="num">4 761</td><td class="num">69%</td></tr><tr><td class="">pH (метод не указан)</td><td class="num">4 688</td><td class="num">96%</td></tr><tr><td class="">железо</td><td class="num">3 103</td><td class="num">4%</td></tr><tr><td class="">ил (&lt; 0.002 мм)</td><td class="num">2 626</td><td class="num">47%</td></tr><tr><td class="">бор</td><td class="num">2 484</td><td class="num">0%</td></tr><tr><td class="">удельная электропроводность</td><td class="num">2 142</td><td class="num">7%</td></tr><tr><td class="">цинк</td><td class="num">1 887</td><td class="num">4%</td></tr><tr><td class="">медь</td><td class="num">1 789</td><td class="num">5%</td></tr></tbody></table></div>
+<p>Остаточные 2 484 «бора» — заголовки вида <code>B</code> без дополнительного текста. Отличить колонку бора от колонки горизонта B по одному символу невозможно, поэтому они сохранены с флагом, а не удалены.</p>
+<p><strong>Корпус сильно концентрирован.</strong> Пять публикаций дают более 1 000 наблюдений каждая; 385 публикаций — менее 10. Медианная публикация вносит около 20 значений. Это означает, что любая невзвешенная статистика по всей базе будет определяться несколькими крупными таблицами.</p>
+<hr>
+<h2>4. Качество данных</h2>
+<p>Флаги хранятся в отдельном слое <code>observation_quality_flag</code> и ничего не удаляют.</p>
+<h3>4.1. Надёжность распознавания свойства</h3>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Признак</th><th class="num">Ячеек</th><th class="num">Доля</th></tr></thead><tbody><tr><td class=""><code>phrase</code> — свойство названо словом или формулой</td><td class="num">42 407</td><td class="num">67.5%</td></tr><tr><td class=""><code>symbol_clean</code> — символ стоит в заголовке один</td><td class="num">14 861</td><td class="num">23.7%</td></tr><tr><td class=""><code>symbol_embedded</code> — символ внутри более длинного текста</td><td class="num">5 537</td><td class="num">8.8%</td></tr></tbody></table></div>
+<p><code>symbol_embedded</code> следует исключать из анализа по умолчанию.</p>
+<h3>4.2. Физическая правдоподобность</h3>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Признак</th><th class="num">Ячеек</th></tr></thead><tbody><tr><td class=""><code>ok</code></td><td class="num">58 931</td></tr><tr><td class=""><code>out_of_physical_range</code></td><td class="num">2 603</td></tr><tr><td class=""><code>negative_content</code></td><td class="num">1 271</td></tr></tbody></table></div>
+<p>Проверка диапазона запускается только там, где единица действительно известна; pH проверяется всегда, поскольку безразмерен. Отрицательные концентрации и pH вне диапазона 2–12 — следы ошибок OCR (потерянный разделитель, распознанный дефис).</p>
+<h3>4.3. Единицы измерения</h3>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Статус</th><th class="num">Ячеек</th><th class="num">Доля</th></tr></thead><tbody><tr><td class=""><code>exact</code> — единица напечатана и совпадает с канонической</td><td class="num">18 728</td><td class="num">29.8%</td></tr><tr><td class=""><code>converted</code> — выполнено обратимое преобразование</td><td class="num">3 829</td><td class="num">6.1%</td></tr><tr><td class=""><code>incompatible</code> — единица указана, но не приводится автоматически</td><td class="num">5 149</td><td class="num">8.2%</td></tr><tr><td class=""><code>missing_unit</code> — единицу нельзя доказать</td><td class="num">35 099</td><td class="num">55.9%</td></tr></tbody></table></div>
+<p><strong>Это главное ограничение базы.</strong> Значениям без напечатанной единицы она намеренно не приписывается: без методического раздела статьи такая подстановка была бы фальсификацией.</p>
+<h3>4.4. Подмножество, пригодное к количественному анализу</h3>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Фильтр</th><th class="num">Ячеек</th></tr></thead><tbody><tr><td class="">Без флагов качества (надёжный заголовок + правдоподобное значение)</td><td class="num">53 856</td></tr><tr><td class="">Дополнительно с доказанной единицей — <strong>готово к анализу</strong></td><td class="num"><strong>19 918 (31.7%)</strong></td></tr></tbody></table></div>
+<p>Разбивка готового подмножества: кислотно‑основные 7 620, органическое вещество 7 124, гранулометрия 2 043, физические 1 069, макроэлементы 838, обменные основания 492, микроэлементы 310, засоление 240.</p>
+<hr>
+<h2>5. Пространственная структура</h2>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Показатель</th><th class="num">Значение</th></tr></thead><tbody><tr><td class="">Координатных записей, сообщённых авторами</td><td class="num">1 092</td></tr><tr><td class="">Уникальных положений</td><td class="num">790</td></tr><tr><td class="">Медианное расстояние до ближайшего соседа</td><td class="num">1.9 км</td></tr><tr><td class="">Точек с соседом ближе 1 км</td><td class="num">41.8%</td></tr><tr><td class="">Индекс Кларка–Эванса</td><td class="num"><strong>0.342</strong></td></tr><tr><td class="">Занятых ячеек 5°×5°</td><td class="num">88</td></tr><tr><td class="">Доля в Европейской России (&lt; 60° в. д.)</td><td class="num">56.3%</td></tr></tbody></table></div>
+<p>Индекс Кларка–Эванса 0.34 (при 1.0 для случайного размещения) означает сильную кластеризацию. Иерархическая группировка показывает, сколько на самом деле независимых местностей стоит за 790 точками:</p>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Порог объединения</th><th class="num">Независимых локалитетов</th></tr></thead><tbody><tr><td class="">1 км</td><td class="num">564</td></tr><tr><td class="">10 км</td><td class="num">385</td></tr><tr><td class="">25 км</td><td class="num">302</td></tr><tr><td class="">100 км</td><td class="num">133</td></tr></tbody></table></div>
+<p><strong>Вывод для пользователя.</strong> 790 координат — это не 790 независимых наблюдений территории, а примерно 300 исследовательских площадок, каждая с несколькими разрезами. Территория России покрыта 88 ячейками 5°×5°; Сибирь и Дальний Восток представлены заметно слабее Европейской части. Любая пространственная статистика по этому набору описывает географию российской почвенной науки, а не географию почв России.</p>
+<hr>
+<h2>6. Временная структура</h2>
+<p>Год публикации отсутствовал у всех 3 555 переводных статей, что исключало корпус из любого временного анализа. Идентификатор статьи Pleiades кодирует год: <code>10.1134/S1064229</code> <strong>3 · 13 · 08 ·</strong> <code>0085</code> — том 2013 г., выпуск 8, статья 85.</p>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Способ определения года</th><th class="num">Публикаций</th><th class="">Точность по Crossref</th></tr></thead><tbody><tr><td class="">Напечатан в каталоге («Почвоведение»)</td><td class="num">625</td><td class="">—</td></tr><tr><td class="">Декодирован, серия с номером выпуска</td><td class="num">2 807</td><td class="">89 из 89 точно</td></tr><tr><td class="">Декодирован, непрерывная серия (блок 60+)</td><td class="num">748</td><td class="">40 точно, 32 с отклонением ±1 год</td></tr></tbody></table></div>
+<p>В непрерывной серии закодирован год подачи, и статья может выйти в следующем томе, поэтому такие годы публикуются как оценка ±1 год, а не как факт. Поле <code>document.publication_year</code> не изменялось: восстановленные значения хранятся отдельно вместе с уровнем достоверности.</p>
+<p>Корпус охватывает <strong>2006–2026 гг.</strong> Доля наблюдений по микроэлементам и загрязнителям выросла примерно с 8% в 2006 г. до 25–35% в последнее десятилетие — это отражает смещение тематики российского почвоведения к геохимии и загрязнению.</p>
+<hr>
+<h2>7. Профильная организация</h2>
+<p>17 470 наблюдений (27.8%) имеют напечатанную глубину; они образуют 6 447 профильных серий «публикация × метка строки».</p>
+<p><strong>pH по глубине</strong> (только правдоподобные значения):</p>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Глубина, см</th><th class="num">n</th><th class="num">Средний pH</th></tr></thead><tbody><tr><td class="">0–20</td><td class="num">1 736</td><td class="num">6.14</td></tr><tr><td class="">20–40</td><td class="num">690</td><td class="num">6.29</td></tr><tr><td class="">40–60</td><td class="num">439</td><td class="num">6.62</td></tr><tr><td class="">60–80</td><td class="num">281</td><td class="num">6.62</td></tr><tr><td class="">80–100</td><td class="num">199</td><td class="num">7.22</td></tr><tr><td class="">100–120</td><td class="num">140</td><td class="num">7.01</td></tr><tr><td class="">120–140</td><td class="num">92</td><td class="num">7.47</td></tr><tr><td class="">160–180</td><td class="num">45</td><td class="num">8.07</td></tr><tr><td class="">180–200</td><td class="num">32</td><td class="num">8.36</td></tr></tbody></table></div>
+<p><strong>Органический углерод по глубине</strong> (только с доказанной единицей, г/кг):</p>
+<div class="table-scroll"><table class="data"><thead><tr><th class="">Глубина, см</th><th class="num">n</th><th class="num">Средний C<sub>орг</sub></th></tr></thead><tbody><tr><td class="">0–20</td><td class="num">501</td><td class="num">66.7</td></tr><tr><td class="">20–40</td><td class="num">201</td><td class="num">33.2</td></tr><tr><td class="">40–60</td><td class="num">127</td><td class="num">31.0</td></tr><tr><td class="">60–80</td><td class="num">100</td><td class="num">16.3</td></tr><tr><td class="">100–120</td><td class="num">49</td><td class="num">12.7</td></tr><tr><td class="">180–200</td><td class="num">17</td><td class="num">5.4</td></tr></tbody></table></div>
+<p>Оба профиля воспроизводят классические закономерности: подкисление верхних горизонтов на фоне подщелачивания и карбонатонакопления в нижней части профиля; экспоненциальное убывание органического углерода с глубиной. Это независимое подтверждение того, что извлечение и нормализация не вносят систематического искажения в подмножество с доказанной единицей.</p>
+<hr>
+<h2>8. Ограничения и риски</h2>
+<ul class="clean">
+<li><strong>Возможный двойной учёт оригинала и перевода.</strong> Русский корпус (2019–2023) почти наверняка имеет переводы в <em>Eurasian Soil Science</em> за те же годы, но <code>document_link</code> пуст, а у переводного корпуса нет ни заголовков, ни авторов — доказать соответствие нечем. Верхняя граница риска ограничена: русский корпус даёт 2 363 наблюдения, то есть <strong>не более 3.8%</strong> слоя.</li>
+<li><strong>Горизонты практически не распознаны.</strong> Метка генетического горизонта заполнена у 12 наблюдений из 62 805. Профильный анализ возможен только по числовой глубине.</li>
+<li><strong>55.9% значений без доказанной единицы</strong> — это не столько дефект извлечения, сколько следствие практики публикации: единица часто указывается в подписи к таблице или в разделе Methods, а не в шапке колонки.</li>
+<li><strong>Кластеризованная выборка</strong> (см. раздел 5) исключает выводы уровня страны.</li>
+<li><strong>Остаточная неоднозначность односимвольных заголовков</strong> (2 484 «бора» и аналогичные) не разрешима автоматически.</li>
+</ul>
+<hr>
+<h2>9. Приоритеты дальнейшей работы</h2>
+<ul class="clean">
+<li><strong>Единицы из подписей к таблицам и раздела Methods.</strong> Наибольший прирост пригодных данных: до 35 099 значений. Подпись к таблице уже хранится в <code>source_artifact.table_label</code>.</li>
+<li><strong>Связка оригинал ↔ перевод.</strong> Получить заголовки Springer через Crossref по уже известным 2 191 DOI и сопоставить их с русскими заголовками; это закрывает риск двойного учёта и одновременно даёт цитируемость.</li>
+<li><strong>Разбор односимвольных заголовков по контексту таблицы.</strong> Если соседние колонки — элементы, <code>B</code> это бор; если соседние строки — горизонты, это горизонт.</li>
+<li><strong>Распознавание генетических горизонтов</strong> из меток строк.</li>
+<li><strong>Привязка строк к конкретным разрезам</strong> в статьях с несколькими точками (2 144 наблюдения со статусом <code>document_multiple_reported_coordinates</code>).</li>
+</ul>
+<hr>
+<h2>Воспроизведение</h2>
+<pre class="mono"><code>python3 observatory_v1/extract_table_measurement_candidates.py --db DB --replace-existing
+python3 observatory_v1/normalize_table_measurement_candidates.py --db DB
+python3 observatory_v1/materialize_full_table_observations.py --db DB
+python3 observatory_v1/flag_observation_quality.py --db DB --output docs/data/observation_quality_audit.json
+python3 observatory_v1/infer_springer_publication_year.py --db DB --crossref docs/data/doi_metadata.csv
+python3 docs/scripts/build_portal.py --db DB --output docs/data</code></pre>
+<p>Все числа этого отчёта воспроизводятся из <code>docs/data/aggregates.json</code> и полной выгрузки <code>docs/data/full_table_observations.csv</code>.</p>
+</main>
+<footer><div class="inner">Russian Soil Observatory · CC BY 4.0</div></footer>
+</body>
+</html>

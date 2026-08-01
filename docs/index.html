@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Russian Soil Observatory</title>
+<meta name="description" content="Открытая база почвенных наблюдений из российских публикаций: 62 805 табличных значений, 790 авторских координат, доказательная цепочка до исходной OCR-ячейки.">
+<link rel="stylesheet" href="assets/leaflet-1.9.4.css">
+<link rel="stylesheet" href="assets/portal.css?v=20260801b">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <h1 class="brand">Russian Soil Observatory
+      <small data-i18n="tagline">Почвенные наблюдения из «Почвоведения» и Eurasian Soil Science</small>
+    </h1>
+    <span class="masthead-spacer"></span>
+    <div class="switch" role="group" aria-label="Language">
+      <button type="button" id="lang-ru" aria-pressed="true">РУС</button>
+      <button type="button" id="lang-en" aria-pressed="false">ENG</button>
+    </div>
+    <div class="switch" role="group" aria-label="Theme">
+      <button type="button" id="theme-light" aria-pressed="false">☀</button>
+      <button type="button" id="theme-dark" aria-pressed="false">☾</button>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button role="tab" aria-selected="true"  data-panel="overview" data-i18n="tab.overview">Обзор</button>
+    <button role="tab" aria-selected="false" data-panel="map"      data-i18n="tab.map">Карта</button>
+    <button role="tab" aria-selected="false" data-panel="props"    data-i18n="tab.props">Свойства</button>
+    <button role="tab" aria-selected="false" data-panel="quality"  data-i18n="tab.quality">Качество данных</button>
+    <button role="tab" aria-selected="false" data-panel="query"    data-i18n="tab.query">SQL-запрос</button>
+    <button role="tab" aria-selected="false" data-panel="about"    data-i18n="tab.about">Методика и данные</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============ OVERVIEW ============ -->
+  <section class="panel" id="panel-overview">
+    <p class="lede" data-i18n="overview.lede">
+      Воспроизводимая база числовых почвенных наблюдений, извлечённых из полнотекстовых
+      публикаций двух корпусов. Каждое значение сохраняет ссылку на исходную ячейку
+      OCR-таблицы, признак достоверности единицы измерения и явно указанную силу
+      пространственной привязки.
+    </p>
+
+    <p style="margin:.9rem 0 1.2rem">
+      <a href="data_audit.html"><strong data-i18n="overview.report">Полный научный анализ базы: состав корпуса, качество извлечения, пространственная и временная структура →</strong></a>
+    </p>
+
+    <div class="grid" id="overview-tiles"></div>
+
+    <div class="card">
+      <h2 data-i18n="overview.timeline">Публикации и наблюдения по годам</h2>
+      <p class="lede" style="font-size:.85rem" data-i18n="overview.timeline.note">
+        Год для переводного корпуса восстановлен из идентификатора статьи Pleiades DOI и
+        сверен с Crossref.
+      </p>
+      <div id="chart-years"></div>
+    </div>
+
+    <div class="grid wide">
+      <div class="card">
+        <h2 data-i18n="overview.categories">Наблюдения по группам свойств</h2>
+        <div id="chart-categories"></div>
+      </div>
+      <div class="card">
+        <h2 data-i18n="overview.spatial">Пространственная структура</h2>
+        <dl class="facts" id="spatial-facts"></dl>
+        <div class="callout warn" style="margin-top:.9rem" data-i18n="overview.spatial.note">
+          Точки сильно сгруппированы вокруг стационаров и профилей. Это не вероятностная
+          выборка по территории России; статистику нельзя переносить на страну в целом.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MAP ============ -->
+  <section class="panel" id="panel-map" hidden>
+    <div class="callout" data-i18n="map.note">
+      <strong>Что показано:</strong> только координаты, прямо сообщённые авторами публикаций.
+      Синие точки дополнительно имеют числовые значения, сверенные с исходной OCR-ячейкой.
+      Административные центроиды и региональные геокоды на карту не выводятся. Это не
+      GPS-привязка каждой строки таблицы и не почвенная карта России.
+    </div>
+    <div class="map-layout" style="margin-top:1rem">
+      <div id="map"></div>
+      <aside>
+        <div class="card">
+          <h2 data-i18n="map.layer">Слой</h2>
+          <dl class="facts" id="map-facts"></dl>
+          <div class="legend">
+            <span><i class="swatch" style="background:var(--series-1)"></i><span data-i18n="map.legend.verified">с проверенными значениями</span></span>
+            <span><i class="swatch" style="background:var(--text-muted)"></i><span data-i18n="map.legend.plain">только координата</span></span>
+          </div>
+          <p style="margin-top:.9rem;font-size:.85rem;color:var(--text-secondary)" data-i18n="map.hint">
+            Нажмите на точку, чтобы увидеть источник, фрагмент текста с координатой и
+            привязанные измерения.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ PROPERTIES ============ -->
+  <section class="panel" id="panel-props" hidden>
+    <p class="lede" data-i18n="props.lede">
+      Полный спектр распознанных свойств. «Единица доказана» — доля значений, у которых
+      единица напечатана в таблице или получена обратимым преобразованием; остальным
+      единица намеренно не приписывается.
+    </p>
+    <div class="card">
+      <div class="toolbar">
+        <label class="status" for="prop-sort" data-i18n="props.sort">Сортировка:</label>
+        <select id="prop-sort" class="ghost" style="padding:.35rem .5rem">
+          <option value="observations" data-i18n="props.sort.n">по числу наблюдений</option>
+          <option value="normalized" data-i18n="props.sort.norm">по доказанным единицам</option>
+          <option value="documents" data-i18n="props.sort.docs">по числу публикаций</option>
+        </select>
+      </div>
+      <div class="table-scroll">
+        <table class="data" id="props-table">
+          <thead><tr>
+            <th data-i18n="props.th.property">Свойство</th>
+            <th data-i18n="props.th.category">Группа</th>
+            <th class="num" data-i18n="props.th.n">Наблюдений</th>
+            <th class="num" data-i18n="props.th.docs">Публикаций</th>
+            <th class="num" data-i18n="props.th.unit">Единица доказана</th>
+            <th class="num" data-i18n="props.th.header">Заголовок надёжен</th>
+            <th class="num" data-i18n="props.th.value">Значение правдоподобно</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUALITY ============ -->
+  <section class="panel" id="panel-quality" hidden>
+    <p class="lede" data-i18n="quality.lede">
+      Слой построен из OCR распознанных таблиц, поэтому часть значений неизбежно
+      содержит ошибки распознавания. Они не удаляются, а помечаются: исходная ячейка
+      остаётся доказательством, а решение принимает исследователь.
+    </p>
+
+    <div class="grid" id="quality-tiles"></div>
+
+    <div class="grid wide">
+      <div class="card">
+        <h2 data-i18n="quality.header">Как свойство опознано в заголовке</h2>
+        <div id="chart-headerkind"></div>
+        <div class="callout warn" style="margin-top:.9rem" data-i18n="quality.header.note">
+          <strong>symbol_embedded</strong> — химический символ найден внутри более длинного
+          заголовка («Thickness of horizons, cm A + B»). Такие значения следует исключать
+          из анализа по умолчанию.
+        </div>
+      </div>
+      <div class="card">
+        <h2 data-i18n="quality.value">Физическая правдоподобность значений</h2>
+        <div id="chart-plausibility"></div>
+        <div class="callout" style="margin-top:.9rem" data-i18n="quality.value.note">
+          Проверка диапазона запускается только там, где единица действительно известна.
+          pH проверяется всегда — он безразмерен.
+        </div>
+      </div>
+    </div>
+
+    <div class="grid wide">
+      <div class="card">
+        <h2 data-i18n="quality.unit">Статус нормализации единиц</h2>
+        <div id="chart-normalization"></div>
+      </div>
+      <div class="card">
+        <h2 data-i18n="quality.spatial">Сила пространственной привязки</h2>
+        <div id="chart-linkage"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUERY ============ -->
+  <section class="panel" id="panel-query" hidden>
+    <p class="lede" data-i18n="query.lede">
+      Вся база наблюдений загружается в браузер и выполняет SQL локально — данные никуда
+      не отправляются. Таблицы: <code>observation</code>, <code>reported_site</code>,
+      <code>verified_measurement</code>, <code>meta</code>.
+    </p>
+    <div class="card">
+      <textarea class="sql" id="sql-input" spellcheck="false"></textarea>
+      <div class="toolbar">
+        <button class="primary" id="sql-run" data-i18n="query.run">Выполнить</button>
+        <button class="ghost" data-example="0" data-i18n="query.ex1">Свойства с доказанной единицей</button>
+        <button class="ghost" data-example="1" data-i18n="query.ex2">pH по глубине</button>
+        <button class="ghost" data-example="2" data-i18n="query.ex3">Тяжёлые металлы по годам</button>
+        <button class="ghost" data-example="3" data-i18n="query.ex4">Только «чистые» данные</button>
+        <button class="ghost" id="sql-csv" data-i18n="query.csv">Скачать результат CSV</button>
+      </div>
+      <p class="status" id="sql-status" data-i18n="query.loading">Загрузка базы…</p>
+      <div class="table-scroll"><table class="data" id="sql-result"><thead></thead><tbody></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="panel" id="panel-about" hidden>
+    <div class="grid wide">
+      <div class="card">
+        <h2 data-i18n="about.chain">Доказательная цепочка</h2>
+        <p data-i18n="about.chain.text">Каждое наблюдение прослеживается до конкретной ячейки:</p>
+        <p class="mono" style="color:var(--text-secondary);font-size:.8rem">
+          document → source_artifact → table_cell → table_measurement_candidate → table_observation
+        </p>
+        <p data-i18n="about.chain.text2">
+          Поле <code>evidence_locator</code> хранит номер строки и колонки исходной таблицы,
+          напечатанный заголовок свойства и метку строки.
+        </p>
+      </div>
+      <div class="card">
+        <h2 data-i18n="about.rules">Чего эти данные не утверждают</h2>
+        <ul class="clean">
+          <li data-i18n="about.rule1">Значение со статусом <code>missing_unit</code> не имеет подставленной «по смыслу» единицы.</li>
+          <li data-i18n="about.rule2">Единственная координата в статье — это контекст документа, а не GPS каждой строки таблицы.</li>
+          <li data-i18n="about.rule3">pH(H₂O), pH(KCl) и pH без указания метода — три разных показателя.</li>
+          <li data-i18n="about.rule4">Русский оригинал и его перевод в Eurasian Soil Science не объединены: доказанного соответствия между ними пока нет.</li>
+          <li data-i18n="about.rule5">Набор точек не является вероятностной выборкой по территории России.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 data-i18n="about.downloads">Данные для скачивания</h2>
+      <div class="table-scroll">
+        <table class="data">
+          <thead><tr>
+            <th data-i18n="about.dl.file">Файл</th>
+            <th data-i18n="about.dl.what">Что это</th>
+            <th class="num" data-i18n="about.dl.size">Размер</th>
+          </tr></thead>
+          <tbody id="downloads"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 data-i18n="about.repro">Воспроизведение</h2>
+      <p data-i18n="about.repro.text">Все публикуемые файлы пересобираются из рабочей базы одной командой:</p>
+      <pre class="mono" style="background:var(--surface-2);padding:.8rem;border-radius:9px;overflow-x:auto">python3 observatory_v1/extract_table_measurement_candidates.py --db DB --replace-existing
+python3 observatory_v1/normalize_table_measurement_candidates.py --db DB
+python3 observatory_v1/materialize_full_table_observations.py --db DB
+python3 observatory_v1/flag_observation_quality.py --db DB
+python3 observatory_v1/infer_springer_publication_year.py --db DB
+python3 docs/scripts/build_portal.py --db DB --output docs/data</pre>
+      <p class="status" id="generated-at"></p>
+    </div>
+
+    <div class="callout" data-i18n="about.license">
+      <strong>Лицензия.</strong> Составленная база и код — CC BY 4.0. Права на исходные
+      статьи принадлежат их издателям; здесь публикуются извлечённые числовые значения
+      и ссылки на источник.
+    </div>
+  </section>
+
+</main>
+
+<footer><div class="inner">
+  <span data-i18n="footer">Russian Soil Observatory · воспроизводимая сборка · доказательство: документ → OCR-таблица → строка → ячейка</span>
+</div></footer>
+
+<script src="assets/leaflet.js"></script>
+<script src="assets/portal.js?v=20260801b"></script>
+</body>
+</html>

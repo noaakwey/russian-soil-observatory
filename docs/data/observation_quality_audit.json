@@ -1,0 +1,79 @@
+{
+  "observations": 62805,
+  "header_match_kind": {
+    "phrase": 42407,
+    "symbol_clean": 14861,
+    "symbol_embedded": 5537
+  },
+  "value_plausibility": {
+    "ok": 58931,
+    "out_of_physical_range": 2603,
+    "negative_content": 1271
+  },
+  "unflagged_observations": 53856,
+  "most_affected_properties": {
+    "ph_unspecified": {
+      "ok": 3380,
+      "out_of_physical_range": 1308
+    },
+    "ph_h2o": {
+      "ok": 4069,
+      "out_of_physical_range": 955
+    },
+    "boron": {
+      "ok": 2081,
+      "negative_content": 403
+    },
+    "clay": {
+      "ok": 2441,
+      "negative_content": 88,
+      "out_of_physical_range": 97
+    },
+    "ph_kcl": {
+      "out_of_physical_range": 99,
+      "ok": 916
+    },
+    "soil_organic_carbon": {
+      "ok": 4662,
+      "negative_content": 99
+    },
+    "organic_matter": {
+      "ok": 5622,
+      "out_of_physical_range": 30,
+      "negative_content": 65
+    },
+    "bulk_density": {
+      "out_of_physical_range": 94,
+      "ok": 1201
+    },
+    "chromium": {
+      "ok": 893,
+      "negative_content": 91
+    },
+    "calcium": {
+      "ok": 2011,
+      "negative_content": 66
+    },
+    "copper": {
+      "ok": 1800,
+      "negative_content": 42
+    },
+    "lead": {
+      "ok": 1275,
+      "negative_content": 35
+    },
+    "nickel": {
+      "ok": 1287,
+      "negative_content": 34
+    },
+    "silt": {
+      "ok": 1340,
+      "negative_content": 33,
+      "out_of_physical_range": 1
+    },
+    "electrical_conductivity": {
+      "ok": 2109,
+      "negative_content": 33
+    }
+  }
+}

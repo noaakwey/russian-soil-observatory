@@ -1,0 +1,23 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 Russian Soil Observatory contributors
+
+The compiled database, the extraction pipeline and the geoportal in this
+repository are licensed under the Creative Commons Attribution 4.0
+International License. You are free to share and adapt the material for any
+purpose, including commercially, provided you give appropriate credit.
+
+Full licence text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+NOT COVERED BY THIS LICENCE
+---------------------------
+Rights in the source articles (Pochvovedenie; Springer / Eurasian Soil Science)
+remain with their publishers and authors. This repository distributes extracted
+numeric values, provenance locators and pointers to the source, not the
+articles themselves.
+
+BUNDLED THIRD-PARTY COMPONENTS
+------------------------------
+docs/assets/leaflet.js, leaflet-1.9.4.css   Leaflet 1.9.4, BSD-2-Clause
+docs/assets/sql-wasm.js, sql-wasm.wasm      sql.js 1.10.3, MIT
+Map tiles are served by OpenStreetMap contributors under ODbL.

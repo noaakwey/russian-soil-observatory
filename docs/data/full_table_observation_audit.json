@@ -1,0 +1,30 @@
+{
+  "table_measurement_candidate": 62805,
+  "table_observation": 62805,
+  "normalization": {
+    "converted": 3829,
+    "exact": 18728,
+    "incompatible": 5149,
+    "missing_unit": 35099
+  },
+  "spatial_linkage": {
+    "document_multiple_reported_coordinates": 2144,
+    "document_single_reported_coordinate": 1234,
+    "no_reported_coordinate": 58586,
+    "row_profile_verified": 841
+  },
+  "qa_status": {
+    "normalized": 21724,
+    "flagged": 841,
+    "unit_incompatible": 5149,
+    "unit_missing": 35091
+  },
+  "linked_operational_measurements": 841,
+  "checks": {
+    "coverage_gap": 0,
+    "candidate_uniqueness": "enforced by table_observation.candidate_id UNIQUE",
+    "artifact_property_context_integrity": "enforced by FOREIGN KEY during materialization",
+    "locator_integrity": "enforced by evidence_locator NOT NULL"
+  },
+  "ready": true
+}
