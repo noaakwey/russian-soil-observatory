@@ -46,6 +46,8 @@ const STRINGS = {
     'chart.depth.note': 'Медиана по интервалам 20 см; показаны интервалы не менее чем с 3 наблюдениями.',
     'chart.lat.note': 'Медиана по полосам 4°; только координаты в границах России (41–82° с.ш.). Наведите точку для деталей.',
     'chart.year.note': 'Число наблюдений в год; только надёжные заголовки и правдоподобные значения.',
+    'chart.axis.count': 'n', 'chart.axis.value': 'значение (единица не доказана)',
+    'chart.median': 'медиана',
     'quality.lede': 'Слой построен из OCR распознанных таблиц, поэтому часть значений неизбежно содержит ошибки распознавания. Они не удаляются, а помечаются: исходная ячейка остаётся доказательством, а решение принимает исследователь.',
     'quality.header': 'Как свойство опознано в заголовке',
     'quality.header.note': '<strong>symbol_embedded</strong> — химический символ найден внутри более длинного заголовка («Thickness of horizons, cm A + B»). Такие значения следует исключать из анализа по умолчанию.',
@@ -131,6 +133,8 @@ const STRINGS = {
     'chart.depth.note': 'Median over 20 cm bins; only bins with 3+ observations are shown.',
     'chart.lat.note': 'Median over 4° bands; coordinates within Russia only (41-82°N). Hover a point for detail.',
     'chart.year.note': 'Observation count per year; trusted headers and plausible values only.',
+    'chart.axis.count': 'n', 'chart.axis.value': 'value (unit not proven)',
+    'chart.median': 'median',
     'quality.lede': 'The layer is built from OCR-recognised tables, so some values inevitably carry recognition errors. They are not deleted but flagged: the source cell remains as evidence and the researcher decides.',
     'quality.header': 'How the property was recognised in the header',
     'quality.header.note': '<strong>symbol_embedded</strong> — the chemical symbol was found inside a longer header ("Thickness of horizons, cm A + B"). Such values should be excluded from analysis by default.',
@@ -581,10 +585,19 @@ function emptyChart(container, message) {
 }
 
 const CHART_W = 340;
-const CHART_H = 176;
+
+function axisTitle(svg, text, x, y, anchor = 'middle') {
+  const label = svgNode('text', { class: 'axis-title', x, y, 'text-anchor': anchor });
+  label.textContent = text;
+  svg.appendChild(label);
+  return label;
+}
 
 /** Bars over p1-p99 of ``values`` so a handful of OCR-corrupted numbers
- * cannot flatten the whole histogram onto one bin. */
+ * cannot flatten the whole histogram onto one bin.  Every axis is labelled
+ * on the chart itself — not only in the hover tooltip — because on a phone
+ * there is no hover: the value axis carries the unit as a title, the count
+ * axis carries an "n" corner label, same as the profile and year charts. */
 function renderHistogram(container, values, unitLabel) {
   if (values.length < 3) return emptyChart(container, t('chart.empty'));
   const sorted = [...values].sort((a, b) => a - b);
@@ -601,11 +614,12 @@ function renderHistogram(container, values, unitLabel) {
     bins[index]++;
   });
   const maxCount = Math.max(...bins, 1);
-  const margin = { top: 8, right: 8, bottom: 20, left: 8 };
+  const height = 202;
+  const margin = { top: 20, right: 8, bottom: 38, left: 26 };
   const innerW = CHART_W - margin.left - margin.right;
-  const innerH = CHART_H - margin.top - margin.bottom;
+  const innerH = height - margin.top - margin.bottom;
   const barW = innerW / binCount;
-  const svg = svgNode('svg', { viewBox: `0 0 ${CHART_W} ${CHART_H}`, class: 'chart-svg' });
+  const svg = svgNode('svg', { viewBox: `0 0 ${CHART_W} ${height}`, class: 'chart-svg' });
 
   bins.forEach((count, i) => {
     if (!count) return;
@@ -627,15 +641,26 @@ function renderHistogram(container, values, unitLabel) {
     y1: margin.top, y2: margin.top + innerH,
   }));
 
+  // count (y) axis: a corner label plus the tallest bar's value, so the bar
+  // heights read as a number, not just a silhouette.
+  svg.appendChild(svgNode('line', { class: 'axis', x1: margin.left, x2: margin.left, y1: margin.top, y2: margin.top + innerH }));
+  axisTitle(svg, t('chart.axis.count'), 4, margin.top - 6, 'start');
+  const maxLabel = svgNode('text', { class: 'tick-label', x: margin.left - 4, y: margin.top + 3, 'text-anchor': 'end' });
+  maxLabel.textContent = num(maxCount);
+  svg.appendChild(maxLabel);
+
+  // value (x) axis: range at the two ends, unit as an explicit title.
+  svg.appendChild(svgNode('line', { class: 'axis', x1: margin.left, x2: margin.left + innerW, y1: margin.top + innerH, y2: margin.top + innerH }));
   [[lo, 'start', margin.left], [hi, 'end', margin.left + innerW]].forEach(([val, anchor, x]) => {
     const label = svgNode('text', {
-      class: 'tick-label', x: x.toFixed(1), y: CHART_H - 5, 'text-anchor': anchor,
+      class: 'tick-label', x: x.toFixed(1), y: margin.top + innerH + 13, 'text-anchor': anchor,
     });
     label.textContent = fmtNum(val);
     svg.appendChild(label);
   });
-  const medLabel = svgNode('text', { class: 'tick-label', x: medX.toFixed(1), y: margin.top - 1, 'text-anchor': 'middle' });
-  medLabel.textContent = fmtNum(med);
+  axisTitle(svg, unitLabel || t('chart.axis.value'), margin.left + innerW / 2, height - 4);
+  const medLabel = svgNode('text', { class: 'tick-label', x: medX.toFixed(1), y: margin.top - 6, 'text-anchor': 'middle' });
+  medLabel.textContent = `${t('chart.median')} ${fmtNum(med)}`;
   svg.appendChild(medLabel);
 
   container.innerHTML = '';
@@ -645,12 +670,13 @@ function renderHistogram(container, values, unitLabel) {
 /** Simple categorical bars, used for the per-year observation count. */
 function renderBars(container, items) {
   if (items.length < 2) return emptyChart(container, t('chart.empty.year'));
-  const margin = { top: 8, right: 8, bottom: 20, left: 8 };
+  const height = 186;
+  const margin = { top: 18, right: 8, bottom: 20, left: 26 };
   const innerW = CHART_W - margin.left - margin.right;
-  const innerH = CHART_H - margin.top - margin.bottom;
+  const innerH = height - margin.top - margin.bottom;
   const maxV = Math.max(...items.map((d) => d.value), 1);
   const barW = innerW / items.length;
-  const svg = svgNode('svg', { viewBox: `0 0 ${CHART_W} ${CHART_H}`, class: 'chart-svg' });
+  const svg = svgNode('svg', { viewBox: `0 0 ${CHART_W} ${height}`, class: 'chart-svg' });
 
   items.forEach((d, i) => {
     const h = innerH * d.value / maxV;
@@ -663,11 +689,17 @@ function renderBars(container, items) {
     svg.appendChild(bar);
   });
 
+  svg.appendChild(svgNode('line', { class: 'axis', x1: margin.left, x2: margin.left, y1: margin.top, y2: margin.top + innerH }));
+  axisTitle(svg, t('chart.axis.count'), 4, margin.top - 6, 'start');
+  const maxLabel = svgNode('text', { class: 'tick-label', x: margin.left - 4, y: margin.top + 3, 'text-anchor': 'end' });
+  maxLabel.textContent = num(maxV);
+  svg.appendChild(maxLabel);
+
   const showEvery = Math.max(1, Math.ceil(items.length / 9));
   items.forEach((d, i) => {
     if (i % showEvery !== 0 && i !== items.length - 1) return;
     const x = margin.left + i * barW + barW / 2;
-    const label = svgNode('text', { class: 'tick-label', x: x.toFixed(1), y: CHART_H - 5, 'text-anchor': 'middle' });
+    const label = svgNode('text', { class: 'tick-label', x: x.toFixed(1), y: height - 5, 'text-anchor': 'middle' });
     label.textContent = d.label;
     svg.appendChild(label);
   });
@@ -677,12 +709,16 @@ function renderBars(container, items) {
 }
 
 /** Median-per-band line+dots, oriented vertically: depth grows downward,
- * latitude grows upward (north at the top, matching the map). */
+ * latitude grows upward (north at the top, matching the map).  The value
+ * axis (x) previously carried no ticks at all — only a hover tooltip, which
+ * a touchscreen never triggers — so every point was an unlabelled dot on a
+ * phone. It now gets a real axis: min/max ticks plus a unit title. */
 function renderProfile(container, points, opts) {
   if (points.length < 2) return emptyChart(container, opts.emptyText);
-  const margin = { top: 10, right: 14, bottom: 8, left: 40 };
+  const height = 208;
+  const margin = { top: 10, right: 14, bottom: 34, left: 40 };
   const innerW = CHART_W - margin.left - margin.right;
-  const innerH = CHART_H - margin.top - margin.bottom;
+  const innerH = height - margin.top - margin.bottom;
   const ys = points.map((p) => p.y);
   const xs = points.map((p) => p.value);
   const yMin = Math.min(...ys), yMax = Math.max(...ys);
@@ -693,7 +729,7 @@ function renderProfile(container, points, opts) {
   };
   const xPos = (x) => margin.left + innerW * (x - xMin) / (xMax - xMin || 1);
 
-  const svg = svgNode('svg', { viewBox: `0 0 ${CHART_W} ${CHART_H}`, class: 'chart-svg' });
+  const svg = svgNode('svg', { viewBox: `0 0 ${CHART_W} ${height}`, class: 'chart-svg' });
   if (xMin < 0) {
     const zeroX = xPos(0);
     svg.appendChild(svgNode('line', { class: 'gridline', x1: zeroX.toFixed(1), x2: zeroX.toFixed(1), y1: margin.top, y2: margin.top + innerH }));
@@ -713,6 +749,18 @@ function renderProfile(container, points, opts) {
     label.textContent = opts.yFormat(p.y);
     svg.appendChild(label);
   });
+
+  // value (x) axis: this is the part a hover-only tooltip left completely
+  // unlabelled on a touchscreen.
+  svg.appendChild(svgNode('line', { class: 'axis', x1: margin.left, x2: margin.left + innerW, y1: margin.top + innerH, y2: margin.top + innerH }));
+  [[xMin, 'start', margin.left], [xMax, 'end', margin.left + innerW]].forEach(([val, anchor, x]) => {
+    const label = svgNode('text', {
+      class: 'tick-label', x: x.toFixed(1), y: margin.top + innerH + 13, 'text-anchor': anchor,
+    });
+    label.textContent = fmtNum(val);
+    svg.appendChild(label);
+  });
+  axisTitle(svg, opts.unitLabel || t('chart.axis.value'), margin.left + innerW / 2, height - 4);
 
   container.innerHTML = '';
   container.appendChild(svg);
@@ -809,7 +857,7 @@ async function selectProperty(pid) {
 }
 
 function renderPropertyCharts(meta, data, useMetric) {
-  const unitLabel = useMetric ? (meta.unit_mode || '') : t('props.th.value');
+  const unitLabel = useMetric ? (meta.unit_mode || '') : t('chart.axis.value');
 
   document.getElementById('chart-hist-note').textContent =
     t(useMetric ? 'chart.hist.note.metric' : 'chart.hist.note.raw').replace('{mode}', meta.unit_mode || '');

@@ -83,7 +83,14 @@ code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monosp
 
 .masthead {
   position: sticky; top: 0; z-index: 500;
+  /* Plain fallback first: some in-app WebViews (Telegram's iOS/Android
+     browser observed) don't parse color-mix() and discard the whole
+     declaration, leaving the sticky header with no background at all — the
+     page scrolls "through" it instead of under it. A same-property
+     redeclaration only overrides when the later value actually parses. */
+  background: var(--surface-1);
   background: color-mix(in srgb, var(--surface-1) 92%, transparent);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--border);
 }
@@ -241,6 +248,7 @@ input.ghost:focus { outline: 2px solid var(--series-1); outline-offset: -1px; }
 #props-table tbody tr { cursor: pointer; }
 #props-table tbody tr:hover { background: var(--surface-2); }
 #props-table tbody tr[aria-selected="true"] {
+  background: var(--surface-2);
   background: color-mix(in srgb, var(--series-1) 14%, transparent);
   box-shadow: inset 3px 0 0 var(--series-1);
 }
@@ -258,6 +266,7 @@ input.ghost:focus { outline: 2px solid var(--series-1); outline-offset: -1px; }
 .chart-svg .axis { stroke: var(--border-strong); stroke-width: 1; }
 .chart-svg .gridline { stroke: var(--border); stroke-width: 1; }
 .chart-svg .tick-label { fill: var(--text-muted); font-size: 9.5px; }
+.chart-svg .axis-title { fill: var(--text-secondary); font-size: 9.5px; font-weight: 600; }
 .chart-svg .bar { fill: var(--series-1); }
 .chart-svg .bar:hover { fill: var(--series-2); }
 .chart-svg .line { fill: none; stroke: var(--series-1); stroke-width: 2; }
