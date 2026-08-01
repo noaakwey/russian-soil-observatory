@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import json
 import sqlite3
+import warnings
 from collections import Counter
 from itertools import combinations
 from pathlib import Path
@@ -33,7 +34,9 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import statsmodels.formula.api as smf
 from scipy import stats
+from statsmodels.stats.multitest import multipletests
 
 EARTH_RADIUS_KM = 6371.0
 
@@ -79,7 +82,7 @@ def haversine(lat1, lon1, lat2, lon2):
 # --------------------------------------------------------------------------
 
 QUERY = """
-SELECT o.observation_id, o.document_id, o.artifact_id, o.property_id,
+SELECT o.observation_id, o.document_id, o.artifact_id, o.row_index, o.property_id,
        p.canonical_name AS property, p.category,
        o.value_num_raw, o.value_normalized, o.unit_normalized,
        o.normalization_status, f.header_match_kind, f.value_plausibility,
@@ -547,6 +550,234 @@ def property_landscape(frame: pd.DataFrame, output: Path) -> dict:
     }
 
 
+# --------------------------------------------------------------------------
+# 6. Property-to-property correlations
+# --------------------------------------------------------------------------
+
+# A pedologically coherent panel: acid-base, organic matter, texture and the
+# properties routinely printed alongside them.  Chosen from the pairs with
+# the deepest same-sample overlap (row_index co-occurrence), not by category,
+# so every cell in the matrix has a real sample size behind it.
+CORRELATION_PANEL = [
+    'ph_h2o', 'ph_kcl', 'ph_unspecified', 'soil_organic_carbon', 'organic_matter',
+    'clay', 'sand', 'silt', 'physical_clay', 'fine_fraction_lt_0_001mm',
+    'base_saturation', 'carbonate_equivalent', 'electrical_conductivity',
+    'iron_oxide_fe2o3', 'available_phosphorus',
+]
+CORRELATION_LABELS_RU = {
+    'ph_h2o': 'pH(H2O)', 'ph_kcl': 'pH(KCl)', 'ph_unspecified': 'pH(?)',
+    'soil_organic_carbon': 'C орг.', 'organic_matter': 'гумус',
+    'clay': 'ил <0.002', 'sand': 'песок', 'silt': 'пыль',
+    'physical_clay': 'физ. глина', 'fine_fraction_lt_0_001mm': 'ил <0.001',
+    'base_saturation': 'V, %', 'carbonate_equivalent': 'CaCO3',
+    'electrical_conductivity': 'EC', 'iron_oxide_fe2o3': 'Fe2O3',
+    'available_phosphorus': 'P подв.',
+}
+
+MIN_PAIR_N = 30
+
+
+def pairwise_wide_table(frame: pd.DataFrame, properties: list[str]) -> pd.DataFrame:
+    """One row per (artifact, row_index) — i.e. per physical table row, which
+    is the same soil sample measured across columns.  Only ``trusted`` and
+    ``metric`` cells enter it: unit compatibility inside a property matters
+    even though correlation itself is scale-invariant, because a property
+    silently mixing mg/kg and % rows would still corrupt its own values.
+    """
+    subset = frame[frame.trusted & frame.metric & frame.property_id.isin(properties)]
+    return subset.pivot_table(index=['artifact_id', 'row_index'], columns='property_id',
+                              values='value_normalized', aggfunc='first')
+
+
+def correlation_matrix(frame: pd.DataFrame, output: Path) -> dict:
+    """Pearson r with Fisher-z 95% CI, Spearman rho, and BH-FDR q-values
+    across every tested pair — not p-values read in isolation, which is
+    exactly the shortcut that manufactures false positives when 105 pairs
+    are screened at once (14 choose 2).
+    """
+    wide = pairwise_wide_table(frame, CORRELATION_PANEL)
+    rows = []
+    for a, b in combinations(CORRELATION_PANEL, 2):
+        if a not in wide.columns or b not in wide.columns:
+            continue
+        pair = wide[[a, b]].dropna()
+        n = len(pair)
+        if n < MIN_PAIR_N:
+            continue
+        r, p_pearson = stats.pearsonr(pair[a], pair[b])
+        rho, p_spearman = stats.spearmanr(pair[a], pair[b])
+        # Fisher z-transform: the standard way to put a CI on a correlation
+        # coefficient, whose sampling distribution is not normal near ±1.
+        z = np.arctanh(np.clip(r, -0.9999, 0.9999))
+        se = 1 / np.sqrt(n - 3)
+        lo, hi = np.tanh(z - 1.96 * se), np.tanh(z + 1.96 * se)
+        rows.append({'a': a, 'b': b, 'n': n, 'pearson_r': r, 'ci_low': lo, 'ci_high': hi,
+                     'p_pearson': p_pearson, 'spearman_rho': rho, 'p_spearman': p_spearman})
+
+    table = pd.DataFrame(rows)
+    if len(table):
+        _, qvals, _, _ = multipletests(table.p_pearson, method='fdr_bh')
+        table['q_value'] = qvals
+        table['significant_fdr5'] = table.q_value < 0.05
+    table = table.sort_values('n', ascending=False)
+    table.round(4).to_csv(output / 'table_correlations.csv', index=False)
+
+    for theme_name, theme in THEMES.items():
+        apply_theme(theme)
+        present = [p for p in CORRELATION_PANEL if p in wide.columns]
+        matrix = pd.DataFrame(np.nan, index=present, columns=present)
+        counts = pd.DataFrame(0, index=present, columns=present)
+        for _, row in table.iterrows():
+            matrix.loc[row.a, row.b] = matrix.loc[row.b, row.a] = row.pearson_r
+            counts.loc[row.a, row.b] = counts.loc[row.b, row.a] = row.n
+        np.fill_diagonal(matrix.values, 1.0)
+        labels = [CORRELATION_LABELS_RU.get(p, p) for p in present]
+
+        fig, ax = plt.subplots(figsize=(7.6, 6.6))
+        cmap = plt.get_cmap('RdBu_r')
+        image = ax.imshow(matrix.values, cmap=cmap, vmin=-1, vmax=1)
+        ax.set_xticks(range(len(present))); ax.set_yticks(range(len(present)))
+        ax.set_xticklabels(labels, rotation=55, ha='right', fontsize=8.4)
+        ax.set_yticklabels(labels, fontsize=8.4)
+        for i in range(len(present)):
+            for j in range(len(present)):
+                if i == j or np.isnan(matrix.values[i, j]):
+                    continue
+                # Grey out pairs that don't survive FDR correction: a visible
+                # number that isn't a trustworthy signal is worse than a gap.
+                sig = table[((table.a == present[i]) & (table.b == present[j]))
+                           | ((table.a == present[j]) & (table.b == present[i]))]
+                is_sig = bool(sig.significant_fdr5.iloc[0]) if len(sig) else False
+                colour = theme['fg'] if is_sig else theme['muted']
+                ax.text(j, i, f'{matrix.values[i, j]:+.2f}', ha='center', va='center',
+                       fontsize=6.6, color=colour)
+        ax.set_title('Корреляции свойств, измеренных в одной строке таблицы\n'
+                     '(Пирсон r; серым — не прошло поправку FDR)', fontsize=10.5, pad=10)
+        bar = fig.colorbar(image, ax=ax, fraction=.045, pad=.03)
+        bar.outline.set_visible(False)
+        fig.tight_layout()
+        save(fig, output, 'fig7_correlations', theme_name)
+
+    strongest = table[table.significant_fdr5].reindex(
+        table[table.significant_fdr5].pearson_r.abs().sort_values(ascending=False).index)
+    return {
+        'pairs_tested': int(len(table)),
+        'pairs_significant_fdr5': int(table.significant_fdr5.sum()) if len(table) else 0,
+        'strongest': [
+            {'a': CORRELATION_LABELS_RU.get(r.a, r.a), 'b': CORRELATION_LABELS_RU.get(r.b, r.b),
+             'n': int(r.n), 'pearson_r': round(r.pearson_r, 3),
+             'ci': [round(r.ci_low, 3), round(r.ci_high, 3)], 'q_value': round(r.q_value, 4)}
+            for r in strongest.head(10).itertuples()
+        ],
+    }
+
+
+# --------------------------------------------------------------------------
+# 7. Mixed-effects models: does pseudo-replication change the conclusion?
+# --------------------------------------------------------------------------
+
+def mixed_effects_models(frame: pd.DataFrame, output: Path) -> dict:
+    """Compare a naive document-mean OLS slope (§2's method) against a
+    mixed-effects model fit on every individual observation with a random
+    intercept per document.  If one article contributes 400 correlated
+    values from a single field, treating them as independent observations is
+    exactly the kind of pseudo-replication that manufactures false
+    precision; a random intercept absorbs that non-independence instead of
+    ignoring it, and the reported CI is on the fixed-effect slope alone.
+    """
+    warnings.filterwarnings('ignore', category=UserWarning)
+    result: dict = {}
+
+    def fit_pair(data: pd.DataFrame, value_col: str, label: str) -> dict | None:
+        naive = data.groupby('document_id').agg(
+            v=(value_col, 'mean'), lat=('latitude', 'first')).dropna()
+        if len(naive) < 15:
+            return None
+        naive_fit = stats.linregress(naive.lat, naive.v)
+
+        model_data = data[['document_id', 'latitude', value_col]].dropna().rename(
+            columns={value_col: 'value'})
+        model = smf.mixedlm('value ~ latitude', model_data, groups=model_data['document_id'])
+        fitted = model.fit(reml=True)
+        slope = fitted.params['latitude']
+        ci_low, ci_high = fitted.conf_int().loc['latitude']
+        # Intraclass correlation: the share of total variance sitting between
+        # documents rather than within one — the number that says how much
+        # pseudo-replication there was to correct for in the first place.
+        var_doc = float(fitted.cov_re.iloc[0, 0])
+        var_resid = float(fitted.scale)
+        icc = var_doc / (var_doc + var_resid)
+
+        return {
+            'label': label, 'n_observations': int(len(model_data)),
+            'n_documents': int(model_data.document_id.nunique()),
+            'naive_ols_slope_per_degree': round(naive_fit.slope, 4),
+            'naive_ols_r_squared': round(naive_fit.rvalue ** 2, 3),
+            'mixed_slope_per_degree': round(slope, 4),
+            'mixed_ci': [round(ci_low, 4), round(ci_high, 4)],
+            'mixed_p_value': float(f"{fitted.pvalues['latitude']:.3g}"),
+            'icc_document': round(icc, 3),
+        }
+
+    ph = frame[frame.property_id.isin(PH_IDS) & frame.trusted & frame.precise
+              & frame.latitude.notna()].copy()
+    ph['value_num_raw'] = ph.value_num_raw
+    result['ph'] = fit_pair(ph, 'value_num_raw', 'pH')
+
+    soc = frame[(frame.property_id == 'soil_organic_carbon') & frame.trusted & frame.metric
+               & frame.latitude.notna() & (frame.unit_normalized == 'g/kg')
+               & ((frame.depth_top_cm.isna()) | (frame.depth_top_cm < 30))].copy()
+    soc['log_value'] = np.log(soc.value_normalized.clip(lower=0.1))
+    result['soc'] = fit_pair(soc, 'log_value', 'log(SOC)')
+
+    # A multiple-predictor model for pH: does latitude survive once depth and
+    # corpus (a proxy for which editorial/lab tradition produced the value)
+    # are held constant, and by how much?
+    ph_multi = frame[frame.property_id.isin(PH_IDS) & frame.trusted & frame.precise
+                     & frame.latitude.notna()].dropna(
+        subset=['value_num_raw', 'latitude', 'depth_top_cm']).copy()
+    if len(ph_multi) >= 60:
+        multi_model = smf.mixedlm('value_num_raw ~ latitude + depth_top_cm + C(corpus)',
+                                  ph_multi, groups=ph_multi['document_id'])
+        multi_fit = multi_model.fit(reml=True)
+        result['ph_multiple'] = {
+            'n_observations': int(len(ph_multi)),
+            'n_documents': int(ph_multi.document_id.nunique()),
+            'coefficients': {
+                name: {'estimate': round(float(multi_fit.params[name]), 4),
+                      'ci': [round(float(multi_fit.conf_int().loc[name, 0]), 4),
+                            round(float(multi_fit.conf_int().loc[name, 1]), 4)],
+                      'p_value': float(f'{multi_fit.pvalues[name]:.3g}')}
+                for name in multi_fit.params.index if name not in ('Group Var',)
+            },
+        }
+
+    for theme_name, theme in THEMES.items():
+        apply_theme(theme)
+        fig, ax = plt.subplots(figsize=(7.6, 3.6))
+        rows_plot = [r for r in (result.get('ph'), result.get('soc')) if r]
+        y = np.arange(len(rows_plot))
+        naive_vals = [r['naive_ols_slope_per_degree'] for r in rows_plot]
+        mixed_vals = [r['mixed_slope_per_degree'] for r in rows_plot]
+        mixed_err = [[m - c[0] for m, c in zip(mixed_vals, [r['mixed_ci'] for r in rows_plot])],
+                    [c[1] - m for m, c in zip(mixed_vals, [r['mixed_ci'] for r in rows_plot])]]
+        ax.scatter(naive_vals, y - 0.12, marker='D', s=50, color=theme['muted'],
+                  label='наивный OLS (средние по публикациям)', zorder=3)
+        ax.errorbar(mixed_vals, y + 0.12, xerr=mixed_err, fmt='o', markersize=7,
+                   color=theme['series'][0], ecolor=theme['series'][0], capsize=4,
+                   label='смешанная модель (документ — случайный эффект, 95% ДИ)', zorder=4)
+        ax.axvline(0, color=theme['grid'], linewidth=1)
+        ax.set_yticks(y); ax.set_yticklabels([r['label'] for r in rows_plot])
+        ax.set_xlabel('наклон на градус широты')
+        ax.set_title('Наивная оценка против смешанной модели', pad=10)
+        ax.legend(frameon=False, fontsize=8, loc='upper left', bbox_to_anchor=(0, -0.18))
+        ax.grid(axis='x', alpha=.35, linewidth=.6)
+        fig.tight_layout()
+        save(fig, output, 'fig8_mixed_effects', theme_name)
+
+    return result
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--db', type=Path, required=True)
@@ -581,6 +812,8 @@ def main() -> None:
 
     findings['zones'] = regional_table(frame, args.output)
     findings['landscape'] = property_landscape(frame, args.output)
+    findings['correlations'] = correlation_matrix(frame, args.output)
+    findings['mixed_effects'] = mixed_effects_models(frame, args.output)
 
     (args.output / 'insights.json').write_text(
         json.dumps(findings, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

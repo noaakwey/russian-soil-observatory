@@ -387,5 +387,189 @@
     "median_unit_proven_pct": 3.3,
     "properties_over_1000_obs": 40,
     "properties_under_50_obs": 13
+  },
+  "correlations": {
+    "pairs_tested": 53,
+    "pairs_significant_fdr5": 29,
+    "strongest": [
+      {
+        "a": "pH(H2O)",
+        "b": "pH(KCl)",
+        "n": 114,
+        "pearson_r": 0.909,
+        "ci": [
+          0.871,
+          0.936
+        ],
+        "q_value": 0.0
+      },
+      {
+        "a": "pH(H2O)",
+        "b": "V, %",
+        "n": 312,
+        "pearson_r": 0.731,
+        "ci": [
+          0.674,
+          0.779
+        ],
+        "q_value": 0.0
+      },
+      {
+        "a": "pH(KCl)",
+        "b": "CaCO3",
+        "n": 40,
+        "pearson_r": 0.669,
+        "ci": [
+          0.452,
+          0.812
+        ],
+        "q_value": 0.0
+      },
+      {
+        "a": "ил <0.002",
+        "b": "Fe2O3",
+        "n": 70,
+        "pearson_r": 0.669,
+        "ci": [
+          0.515,
+          0.781
+        ],
+        "q_value": 0.0
+      },
+      {
+        "a": "ил <0.001",
+        "b": "V, %",
+        "n": 50,
+        "pearson_r": -0.665,
+        "ci": [
+          -0.796,
+          -0.474
+        ],
+        "q_value": 0.0
+      },
+      {
+        "a": "физ. глина",
+        "b": "CaCO3",
+        "n": 30,
+        "pearson_r": 0.609,
+        "ci": [
+          0.318,
+          0.795
+        ],
+        "q_value": 0.001
+      },
+      {
+        "a": "гумус",
+        "b": "EC",
+        "n": 32,
+        "pearson_r": 0.533,
+        "ci": [
+          0.226,
+          0.743
+        ],
+        "q_value": 0.0041
+      },
+      {
+        "a": "pH(H2O)",
+        "b": "P подв.",
+        "n": 30,
+        "pearson_r": -0.532,
+        "ci": [
+          -0.749,
+          -0.212
+        ],
+        "q_value": 0.0053
+      },
+      {
+        "a": "pH(H2O)",
+        "b": "ил <0.001",
+        "n": 238,
+        "pearson_r": 0.471,
+        "ci": [
+          0.366,
+          0.564
+        ],
+        "q_value": 0.0
+      },
+      {
+        "a": "ил <0.002",
+        "b": "песок",
+        "n": 179,
+        "pearson_r": -0.447,
+        "ci": [
+          -0.557,
+          -0.322
+        ],
+        "q_value": 0.0
+      }
+    ]
+  },
+  "mixed_effects": {
+    "ph": {
+      "label": "pH",
+      "n_observations": 1032,
+      "n_documents": 90,
+      "naive_ols_slope_per_degree": -0.0828,
+      "naive_ols_r_squared": 0.17,
+      "mixed_slope_per_degree": -0.0841,
+      "mixed_ci": [
+        -0.1216,
+        -0.0466
+      ],
+      "mixed_p_value": 1.12e-05,
+      "icc_document": 0.705
+    },
+    "soc": {
+      "label": "log(SOC)",
+      "n_observations": 1891,
+      "n_documents": 165,
+      "naive_ols_slope_per_degree": -0.0086,
+      "naive_ols_r_squared": 0.001,
+      "mixed_slope_per_degree": -0.0062,
+      "mixed_ci": [
+        -0.0411,
+        0.0287
+      ],
+      "mixed_p_value": 0.729,
+      "icc_document": 0.521
+    },
+    "ph_multiple": {
+      "n_observations": 621,
+      "n_documents": 44,
+      "coefficients": {
+        "Intercept": {
+          "estimate": 11.8931,
+          "ci": [
+            8.2987,
+            15.4876
+          ],
+          "p_value": 8.87e-11
+        },
+        "C(corpus)[T.springer]": {
+          "estimate": -0.4416,
+          "ci": [
+            -1.4269,
+            0.5436
+          ],
+          "p_value": 0.38
+        },
+        "latitude": {
+          "estimate": -0.0943,
+          "ci": [
+            -0.1505,
+            -0.0381
+          ],
+          "p_value": 0.000996
+        },
+        "depth_top_cm": {
+          "estimate": 0.0098,
+          "ci": [
+            0.0082,
+            0.0113
+          ],
+          "p_value": 2.4e-36
+        }
+      }
+    }
   }
 }
