@@ -1,22 +1,22 @@
 {
   "layer": {
-    "observations": 106286,
-    "trusted": 97247,
-    "metric": 23508,
-    "located": 79971,
-    "precise": 13046,
+    "observations": 104893,
+    "trusted": 95875,
+    "metric": 23269,
+    "located": 78752,
+    "precise": 12917,
     "documents_outside_russia": 160
   },
   "effort": {
-    "documents_located": 905,
-    "observations_located": 74597,
-    "european_documents_pct": 72.9,
+    "documents_located": 883,
+    "observations_located": 73381,
+    "european_documents_pct": 72.7,
     "european_area_pct": 23.0,
-    "documents_east_of_100E": 99,
+    "documents_east_of_100E": 97,
     "by_tier": {
-      "region": 721,
-      "reported": 153,
-      "dms": 31
+      "region": 703,
+      "reported": 150,
+      "dms": 30
     }
   },
   "zonal": {
@@ -85,7 +85,7 @@
     }
   },
   "cooccurrence": {
-    "tables_with_multiple_properties": 1331,
+    "tables_with_multiple_properties": 1320,
     "strongest_pairs": [
       {
         "a": "coarse silt 0.05-0.01 mm",
@@ -186,7 +186,7 @@
       {
         "a": "calcium",
         "b": "magnesium",
-        "jaccard": 0.679,
+        "jaccard": 0.685,
         "tables": 74
       },
       {
@@ -224,53 +224,53 @@
   },
   "time": {
     "metal_share_2006_2010": 8.1,
-    "metal_share_2020_2025": 13.9,
-    "longitude_drift_per_year": 0.304,
-    "longitude_drift_p": 0.0788,
+    "metal_share_2020_2025": 14.0,
+    "longitude_drift_per_year": 0.253,
+    "longitude_drift_p": 0.133,
     "median_longitude_2006_2010": 41.0,
     "median_longitude_2020_2025": 44.0
   },
   "zones": [
     {
       "zone": "Арктика и субарктика (>66°)",
-      "documents": 74,
-      "observations": 7982,
+      "documents": 73,
+      "observations": 7971,
       "properties": 69,
-      "precise_pct": 49.0
+      "precise_pct": 48.0
     },
     {
       "zone": "Северная тайга (60–66°)",
       "documents": 89,
-      "observations": 7845,
-      "properties": 75,
+      "observations": 7732,
+      "properties": 74,
       "precise_pct": 30.0
     },
     {
       "zone": "Средняя тайга (56–60°)",
-      "documents": 207,
-      "observations": 15519,
-      "properties": 84,
+      "documents": 198,
+      "observations": 15302,
+      "properties": 85,
       "precise_pct": 13.0
     },
     {
       "zone": "Южная тайга и лесостепь (52–56°)",
-      "documents": 292,
-      "observations": 26816,
+      "documents": 282,
+      "observations": 25994,
       "properties": 87,
-      "precise_pct": 14.0
+      "precise_pct": 13.0
     },
     {
       "zone": "Степь (48–52°)",
-      "documents": 114,
-      "observations": 6658,
-      "properties": 74,
+      "documents": 113,
+      "observations": 6641,
+      "properties": 73,
       "precise_pct": 27.0
     },
     {
       "zone": "Сухая степь и предгорья (<48°)",
-      "documents": 129,
-      "observations": 9777,
-      "properties": 80,
+      "documents": 128,
+      "observations": 9741,
+      "properties": 79,
       "precise_pct": 18.0
     }
   ],
@@ -299,8 +299,8 @@
       },
       {
         "property": "total porosity",
-        "unit_proven_pct": 74.8,
-        "observations": 480
+        "unit_proven_pct": 78.3,
+        "observations": 608
       }
     ],
     "worst_unit_proven": [
@@ -385,12 +385,12 @@
       }
     ],
     "median_unit_proven_pct": 3.3,
-    "properties_over_1000_obs": 40,
+    "properties_over_1000_obs": 39,
     "properties_under_50_obs": 13
   },
   "correlations": {
     "pairs_tested": 53,
-    "pairs_significant_fdr5": 29,
+    "pairs_significant_fdr5": 30,
     "strongest": [
       {
         "a": "pH(H2O)",
@@ -571,5 +571,56 @@
         }
       }
     }
+  },
+  "zonal_sweep": {
+    "properties_eligible": 16,
+    "properties_total": 101,
+    "properties_significant_fdr5": 4,
+    "strengthening": [
+      {
+        "property": "physical clay",
+        "n_documents": 24,
+        "slope_per_degree": -0.9929,
+        "ci": [
+          -1.6272,
+          -0.3585
+        ],
+        "log_transformed": false,
+        "q_value": 0.0105
+      },
+      {
+        "property": "fine fraction <0.001 mm",
+        "n_documents": 15,
+        "slope_per_degree": -0.8866,
+        "ci": [
+          -1.4642,
+          -0.309
+        ],
+        "log_transformed": false,
+        "q_value": 0.0105
+      },
+      {
+        "property": "pH in water",
+        "n_documents": 206,
+        "slope_per_degree": -0.0816,
+        "ci": [
+          -0.1071,
+          -0.056
+        ],
+        "log_transformed": false,
+        "q_value": 0.0
+      },
+      {
+        "property": "pH (method unspecified)",
+        "n_documents": 127,
+        "slope_per_degree": -0.0763,
+        "ci": [
+          -0.1162,
+          -0.0365
+        ],
+        "log_transformed": false,
+        "q_value": 0.0014
+      }
+    ]
   }
 }

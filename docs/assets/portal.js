@@ -312,10 +312,10 @@ function renderQuality() {
 const DOWNLOADS = [
   ['data/full_table_observations.csv', {
     ru: 'Все табличные наблюдения с флагами качества и происхождением',
-    en: 'All table observations with quality flags and provenance' }, '80 MB'],
+    en: 'All table observations with quality flags and provenance' }, '79 MB'],
   ['data/observatory.sqlite.gz', {
     ru: 'База для браузера и локального анализа (SQLite, gzip)',
-    en: 'Database for the browser and local analysis (SQLite, gzip)' }, '9.5 MB'],
+    en: 'Database for the browser and local analysis (SQLite, gzip)' }, '9.0 MB'],
   ['data/aggregates.json', {
     ru: 'Все сводные показатели портала', en: 'Every aggregate the portal quotes' }, '30 KB'],
   ['data/portal_map.json', {

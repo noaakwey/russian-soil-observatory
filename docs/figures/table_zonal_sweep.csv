@@ -1,0 +1,17 @@
+property_id,property,n_observations,n_documents,log_transformed,slope_per_degree,ci_low,ci_high,p_value,icc_document,q_value,significant_fdr5
+physical_clay,physical clay,375,24,False,-0.99287,-1.62721,-0.35854,0.00216,0.37463,0.01051,True
+fine_fraction_lt_0_001mm,fine fraction <0.001 mm,263,15,False,-0.88659,-1.46422,-0.30895,0.00263,0.71097,0.01051,True
+clay,clay,676,28,False,-0.38419,-1.18046,0.41208,0.34432,0.52989,0.55091,False
+carbonate_equivalent,carbonate equivalent (CaCO3),273,17,True,-0.18872,-0.35912,-0.01831,0.02996,0.49084,0.09588,False
+ph_h2o,pH in water,3343,206,False,-0.08159,-0.10714,-0.05604,0.0,0.641,0.0,True
+ph_unspecified,pH (method unspecified),1667,127,False,-0.07631,-0.11617,-0.03645,0.00018,0.68495,0.0014,True
+ph_kcl,pH in KCl,658,43,False,-0.01934,-0.07292,0.03424,0.47932,0.59959,0.69719,False
+porosity,total porosity,406,23,False,-0.00603,-1.72284,1.71078,0.9945,0.82914,0.9945,False
+organic_matter,organic matter/humus,2738,150,True,-0.00593,-0.02869,0.01683,0.60984,0.43589,0.75057,False
+bulk_density,bulk density,456,30,False,-0.00287,-0.0288,0.02307,0.82835,0.85305,0.94668,False
+soil_organic_carbon,soil organic carbon,2235,168,True,-0.00081,-0.03558,0.03395,0.9635,0.52124,0.9945,False
+iron_oxide_fe2o3,iron oxide Fe2O3,806,17,True,0.04396,-0.12122,0.20915,0.60194,0.72303,0.75057,False
+coarse_sand,coarse sand,921,49,True,0.11536,0.00275,0.22798,0.04466,0.63106,0.11864,False
+available_phosphorus,available phosphorus,173,18,True,0.12722,-0.00105,0.25549,0.0519,0.59971,0.11864,False
+base_saturation,base saturation,316,16,False,1.25891,-1.29351,3.81134,0.3337,0.69812,0.55091,False
+sand,sand,178,16,False,1.3318,-0.46829,3.13189,0.14703,0.49657,0.29407,False

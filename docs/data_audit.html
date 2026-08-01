@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Научный анализ базы Russian Soil Observatory</title>
-<link rel="stylesheet" href="assets/portal.css?v=20260801g">
+<link rel="stylesheet" href="assets/portal.css?v=20260801h">
 <style>
   main { max-width: 82ch; }
   main h1 { font-size: 1.7rem; margin-top: .2em; }
@@ -41,7 +41,7 @@
 <p><strong>Версия слоя наблюдений: 1 августа 2026 г. · 62 805 табличных наблюдений из 1 288 публикаций</strong></p>
 <div class="callout"><strong>Abstract.</strong> This report audits a database of soil measurements extracted from the full text of 4 180 Russian soil-science publications. Rebuilding the observation layer with the current header matcher removed 10 220 confirmed false positives (chemical symbols matched inside unrelated headers), recovered the analytical method for 1 731 pH cells lost to LaTeX markup, and restored 1 337 cells that a naive rebuild would have destroyed — including the anchors of all 147 manually verified measurements. The publication year, previously absent for the entire translated corpus, was recovered from the Pleiades DOI and validated against Crossref. Two structural limits dominate any downstream use: 56 % of values carry no provable unit, and the 790 reported coordinates are strongly clustered (Clark–Evans R = 0.34, ≈ 302 independent localities), so the point set is not a probability sample of Russian territory.</div>
 <hr>
-<div class="callout"><strong>Дополнено позже в тот же день.</strong> Каталог свойств расширен: добавлены заголовки-ионы (<code>Ca2+</code>, <code>Cl-</code>), фракции по Качинскому (<code>0.05–0.01</code>, <code>&lt;0.001</code>), валовые оксиды (<code>SiO2</code>, <code>TiO2</code>) и элементные отношения (<code>C:N</code>). Слой вырос до <strong>106 286 наблюдений и 101 свойства</strong> без потери ни одной курированной записи (режим <code>--additive</code>). Числа ниже описывают состояние до этого расширения; актуальный разбор — в <a href="insights.md">анализе</a>, раздел 0.5.</div>
+<div class="callout"><strong>Дополнено позже в тот же день.</strong> Каталог свойств расширен: добавлены заголовки-ионы (<code>Ca2+</code>, <code>Cl-</code>), фракции по Качинскому (<code>0.05–0.01</code>, <code>&lt;0.001</code>), валовые оксиды (<code>SiO2</code>, <code>TiO2</code>) и элементные отношения (<code>C:N</code>). Слой вырос до 106 286 наблюдений и 101 свойства без потери ни одной курированной записи (режим <code>--additive</code>). Позже систематическая широтная проверка по всем свойствам (не только по флагманским pH/SOC) вскрыла шаблон без границы слова: <code>total_phosphorus</code> матчил «Total Porosity», «Total PAHs» и «Total precipitation» как фосфор (82% из 1 525 ячеек — ложные). Исправлено; слой сейчас — <strong>104 893 наблюдения</strong>. Числа ниже описывают состояние до обоих изменений; актуальный разбор — в <a href="insights.md">анализе</a>, разделы 0.5 и 2.7.</div>
 <h2>Резюме</h2>
 <ul class="clean">
 <li><strong>Слой наблюдений был построен из устаревших кандидатов.</strong> 22.9% записей не соответствовали действующему коду извлечения. После пересборки — 62 805 наблюдений вместо 70 828.</li>
