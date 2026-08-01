@@ -1,22 +1,22 @@
 {
   "layer": {
-    "observations": 62805,
-    "trusted": 53856,
-    "metric": 19918,
-    "located": 42902,
-    "precise": 4989,
+    "observations": 106286,
+    "trusted": 97247,
+    "metric": 23508,
+    "located": 79971,
+    "precise": 13046,
     "documents_outside_russia": 160
   },
   "effort": {
-    "documents_located": 809,
-    "observations_located": 37524,
-    "european_documents_pct": 73.1,
+    "documents_located": 905,
+    "observations_located": 74597,
+    "european_documents_pct": 72.9,
     "european_area_pct": 23.0,
-    "documents_east_of_100E": 93,
+    "documents_east_of_100E": 99,
     "by_tier": {
-      "region": 645,
-      "reported": 137,
-      "dms": 27
+      "region": 721,
+      "reported": 153,
+      "dms": 31
     }
   },
   "zonal": {
@@ -85,13 +85,91 @@
     }
   },
   "cooccurrence": {
-    "tables_with_multiple_properties": 930,
+    "tables_with_multiple_properties": 1331,
     "strongest_pairs": [
       {
-        "a": "calcium",
-        "b": "magnesium",
-        "jaccard": 0.725,
+        "a": "coarse silt 0.05-0.01 mm",
+        "b": "medium silt 0.01-0.005 mm",
+        "jaccard": 0.938,
+        "tables": 106
+      },
+      {
+        "a": "fine silt 0.005-0.001 mm",
+        "b": "medium silt 0.01-0.005 mm",
+        "jaccard": 0.938,
+        "tables": 106
+      },
+      {
+        "a": "fine sand",
+        "b": "medium silt 0.01-0.005 mm",
+        "jaccard": 0.915,
+        "tables": 107
+      },
+      {
+        "a": "coarse silt 0.05-0.01 mm",
+        "b": "fine sand",
+        "jaccard": 0.905,
+        "tables": 105
+      },
+      {
+        "a": "coarse silt 0.05-0.01 mm",
+        "b": "fine silt 0.005-0.001 mm",
+        "jaccard": 0.895,
+        "tables": 102
+      },
+      {
+        "a": "fine sand",
+        "b": "fine silt 0.005-0.001 mm",
+        "jaccard": 0.873,
+        "tables": 103
+      },
+      {
+        "a": "chloride ion Cl-",
+        "b": "sulfate ion SO4 2-",
+        "jaccard": 0.841,
         "tables": 74
+      },
+      {
+        "a": "coarse sand",
+        "b": "coarse silt 0.05-0.01 mm",
+        "jaccard": 0.825,
+        "tables": 94
+      },
+      {
+        "a": "coarse sand",
+        "b": "fine sand",
+        "jaccard": 0.821,
+        "tables": 96
+      },
+      {
+        "a": "calcium oxide CaO",
+        "b": "magnesium oxide MgO",
+        "jaccard": 0.806,
+        "tables": 58
+      },
+      {
+        "a": "coarse sand",
+        "b": "medium silt 0.01-0.005 mm",
+        "jaccard": 0.788,
+        "tables": 93
+      },
+      {
+        "a": "coarse sand",
+        "b": "fine silt 0.005-0.001 mm",
+        "jaccard": 0.763,
+        "tables": 90
+      },
+      {
+        "a": "magnesium oxide MgO",
+        "b": "silicon dioxide",
+        "jaccard": 0.757,
+        "tables": 56
+      },
+      {
+        "a": "aluminum oxide Al2O3",
+        "b": "iron oxide Fe2O3",
+        "jaccard": 0.734,
+        "tables": 80
       },
       {
         "a": "copper",
@@ -100,112 +178,34 @@
         "tables": 132
       },
       {
-        "a": "available phosphorus",
-        "b": "available potassium",
-        "jaccard": 0.692,
-        "tables": 90
-      },
-      {
-        "a": "lead",
-        "b": "zinc",
-        "jaccard": 0.647,
-        "tables": 110
-      },
-      {
-        "a": "sand",
-        "b": "silt",
-        "jaccard": 0.645,
-        "tables": 80
-      },
-      {
-        "a": "copper",
-        "b": "lead",
-        "jaccard": 0.624,
-        "tables": 106
-      },
-      {
-        "a": "lead",
-        "b": "nickel",
-        "jaccard": 0.621,
-        "tables": 90
-      },
-      {
-        "a": "copper",
-        "b": "nickel",
-        "jaccard": 0.592,
-        "tables": 100
-      },
-      {
-        "a": "clay",
-        "b": "silt",
-        "jaccard": 0.544,
-        "tables": 86
-      },
-      {
-        "a": "nickel",
-        "b": "zinc",
-        "jaccard": 0.5,
-        "tables": 91
-      },
-      {
-        "a": "chromium",
-        "b": "nickel",
-        "jaccard": 0.5,
-        "tables": 62
-      },
-      {
-        "a": "clay",
-        "b": "sand",
-        "jaccard": 0.491,
-        "tables": 83
-      },
-      {
-        "a": "cadmium",
-        "b": "lead",
-        "jaccard": 0.485,
-        "tables": 64
-      },
-      {
-        "a": "manganese",
-        "b": "zinc",
-        "jaccard": 0.484,
-        "tables": 89
-      },
-      {
-        "a": "copper",
-        "b": "manganese",
-        "jaccard": 0.478,
-        "tables": 87
-      },
-      {
-        "a": "chromium",
-        "b": "lead",
-        "jaccard": 0.462,
-        "tables": 61
-      },
-      {
-        "a": "iron",
-        "b": "manganese",
-        "jaccard": 0.461,
-        "tables": 65
+        "a": "calcium oxide CaO",
+        "b": "silicon dioxide",
+        "jaccard": 0.704,
+        "tables": 57
       },
       {
         "a": "calcium",
-        "b": "iron",
-        "jaccard": 0.444,
-        "tables": 56
+        "b": "magnesium",
+        "jaccard": 0.679,
+        "tables": 74
       },
       {
-        "a": "cadmium",
-        "b": "nickel",
-        "jaccard": 0.421,
-        "tables": 56
+        "a": "fine fraction <0.001 mm",
+        "b": "fine silt 0.005-0.001 mm",
+        "jaccard": 0.669,
+        "tables": 103
       },
       {
-        "a": "cadmium",
-        "b": "zinc",
-        "jaccard": 0.401,
-        "tables": 67
+        "a": "calcium ion Ca2+",
+        "b": "magnesium ion Mg2+",
+        "jaccard": 0.662,
+        "tables": 174
+      },
+      {
+        "a": "aluminum oxide Al2O3",
+        "b": "silicon dioxide",
+        "jaccard": 0.656,
+        "tables": 61
       }
     ]
   },
@@ -223,55 +223,55 @@
     "ph_h2o_minus_kcl": 1.17
   },
   "time": {
-    "metal_share_2006_2010": 17.7,
-    "metal_share_2020_2025": 21.8,
-    "longitude_drift_per_year": 0.357,
-    "longitude_drift_p": 0.0424,
+    "metal_share_2006_2010": 8.1,
+    "metal_share_2020_2025": 13.9,
+    "longitude_drift_per_year": 0.304,
+    "longitude_drift_p": 0.0788,
     "median_longitude_2006_2010": 41.0,
     "median_longitude_2020_2025": 44.0
   },
   "zones": [
     {
       "zone": "Арктика и субарктика (>66°)",
-      "documents": 69,
-      "observations": 3732,
-      "properties": 38,
-      "precise_pct": 51.0
+      "documents": 74,
+      "observations": 7982,
+      "properties": 69,
+      "precise_pct": 49.0
     },
     {
       "zone": "Северная тайга (60–66°)",
-      "documents": 82,
-      "observations": 3421,
-      "properties": 46,
+      "documents": 89,
+      "observations": 7845,
+      "properties": 75,
       "precise_pct": 30.0
     },
     {
       "zone": "Средняя тайга (56–60°)",
-      "documents": 173,
-      "observations": 8134,
-      "properties": 51,
+      "documents": 207,
+      "observations": 15519,
+      "properties": 84,
       "precise_pct": 13.0
     },
     {
       "zone": "Южная тайга и лесостепь (52–56°)",
-      "documents": 263,
-      "observations": 14470,
-      "properties": 55,
-      "precise_pct": 12.0
+      "documents": 292,
+      "observations": 26816,
+      "properties": 87,
+      "precise_pct": 14.0
     },
     {
       "zone": "Степь (48–52°)",
-      "documents": 106,
-      "observations": 3820,
-      "properties": 42,
+      "documents": 114,
+      "observations": 6658,
+      "properties": 74,
       "precise_pct": 27.0
     },
     {
       "zone": "Сухая степь и предгорья (<48°)",
-      "documents": 116,
-      "observations": 3947,
-      "properties": 48,
-      "precise_pct": 17.0
+      "documents": 129,
+      "observations": 9777,
+      "properties": 80,
+      "precise_pct": 18.0
     }
   ]
 }

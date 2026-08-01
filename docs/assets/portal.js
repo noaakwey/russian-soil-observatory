@@ -72,7 +72,7 @@ const STRINGS = {
     'popup.value': 'Значение', 'popup.none': 'Для этой точки пока нет измерения, прошедшего строгую пространственную связь.',
     'popup.records': 'записей с этой координатой', 'popup.year': 'год',
     'sql.rows': 'строк', 'sql.time': 'мс', 'sql.error': 'Ошибка SQL: ',
-    'sql.loading': 'Загрузка базы (4,9 МБ)…', 'sql.ready': 'База загружена. Выполните запрос.',
+    'sql.loading': 'Загрузка базы (7,7 МБ)…', 'sql.ready': 'База загружена. Выполните запрос.',
     'sql.truncated': 'показаны первые 1000 строк',
   },
   en: {
@@ -140,7 +140,7 @@ const STRINGS = {
     'popup.value': 'Value', 'popup.none': 'No measurement has passed strict spatial linkage for this point yet.',
     'popup.records': 'records at this coordinate', 'popup.year': 'year',
     'sql.rows': 'rows', 'sql.time': 'ms', 'sql.error': 'SQL error: ',
-    'sql.loading': 'Loading database (4.9 MB)…', 'sql.ready': 'Database loaded. Run a query.',
+    'sql.loading': 'Loading database (7.7 MB)…', 'sql.ready': 'Database loaded. Run a query.',
     'sql.truncated': 'first 1000 rows shown',
   },
 };
@@ -260,10 +260,10 @@ function renderQuality() {
 const DOWNLOADS = [
   ['data/full_table_observations.csv', {
     ru: 'Все табличные наблюдения с флагами качества и происхождением',
-    en: 'All table observations with quality flags and provenance' }, '46 MB'],
+    en: 'All table observations with quality flags and provenance' }, '77 MB'],
   ['data/observatory.sqlite.gz', {
     ru: 'База для браузера и локального анализа (SQLite, gzip)',
-    en: 'Database for the browser and local analysis (SQLite, gzip)' }, '4.9 MB'],
+    en: 'Database for the browser and local analysis (SQLite, gzip)' }, '7.7 MB'],
   ['data/aggregates.json', {
     ru: 'Все сводные показатели портала', en: 'Every aggregate the portal quotes' }, '30 KB'],
   ['data/portal_map.json', {

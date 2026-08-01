@@ -21,7 +21,10 @@ def normalize_header(header: str) -> str:
     text = _LATEX_COMMAND.sub(" ", header)
     text = re.sub(r"\\[(){}\[\],;:!]", " ", text)
     text = re.sub(r"[\\{}$]", " ", text)
-    text = text.replace("_", " ")
+    # Subscript and superscript markers are pure typography: ``SO_4^{2-}``
+    # means the sulfate ion whether or not the OCR kept the carets.  Dropping
+    # both lets one ion pattern match the LaTeX and the plain-text spelling.
+    text = text.replace("_", " ").replace("^", " ")
     # ``H_2O`` becomes ``H 2 O`` once the subscript brace is gone.
     text = re.sub(r"\bH\s*2\s*O\b", "H2O", text)
     return re.sub(r"\s+", " ", text).strip()
@@ -110,6 +113,60 @@ TABLE_PROPERTY_PATTERNS: dict[str, str] = {
     'phosphatase_activity': r'phosphatase|фосфатаз',
     'redox_potential': r'redox\s+potential|\bEh\b|окислительно[- ]восстановительн\w*\s+потенциал',
     'soil_temperature': r'soil\s+temperature|температур\w*\s+почв',
+
+    # ---------------------------------------------------------------- ratios
+    # Placed before the ion block: ``C : N`` must not be read as carbon alone.
+    'carbon_nitrogen_ratio': r'\bC\s*[/:]\s*N\b|\bC\s*к\s*N\b|отношени\w*\s*C\s*[/:]\s*N',
+    'carbon_phosphorus_ratio': r'\bC\s*[/:]\s*P\b',
+    'hydrogen_carbon_ratio': r'\bH\s*[/:]\s*C\b',
+    'oxygen_carbon_ratio': r'\bO\s*[/:]\s*C\b',
+
+    # ------------------------------------------------- bulk oxide composition
+    'silicon_dioxide': r'\bSiO\s*2\b',
+    'aluminum_oxide_al2o3': r'\bAl\s*2\s*O\s*3\b',
+    'iron_oxide_fe2o3': r'\bFe\s*2\s*O\s*3\b',
+    'titanium_dioxide': r'\bTiO\s*2\b',
+    'manganese_oxide_mno': r'\bMnO\b(?!\s*2)',
+    'calcium_oxide_cao': r'\bCaO\b',
+    'magnesium_oxide_mgo': r'\bMgO\b',
+    'potassium_oxide_k2o': r'\bK\s*2\s*O\b',
+    'sodium_oxide_na2o': r'\bNa\s*2\s*O\b',
+    'phosphorus_pentoxide': r'\bP\s*2\s*O\s*5\b',
+
+    # ---------------------------------------- Kachinsky particle-size fractions
+    # Russian granulometry names a fraction by its size limits in millimetres,
+    # so the header is a pair of numbers rather than a word.  Ranges are
+    # matched with a tolerance on the separator because OCR renders the dash
+    # as hyphen, en dash or em dash interchangeably.
+    'very_coarse_sand': r'(?<![\d.,])[31](?:[.,]0+)?\s*[-–—]\s*1(?:[.,]0+)?\s*(?:мм|mm)?(?![\d.,])',
+    'coarse_sand': r'(?<![\d.,])1(?:[.,]0+)?\s*[-–—]\s*0[.,]25\s*(?:мм|mm)?(?![\d.,])',
+    'fine_sand': r'(?<![\d.,])0[.,]25\s*[-–—]\s*0[.,]05\s*(?:мм|mm)?(?![\d.,])',
+    'coarse_silt': r'(?<![\d.,])0[.,]05\s*[-–—]\s*0[.,]01\s*(?:мм|mm)?(?![\d.,])',
+    'medium_silt': r'(?<![\d.,])0[.,]01\s*[-–—]\s*0[.,]005\s*(?:мм|mm)?(?![\d.,])',
+    'fine_silt': r'(?<![\d.,])0[.,]005\s*[-–—]\s*0[.,]001\s*(?:мм|mm)?(?![\d.,])',
+    'fine_fraction_lt_0_001mm': r'<\s*0[.,]001\s*(?:мм|mm)?(?![\d.,])',
+    'physical_clay': r'physical\s+clay|физическ\w*\s+глин|<\s*0[.,]01\s*(?:мм|mm)?(?![\d.,])',
+
+    # ------------------------------------------------------------------- ions
+    # A qualified header states the extraction and must win over the bare ion:
+    # "exchangeable Ca2+" is exchangeable calcium, not an unattributed cation.
+    'exchangeable_calcium': r'exchangeable\s+(?:Ca|calcium)|обменн\w*\s+(?:Ca|кальци)',
+    'exchangeable_magnesium': r'exchangeable\s+(?:Mg|magnesium)|обменн\w*\s+(?:Mg|магни)',
+
+    # Reached only after those, so a bare "Ca2+" lands here, where the
+    # extraction method is explicitly not claimed.
+    'calcium_ion': r'\bCa\s*2?\s*\+',
+    'magnesium_ion': r'\bMg\s*2?\s*\+',
+    'sodium_ion': r'\bNa\s*\+',
+    'potassium_ion': r'\bK\s*\+',
+    'ammonium_ion': r'\bNH\s*4\s*\+',
+    'aluminium_ion': r'\bAl\s*3?\s*\+',
+    'hydrogen_ion': r'\bH\s*\+',
+    'bicarbonate_ion': r'\bHCO\s*3\s*[-−]',
+    'carbonate_ion': r'\bCO\s*3\s*2?\s*[-−]',
+    'sulfate_ion': r'\bSO\s*4\s*2?\s*[-−]',
+    'chloride_ion': r'\bCl\s*[-−]',
+    'nitrate_ion': r'\bNO\s*3\s*[-−]',
 }
 
 # Exact standalone symbols (case-sensitive); common-letter symbols are not

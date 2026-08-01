@@ -37,12 +37,19 @@ def property_for(header: str):
     return None
 
 def main() -> None:
- p=argparse.ArgumentParser();p.add_argument('--db',type=Path,required=True);p.add_argument('--header-rows',type=int,default=3);p.add_argument('--replace-existing',action='store_true',help='Rebuild the regenerable OCR table candidate layer from table_cell.');a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--db',type=Path,required=True);p.add_argument('--header-rows',type=int,default=3);p.add_argument('--replace-existing',action='store_true',help='Rebuild the regenerable OCR table candidate layer from table_cell.')
+ # A rebuild silently reverts manual reclassifications, because it rewrites
+ # every candidate from the patterns.  --additive only fills cells that have
+ # no candidate yet, which is what adding new property patterns needs.
+ p.add_argument('--additive',action='store_true',help='Insert only cells that have no candidate yet; never overwrite an existing row.');a=p.parse_args()
  stats={'tables':0,'header_properties':0,'candidates':0}
  with sqlite3.connect(a.db) as c:
  # Stream one table at a time; an OCR matrix can be large.
+  if a.replace_existing and a.additive:
+   raise SystemExit('--replace-existing and --additive are mutually exclusive')
   if a.replace_existing:
    c.execute('DELETE FROM table_measurement_candidate')
+  before=c.execute('SELECT COUNT(*) FROM table_measurement_candidate').fetchone()[0]
   artifacts=[r[0] for r in c.execute('SELECT DISTINCT artifact_id FROM table_cell')]
   for no,artifact in enumerate(artifacts,start=1):
    cells=defaultdict(dict)
@@ -75,12 +82,15 @@ def main() -> None:
      value=row.get(col,'');m=NUMBER.match(value)
      if not m: continue
      cid=f'{artifact}:tm:r{r}:c{col}'
-     c.execute('''INSERT OR REPLACE INTO table_measurement_candidate
+     c.execute(f'''INSERT OR {'IGNORE' if a.additive else 'REPLACE'} INTO table_measurement_candidate
        (candidate_id,artifact_id,row_index,column_index,property_id,property_header_raw,value_num,value_text,unit_raw,row_label_raw,horizon_label,depth_top_cm,depth_bottom_cm,status)
        VALUES(?,?,?,?,?,?,?,NULL,?,?,?,?,?,'unreviewed')''',
        (cid,artifact,r,col,pid,header,num(m.group(1)),m.group(2) or (HEADER_UNIT.search(header).group(0) if HEADER_UNIT.search(header) else ('pH' if pid == 'ph_h2o' else None)),row_label,horizon.group(1) if horizon else None,num(depth.group(1)) if depth else (float(table_depth.group(1)) if table_depth else None),num(depth.group(2)) if depth else (float(table_depth.group(2)) if table_depth else None)))
      stats['candidates']+=1
    if no%100==0:c.commit()
   c.commit()
+  stats['rows_before']=before
+  stats['rows_after']=c.execute('SELECT COUNT(*) FROM table_measurement_candidate').fetchone()[0]
+  stats['rows_added']=stats['rows_after']-before
  print(stats)
 if __name__=='__main__':main()

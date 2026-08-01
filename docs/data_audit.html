@@ -15,6 +15,19 @@
   main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
   main pre.mono { background: var(--surface-2); padding: .85rem 1rem; border-radius: 9px;
                    overflow-x: auto; font-size: .8rem; line-height: 1.5; }
+  main figure { margin: 1.9em 0; }
+  main figure img { width: 100%; max-width: 100%; height: auto; border-radius: 8px;
+                     border: 1px solid var(--border); }
+  main figcaption { margin-top: .6rem; font-size: .84rem; color: var(--text-muted);
+                     line-height: 1.5; }
+  .fig-dark { display: none; }
+  @media (prefers-color-scheme: dark) {
+    .fig-light { display: none; } .fig-dark { display: block; }
+  }
+  :root[data-theme="light"] .fig-light { display: block; }
+  :root[data-theme="light"] .fig-dark { display: none; }
+  :root[data-theme="dark"] .fig-light { display: none; }
+  :root[data-theme="dark"] .fig-dark { display: block; }
 </style>
 </head>
 <body>
@@ -28,6 +41,7 @@
 <p><strong>Версия слоя наблюдений: 1 августа 2026 г. · 62 805 табличных наблюдений из 1 288 публикаций</strong></p>
 <div class="callout"><strong>Abstract.</strong> This report audits a database of soil measurements extracted from the full text of 4 180 Russian soil-science publications. Rebuilding the observation layer with the current header matcher removed 10 220 confirmed false positives (chemical symbols matched inside unrelated headers), recovered the analytical method for 1 731 pH cells lost to LaTeX markup, and restored 1 337 cells that a naive rebuild would have destroyed — including the anchors of all 147 manually verified measurements. The publication year, previously absent for the entire translated corpus, was recovered from the Pleiades DOI and validated against Crossref. Two structural limits dominate any downstream use: 56 % of values carry no provable unit, and the 790 reported coordinates are strongly clustered (Clark–Evans R = 0.34, ≈ 302 independent localities), so the point set is not a probability sample of Russian territory.</div>
 <hr>
+<div class="callout"><strong>Дополнено позже в тот же день.</strong> Каталог свойств расширен: добавлены заголовки-ионы (<code>Ca2+</code>, <code>Cl-</code>), фракции по Качинскому (<code>0.05–0.01</code>, <code>&lt;0.001</code>), валовые оксиды (<code>SiO2</code>, <code>TiO2</code>) и элементные отношения (<code>C:N</code>). Слой вырос до <strong>106 286 наблюдений и 101 свойства</strong> без потери ни одной курированной записи (режим <code>--additive</code>). Числа ниже описывают состояние до этого расширения; актуальный разбор — в <a href="insights.md">анализе</a>, раздел 0.5.</div>
 <h2>Резюме</h2>
 <ul class="clean">
 <li><strong>Слой наблюдений был построен из устаревших кандидатов.</strong> 22.9% записей не соответствовали действующему коду извлечения. После пересборки — 62 805 наблюдений вместо 70 828.</li>
