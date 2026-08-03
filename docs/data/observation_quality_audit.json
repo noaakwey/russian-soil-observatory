@@ -1,44 +1,45 @@
 {
-  "observations": 62805,
+  "observations": 106839,
   "header_match_kind": {
-    "phrase": 42407,
-    "symbol_clean": 14861,
-    "symbol_embedded": 5537
+    "phrase": 86063,
+    "symbol_clean": 15178,
+    "symbol_embedded": 5598
   },
   "value_plausibility": {
-    "ok": 58931,
-    "out_of_physical_range": 2603,
-    "negative_content": 1271
+    "ok": 102712,
+    "out_of_physical_range": 2707,
+    "negative_content": 1420
   },
-  "unflagged_observations": 53856,
+  "unflagged_observations": 97576,
   "most_affected_properties": {
     "ph_unspecified": {
-      "ok": 3380,
-      "out_of_physical_range": 1308
+      "ok": 3539,
+      "out_of_physical_range": 1321
     },
     "ph_h2o": {
-      "ok": 4069,
-      "out_of_physical_range": 955
+      "ok": 4096,
+      "out_of_physical_range": 966
     },
     "boron": {
-      "ok": 2081,
+      "ok": 2156,
       "negative_content": 403
     },
     "clay": {
-      "ok": 2441,
+      "ok": 2449,
       "negative_content": 88,
       "out_of_physical_range": 97
     },
-    "ph_kcl": {
-      "out_of_physical_range": 99,
-      "ok": 916
-    },
     "soil_organic_carbon": {
-      "ok": 4662,
-      "negative_content": 99
+      "out_of_physical_range": 60,
+      "ok": 4674,
+      "negative_content": 85
+    },
+    "ph_kcl": {
+      "out_of_physical_range": 100,
+      "ok": 934
     },
     "organic_matter": {
-      "ok": 5622,
+      "ok": 5769,
       "out_of_physical_range": 30,
       "negative_content": 65
     },
@@ -47,32 +48,32 @@
       "ok": 1201
     },
     "chromium": {
-      "ok": 893,
+      "ok": 920,
       "negative_content": 91
     },
     "calcium": {
-      "ok": 2011,
+      "ok": 2036,
       "negative_content": 66
     },
     "copper": {
-      "ok": 1800,
+      "ok": 1862,
       "negative_content": 42
     },
     "lead": {
-      "ok": 1275,
+      "ok": 1339,
       "negative_content": 35
     },
     "nickel": {
-      "ok": 1287,
+      "ok": 1314,
       "negative_content": 34
     },
     "silt": {
-      "ok": 1340,
+      "ok": 1347,
       "negative_content": 33,
       "out_of_physical_range": 1
     },
     "electrical_conductivity": {
-      "ok": 2109,
+      "ok": 2120,
       "negative_content": 33
     }
   }

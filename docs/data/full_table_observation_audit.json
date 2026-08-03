@@ -1,25 +1,25 @@
 {
-  "table_measurement_candidate": 62805,
-  "table_observation": 62805,
+  "table_measurement_candidate": 106839,
+  "table_observation": 106839,
   "normalization": {
-    "converted": 3829,
-    "exact": 18728,
-    "incompatible": 5149,
-    "missing_unit": 35099
+    "converted": 3471,
+    "exact": 22910,
+    "incompatible": 5490,
+    "missing_unit": 74968
   },
   "spatial_linkage": {
-    "document_multiple_reported_coordinates": 2144,
-    "document_single_reported_coordinate": 1234,
-    "no_reported_coordinate": 58586,
-    "row_profile_verified": 841
+    "document_multiple_reported_coordinates": 5191,
+    "document_single_reported_coordinate": 5448,
+    "no_reported_coordinate": 95381,
+    "row_profile_verified": 819
   },
   "qa_status": {
-    "normalized": 21724,
-    "flagged": 841,
-    "unit_incompatible": 5149,
-    "unit_missing": 35091
+    "normalized": 25570,
+    "flagged": 819,
+    "unit_incompatible": 5490,
+    "unit_missing": 74960
   },
-  "linked_operational_measurements": 841,
+  "linked_operational_measurements": 819,
   "checks": {
     "coverage_gap": 0,
     "candidate_uniqueness": "enforced by table_observation.candidate_id UNIQUE",

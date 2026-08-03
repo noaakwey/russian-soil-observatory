@@ -1,7 +1,7 @@
 {
-  "documents_with_year": 4180,
+  "documents_with_year": 4521,
   "by_confidence": {
-    "printed": 625,
+    "printed": 966,
     "issue_number": 2807,
     "submission_year": 748
   },
@@ -28,9 +28,9 @@
     "2021": 303,
     "2022": 365,
     "2023": 336,
-    "2024": 204,
-    "2025": 224,
-    "2026": 20
+    "2024": 335,
+    "2025": 347,
+    "2026": 107
   },
   "crossref_validation": {
     "issue_number_exact": 89,

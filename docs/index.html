@@ -1,19 +1,43 @@
 <!doctype html>
 <html lang="ru">
 <head>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=111270341', 'ym');
+
+    ym(111270341, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/111270341" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Russian Soil Observatory</title>
-<meta name="description" content="Открытая база почвенных наблюдений из российских публикаций: 104 893 табличных значения, 101 свойство, 75% с пространственной привязкой, доказательная цепочка до исходной OCR-ячейки.">
+<meta name="description" content="Открытая база почвенных наблюдений из российских публикаций: воспроизводимый конвейер извлечения, доказательная цепочка до исходной OCR-ячейки, двуязычный геопортал.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Russian Soil Observatory">
+<meta property="og:description" content="Открытая база почвенных наблюдений из российских публикаций с доказательной цепочкой до исходной OCR-ячейки.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/leaflet-1.9.4.css">
-<link rel="stylesheet" href="assets/portal.css?v=20260801j">
+<link rel="stylesheet" href="assets/portal.css?v=20260803a">
 </head>
 <body>
 
 <header class="masthead">
   <div class="masthead-inner">
-    <h1 class="brand">Russian Soil Observatory
-      <small data-i18n="tagline">Почвенные наблюдения из «Почвоведения» и Eurasian Soil Science</small>
+    <h1 class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-text">Russian Soil Observatory
+        <small data-i18n="tagline">Почвенные наблюдения из «Почвоведения» и Eurasian Soil Science</small>
+      </span>
     </h1>
     <span class="masthead-spacer"></span>
     <div class="switch" role="group" aria-label="Language">
@@ -39,19 +63,24 @@
 
   <!-- ============ OVERVIEW ============ -->
   <section class="panel" id="panel-overview">
-    <p class="lede" data-i18n="overview.lede">
-      Воспроизводимая база числовых почвенных наблюдений, извлечённых из полнотекстовых
-      публикаций двух корпусов. Каждое значение сохраняет ссылку на исходную ячейку
-      OCR-таблицы, признак достоверности единицы измерения и явно указанную силу
-      пространственной привязки.
-    </p>
-
-    <div class="callout" style="margin:.9rem 0 1.3rem">
-      <p style="margin:0 0 .5rem"><a href="insights.html"><strong data-i18n="overview.insights">Пространство, компоненты, время: зональные градиенты, связи свойств и тренды за 20 лет →</strong></a></p>
-      <p style="margin:0"><a href="data_audit.html" data-i18n="overview.report">Аудит базы: состав корпуса, качество извлечения, ограничения →</a></p>
+    <div class="hero">
+      <span class="eyebrow" data-i18n="hero.eyebrow">Открытые данные · воспроизводимый конвейер</span>
+      <h2 data-i18n="hero.title">Числа, извлечённые из почвенной литературы,<br>с доказательством для каждого значения</h2>
+      <p class="lede" data-i18n="overview.lede">
+        Воспроизводимая база числовых почвенных наблюдений, извлечённых из полнотекстовых
+        публикаций двух корпусов. Каждое значение сохраняет ссылку на исходную ячейку
+        OCR-таблицы, признак достоверности единицы измерения и явно указанную силу
+        пространственной привязки.
+      </p>
+      <div class="hero-actions">
+        <button type="button" class="primary btn-lg" data-goto="map" data-i18n="hero.cta.map">Открыть карту</button>
+        <button type="button" class="ghost btn-lg" data-goto="query" data-i18n="hero.cta.sql">Выполнить SQL-запрос</button>
+        <a class="ghost btn-lg btn-link" href="insights.html" data-i18n="overview.insights.short">Пространственно-временной анализ →</a>
+        <a class="ghost btn-lg btn-link" href="data_audit.html" data-i18n="overview.report.short">Аудит качества →</a>
+      </div>
     </div>
 
-    <div class="grid" id="overview-tiles"></div>
+    <div class="grid reveal" id="overview-tiles"></div>
 
     <div class="card">
       <h2 data-i18n="overview.timeline">Публикации и наблюдения по годам</h2>
@@ -299,6 +328,8 @@ python3 docs/scripts/build_portal.py --db DB --output docs/data</pre>
 <footer><div class="inner">
   <span data-i18n="footer">Russian Soil Observatory · воспроизводимая сборка · доказательство: документ → OCR-таблица → строка → ячейка</span>
 </div></footer>
+
+<button type="button" id="to-top" class="to-top" aria-label="Наверх" title="Наверх">↑</button>
 
 <script src="assets/leaflet.js"></script>
 <script src="assets/portal.js?v=20260801j"></script>

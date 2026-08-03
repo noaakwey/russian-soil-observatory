@@ -13,7 +13,13 @@ const STRINGS = {
     'tab.quality': 'Качество данных', 'tab.query': 'SQL-запрос', 'tab.about': 'Методика и данные',
     'overview.lede': 'Воспроизводимая база числовых почвенных наблюдений, извлечённых из полнотекстовых публикаций двух корпусов. Каждое значение сохраняет ссылку на исходную ячейку OCR-таблицы, признак достоверности единицы измерения и явно указанную силу пространственной привязки.',
     'overview.insights': 'Пространство, компоненты, время: зональные градиенты, связи свойств и тренды за 20 лет →',
+    'overview.insights.short': 'Пространственно-временной анализ →',
     'overview.report': 'Аудит базы: состав корпуса, качество извлечения, ограничения →',
+    'overview.report.short': 'Аудит качества →',
+    'hero.eyebrow': 'Открытые данные · воспроизводимый конвейер',
+    'hero.title': 'Числа, извлечённые из почвенной литературы,<br>с доказательством для каждого значения',
+    'hero.cta.map': 'Открыть карту',
+    'hero.cta.sql': 'Выполнить SQL-запрос',
     'overview.timeline': 'Публикации и наблюдения по годам',
     'overview.timeline.note': 'Год для переводного корпуса восстановлен из идентификатора статьи Pleiades DOI и сверен с Crossref.',
     'overview.categories': 'Наблюдения по группам свойств',
@@ -100,7 +106,13 @@ const STRINGS = {
     'tab.quality': 'Data quality', 'tab.query': 'SQL query', 'tab.about': 'Method & data',
     'overview.lede': 'A reproducible database of numeric soil observations extracted from the full text of two publication corpora. Every value keeps a pointer to its source OCR table cell, a flag for whether its unit is proven, and an explicit statement of how strong its spatial linkage is.',
     'overview.insights': 'Space, components, time: zonal gradients, property linkages and twenty-year trends →',
+    'overview.insights.short': 'Spatio-temporal analysis →',
     'overview.report': 'Database audit: corpus composition, extraction quality, limitations →',
+    'overview.report.short': 'Quality audit →',
+    'hero.eyebrow': 'Open data · reproducible pipeline',
+    'hero.title': 'Numbers extracted from soil-science literature,<br>with evidence behind every value',
+    'hero.cta.map': 'Open the map',
+    'hero.cta.sql': 'Run a SQL query',
     'overview.timeline': 'Publications and observations by year',
     'overview.timeline.note': 'For the translated corpus the year is decoded from the Pleiades DOI article identifier and validated against Crossref.',
     'overview.categories': 'Observations by property group',
@@ -186,6 +198,47 @@ const STRINGS = {
 let lang = (navigator.language || 'ru').startsWith('ru') ? 'ru' : 'en';
 const t = (key) => (STRINGS[lang] && STRINGS[lang][key]) || STRINGS.ru[key] || key;
 const num = (value) => value == null ? '—' : value.toLocaleString(lang === 'ru' ? 'ru-RU' : 'en-US');
+
+/* Counts up each `[data-count-to]` node from 0 once, on insertion. Values are
+   already final in the DOM (data-count-to holds them) so nothing breaks for
+   users with prefers-reduced-motion or JS timing quirks — the animation is
+   pure decoration on top of a value that is correct from frame one. */
+function animateCounters(root) {
+  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  root.querySelectorAll('[data-count-to]').forEach((node) => {
+    const target = Number(node.dataset.countTo) || 0;
+    if (reduceMotion || target === 0) { node.textContent = num(target); return; }
+    const duration = 700;
+    const start = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      node.textContent = num(Math.round(target * eased));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+}
+
+/* Fades cards in as they cross into view. Re-observing after every re-render
+   would be wasted work, so this only watches elements that opt in via the
+   `reveal` class and observes each one exactly once. */
+const revealObserver = ('IntersectionObserver' in window)
+  ? new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 })
+  : null;
+
+function observeReveals() {
+  document.querySelectorAll('.reveal:not(.is-visible)').forEach((node) => {
+    if (revealObserver) revealObserver.observe(node); else node.classList.add('is-visible');
+  });
+}
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g,
   (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 
@@ -216,9 +269,10 @@ function renderOverview() {
     { value: AGG.ocr_tables, label: t('t.tables') },
   ];
   document.getElementById('overview-tiles').innerHTML = tiles.map((tile) => `
-    <div class="tile"><div class="value">${num(tile.value)}</div>
+    <div class="tile"><div class="value" data-count-to="${tile.value}">0</div>
       <div class="label">${esc(tile.label)}</div>
       ${tile.note ? `<div class="note">${esc(tile.note)}</div>` : ''}</div>`).join('');
+  animateCounters(document.getElementById('overview-tiles'));
 
   // Documents per year, split by corpus — one axis, two stacked segments.
   const years = AGG.documents_per_year.filter((row) => row.year >= 2006);
@@ -291,9 +345,10 @@ function renderQuality() {
     { value: (q.value_plausibility.negative_content || 0) + (q.value_plausibility.out_of_physical_range || 0),
       label: lang === 'ru' ? 'значения вне физического диапазона' : 'values outside physical range' },
     { value: q.normalization_status.missing_unit || 0, label: 'missing_unit' },
-  ].map((tile) => `<div class="tile"><div class="value">${num(tile.value)}</div>
+  ].map((tile) => `<div class="tile"><div class="value" data-count-to="${tile.value}">0</div>
       <div class="label">${esc(tile.label)}</div>
       ${tile.note ? `<div class="note">${esc(tile.note)}</div>` : ''}</div>`).join('');
+  animateCounters(document.getElementById('quality-tiles'));
 
   const toRows = (obj, tones = {}) => Object.entries(obj)
     .sort((a, b) => b[1] - a[1])
@@ -355,6 +410,8 @@ function renderDownloads() {
 
 let map = null;
 let mapLayer = null;
+let tileBase = null;
+let mapTheme = null;
 
 function popupHtml(point) {
   const sources = point.sources.map((source) => `<li>
@@ -379,13 +436,35 @@ function popupHtml(point) {
       : `<p><em>${esc(t('popup.none'))}</em></p>`}`;
 }
 
+function isDarkTheme() {
+  const explicit = document.documentElement.getAttribute('data-theme');
+  if (explicit) return explicit === 'dark';
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+}
+
+/* CARTO's basemaps read as flat, editorial cartography next to the rest of
+   the UI; plain OSM tiles carry too much colour and label noise for a data
+   portal and never matched the dark theme at all. */
+function tileUrlForTheme() {
+  return isDarkTheme()
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+}
+const TILE_ATTRIBUTION =
+  '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' +
+  ' contributors © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>';
+
 function renderMap() {
   if (!MAP_DATA) return;
   if (!map) {
-    map = L.map('map', { scrollWheelZoom: true }).setView([60, 80], 3);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18, attribution: '© OpenStreetMap contributors',
+    map = L.map('map', { scrollWheelZoom: true, zoomControl: true }).setView([60, 80], 3);
+    tileBase = L.tileLayer(tileUrlForTheme(), {
+      maxZoom: 18, attribution: TILE_ATTRIBUTION, subdomains: 'abcd',
     }).addTo(map);
+    mapTheme = isDarkTheme();
+  } else if (mapTheme !== isDarkTheme()) {
+    tileBase.setUrl(tileUrlForTheme());
+    mapTheme = isDarkTheme();
   }
   if (mapLayer) mapLayer.remove();
 
@@ -901,6 +980,7 @@ function applyLanguage() {
   if (AGG) { renderOverview(); renderProperties(); renderQuality(); renderDownloads(); }
   if (MAP_DATA && map) renderMap();
   if (selectedProperty) selectProperty(selectedProperty);
+  observeReveals();
 }
 
 function selectTab(name) {
@@ -923,6 +1003,7 @@ function selectTab(name) {
   if (name === 'props' && !selectedProperty && AGG?.properties?.length) {
     selectProperty(AGG.properties[0].property_id);
   }
+  observeReveals();
 }
 
 function applyTheme(theme) {
@@ -949,6 +1030,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.tabs button').forEach((button) => {
     button.onclick = () => selectTab(button.dataset.panel);
   });
+  document.querySelectorAll('[data-goto]').forEach((button) => {
+    button.onclick = () => selectTab(button.dataset.goto);
+  });
   document.getElementById('prop-sort').onchange = renderProperties;
   document.getElementById('prop-filter').oninput = renderProperties;
   document.querySelector('#props-table tbody').addEventListener('click', (event) => {
@@ -964,6 +1048,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   });
   document.getElementById('sql-input').value = EXAMPLES[0];
+
+  const toTop = document.getElementById('to-top');
+  window.addEventListener('scroll', () => {
+    toTop.classList.toggle('visible', window.scrollY > 640);
+  }, { passive: true });
+  toTop.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   fetch('data/aggregates.json')
     .then((response) => response.json())

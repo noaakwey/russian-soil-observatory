@@ -1,8 +1,8 @@
 {
   "layer": {
-    "observations": 104893,
-    "trusted": 95811,
-    "metric": 23205,
+    "observations": 106839,
+    "trusted": 97576,
+    "metric": 23653,
     "located": 78752,
     "precise": 12917,
     "documents_outside_russia": 160
@@ -85,43 +85,43 @@
     }
   },
   "cooccurrence": {
-    "tables_with_multiple_properties": 1318,
+    "tables_with_multiple_properties": 1355,
     "strongest_pairs": [
       {
         "a": "coarse silt 0.05-0.01 mm",
         "b": "medium silt 0.01-0.005 mm",
-        "jaccard": 0.938,
-        "tables": 106
+        "jaccard": 0.941,
+        "tables": 111
       },
       {
         "a": "fine silt 0.005-0.001 mm",
         "b": "medium silt 0.01-0.005 mm",
-        "jaccard": 0.938,
-        "tables": 106
+        "jaccard": 0.941,
+        "tables": 111
       },
       {
         "a": "fine sand",
         "b": "medium silt 0.01-0.005 mm",
-        "jaccard": 0.915,
-        "tables": 107
+        "jaccard": 0.911,
+        "tables": 112
       },
       {
         "a": "coarse silt 0.05-0.01 mm",
         "b": "fine sand",
-        "jaccard": 0.905,
-        "tables": 105
+        "jaccard": 0.902,
+        "tables": 110
       },
       {
         "a": "coarse silt 0.05-0.01 mm",
         "b": "fine silt 0.005-0.001 mm",
-        "jaccard": 0.895,
-        "tables": 102
+        "jaccard": 0.899,
+        "tables": 107
       },
       {
         "a": "fine sand",
         "b": "fine silt 0.005-0.001 mm",
-        "jaccard": 0.873,
-        "tables": 103
+        "jaccard": 0.871,
+        "tables": 108
       },
       {
         "a": "chloride ion Cl-",
@@ -131,39 +131,45 @@
       },
       {
         "a": "coarse sand",
-        "b": "coarse silt 0.05-0.01 mm",
-        "jaccard": 0.825,
-        "tables": 94
+        "b": "fine sand",
+        "jaccard": 0.829,
+        "tables": 102
       },
       {
         "a": "coarse sand",
-        "b": "fine sand",
-        "jaccard": 0.821,
-        "tables": 96
+        "b": "coarse silt 0.05-0.01 mm",
+        "jaccard": 0.825,
+        "tables": 99
       },
       {
         "a": "calcium oxide CaO",
         "b": "magnesium oxide MgO",
-        "jaccard": 0.806,
-        "tables": 58
+        "jaccard": 0.808,
+        "tables": 59
       },
       {
         "a": "coarse sand",
         "b": "medium silt 0.01-0.005 mm",
-        "jaccard": 0.788,
-        "tables": 93
+        "jaccard": 0.79,
+        "tables": 98
       },
       {
         "a": "coarse sand",
         "b": "fine silt 0.005-0.001 mm",
-        "jaccard": 0.763,
-        "tables": 90
+        "jaccard": 0.766,
+        "tables": 95
       },
       {
         "a": "magnesium oxide MgO",
         "b": "silicon dioxide",
-        "jaccard": 0.757,
-        "tables": 56
+        "jaccard": 0.76,
+        "tables": 57
+      },
+      {
+        "a": "copper",
+        "b": "zinc",
+        "jaccard": 0.734,
+        "tables": 138
       },
       {
         "a": "aluminum oxide Al2O3",
@@ -172,40 +178,34 @@
         "tables": 80
       },
       {
-        "a": "copper",
-        "b": "zinc",
-        "jaccard": 0.725,
-        "tables": 132
-      },
-      {
         "a": "calcium oxide CaO",
         "b": "silicon dioxide",
-        "jaccard": 0.704,
-        "tables": 57
+        "jaccard": 0.707,
+        "tables": 58
       },
       {
         "a": "calcium",
         "b": "magnesium",
         "jaccard": 0.685,
-        "tables": 74
+        "tables": 76
       },
       {
         "a": "fine fraction <0.001 mm",
         "b": "fine silt 0.005-0.001 mm",
-        "jaccard": 0.669,
-        "tables": 103
+        "jaccard": 0.675,
+        "tables": 108
       },
       {
         "a": "calcium ion Ca2+",
         "b": "magnesium ion Mg2+",
-        "jaccard": 0.662,
-        "tables": 174
+        "jaccard": 0.663,
+        "tables": 179
       },
       {
-        "a": "aluminum oxide Al2O3",
-        "b": "silicon dioxide",
-        "jaccard": 0.656,
-        "tables": 61
+        "a": "lead",
+        "b": "zinc",
+        "jaccard": 0.655,
+        "tables": 116
       }
     ]
   },
@@ -220,7 +220,7 @@
       "e_folding_depth_cm": 50.9,
       "r_squared": 0.381
     },
-    "ph_h2o_minus_kcl": 1.17
+    "ph_h2o_minus_kcl": 1.18
   },
   "time": {
     "metal_share_2006_2010": 8.1,
@@ -280,7 +280,7 @@
       {
         "property": "pH in water",
         "unit_proven_pct": 97.4,
-        "observations": 5024
+        "observations": 5062
       },
       {
         "property": "base saturation",
@@ -289,13 +289,13 @@
       },
       {
         "property": "pH in KCl",
-        "unit_proven_pct": 89.6,
-        "observations": 1015
+        "unit_proven_pct": 88.9,
+        "observations": 1034
       },
       {
         "property": "pH (method unspecified)",
-        "unit_proven_pct": 86.5,
-        "observations": 4688
+        "unit_proven_pct": 85.8,
+        "observations": 4860
       },
       {
         "property": "total porosity",
@@ -307,17 +307,17 @@
       {
         "property": "fine silt 0.005-0.001 mm",
         "unit_proven_pct": 0.0,
-        "observations": 1774
+        "observations": 1827
       },
       {
         "property": "medium silt 0.01-0.005 mm",
         "unit_proven_pct": 0.0,
-        "observations": 1770
+        "observations": 1823
       },
       {
         "property": "magnesium",
         "unit_proven_pct": 0.0,
-        "observations": 1507
+        "observations": 1530
       },
       {
         "property": "potassium oxide K2O",
@@ -327,7 +327,7 @@
       {
         "property": "magnesium oxide MgO",
         "unit_proven_pct": 0.0,
-        "observations": 601
+        "observations": 619
       }
     ],
     "best_depth_coverage": [
@@ -384,13 +384,13 @@
         "observations": 2665
       }
     ],
-    "median_unit_proven_pct": 3.3,
-    "properties_over_1000_obs": 39,
+    "median_unit_proven_pct": 3.2,
+    "properties_over_1000_obs": 40,
     "properties_under_50_obs": 13
   },
   "correlations": {
     "pairs_tested": 53,
-    "pairs_significant_fdr5": 29,
+    "pairs_significant_fdr5": 27,
     "strongest": [
       {
         "a": "pH(H2O)",
@@ -467,7 +467,7 @@
           0.226,
           0.743
         ],
-        "q_value": 0.0043
+        "q_value": 0.0041
       },
       {
         "a": "pH(H2O)",
@@ -478,7 +478,18 @@
           -0.749,
           -0.212
         ],
-        "q_value": 0.0055
+        "q_value": 0.0053
+      },
+      {
+        "a": "pH(KCl)",
+        "b": "физ. глина",
+        "n": 60,
+        "pearson_r": -0.523,
+        "ci": [
+          -0.686,
+          -0.31
+        ],
+        "q_value": 0.0001
       },
       {
         "a": "pH(H2O)",
@@ -488,17 +499,6 @@
         "ci": [
           0.366,
           0.564
-        ],
-        "q_value": 0.0
-      },
-      {
-        "a": "ил <0.002",
-        "b": "песок",
-        "n": 179,
-        "pearson_r": -0.447,
-        "ci": [
-          -0.557,
-          -0.322
         ],
         "q_value": 0.0
       }
