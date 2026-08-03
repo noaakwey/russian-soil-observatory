@@ -19,8 +19,9 @@ soil-science publications, with a bilingual (RU/EN) geoportal.*
 | — «Почвоведение» | 625 |
 | — Springer / *Eurasian Soil Science* | 3 555 |
 | OCR-таблиц | 12 280 |
-| Табличных наблюдений | 62 805 |
-| Канонических свойств | 70 |
+| Табличных наблюдений | 104 893 |
+| Канонических свойств | 101 |
+| Публикаций, давших наблюдения | 1 378 |
 | Авторских координат | 1 092 (790 уникальных положений) |
 | Строгий пространственный слой | 1 239 измерений |
 
@@ -36,8 +37,8 @@ soil-science publications, with a bilingual (RU/EN) geoportal.*
 
 | Файл | Что это |
 |---|---|
-| `full_table_observations.csv` | все 62 805 наблюдений с флагами качества и происхождением |
-| `observatory.sqlite.gz` | та же база в SQLite (gzip, 4.9 МБ) — для браузера и локального анализа |
+| `full_table_observations.csv` | все 104 893 наблюдения с флагами качества и происхождением |
+| `observatory.sqlite.gz` | та же база в SQLite (gzip, 8.9 МБ) — для браузера и локального анализа |
 | `aggregates.json` | все сводные показатели портала |
 | `portal_map.json` | точки карты с источниками и измерениями |
 | `reported_sites.csv` | все координаты, сообщённые авторами |
@@ -54,12 +55,12 @@ SELECT * FROM observation
 WHERE header_match_kind <> 'symbol_embedded'   -- свойство надёжно опознано
   AND value_plausibility = 'ok'                -- значение физически возможно
   AND normalization_status IN ('exact','converted');  -- единица доказана
--- 19 918 наблюдений из 62 805
+-- 23 205 наблюдений из 104 893
 ```
 
-- `normalization_status = 'missing_unit'` (55.9%) — единицу нельзя доказать по
+- `normalization_status = 'missing_unit'` (70.1%) — единицу нельзя доказать по
   напечатанному заголовку. Она **намеренно не подставляется**.
-- `header_match_kind = 'symbol_embedded'` (8.8%) — химический символ найден внутри
+- `header_match_kind = 'symbol_embedded'` (5.2%) — химический символ найден внутри
   более длинного текста заголовка; вероятное ложное срабатывание.
 - `spatial_linkage` — сила привязки к координате; `document_single_reported_coordinate`
   означает контекст документа, а не GPS строки таблицы.
@@ -68,13 +69,15 @@ WHERE header_match_kind <> 'symbol_embedded'   -- свойство надёжн�
 
 1. Точки сильно кластеризованы (индекс Кларка–Эванса 0.34, ≈ 302 независимых
    локалитета на 790 положений) — это **не вероятностная выборка** по территории России.
-2. Русский оригинал и его перевод в *Eurasian Soil Science* не связаны: у переводного
-   корпуса нет заголовков и авторов. Верхняя граница возможного двойного учёта — 3.8%.
-3. Метка генетического горизонта заполнена лишь у 12 наблюдений; профильный анализ
+2. Для 47 пар статей установлено соответствие «русский оригинал ↔ перевод»
+   по отпечатку числовых значений таблиц (`document_links.csv`, статус candidate,
+   документы не объединяются). Остаточная верхняя граница двойного учёта — 1.3%.
+3. Метка генетического горизонта заполнена лишь у 19 наблюдений; профильный анализ
    возможен только по числовой глубине.
 4. Значения получены OCR-распознаванием и содержат ошибки; они помечены, а не удалены.
 
-Подробно — в [научном анализе](docs/data_audit.md).
+Подробно — в [аудите базы](docs/data_audit.md) и
+[пространственно-временно́м анализе](docs/insights.md).
 
 ## Воспроизведение
 
@@ -82,19 +85,37 @@ WHERE header_match_kind <> 'symbol_embedded'   -- свойство надёжн�
 1.2 ГБ). Порядок:
 
 ```bash
-python3 observatory_v1/extract_table_measurement_candidates.py --db DB --replace-existing
+pip install pandas numpy scipy matplotlib statsmodels
+
+# каталог свойств и извлечение
+python3 observatory_v1/seed_additional_properties.py --db DB
+python3 observatory_v1/extract_table_measurement_candidates.py --db DB --additive
+python3 observatory_v1/repair_total_npk_word_boundary.py --db DB
+python3 observatory_v1/extract_table_measurement_candidates.py --db DB --additive
 python3 observatory_v1/normalize_table_measurement_candidates.py --db DB
 python3 observatory_v1/materialize_full_table_observations.py --db DB
 python3 observatory_v1/audit_full_table_observations.py --db DB --output docs/data/full_table_observation_audit.json
 python3 observatory_v1/flag_observation_quality.py --db DB --output docs/data/observation_quality_audit.json
+
+# датировка, пространственная привязка, связь оригинал/перевод
 python3 observatory_v1/infer_springer_publication_year.py --db DB --crossref docs/data/doi_metadata.csv --output docs/data/publication_year_audit.json
+python3 observatory_v1/infer_document_study_region.py --db DB
+python3 observatory_v1/infer_document_precise_coordinates.py --db DB
+python3 observatory_v1/merge_spatial_layers.py --db DB
+python3 observatory_v1/link_springer_translations.py --db DB
+
+# сборка портала, анализа и отчётов
 python3 docs/scripts/build_portal.py --db DB --output docs/data
+python3 docs/scripts/build_insight_analysis.py --db DB --output docs/figures
+python3 docs/scripts/build_manuscript_analysis.py --db DB --tables docs/tables --figures docs/figures --output docs/tables/manuscript_analysis.json
 python3 docs/scripts/render_markdown.py --input docs/data_audit.md --output docs/data_audit.html
+python3 docs/scripts/render_markdown.py --input docs/insights.md --output docs/insights.html
 ```
 
-> `--replace-existing` пересоздаёт слой кандидатов из `table_cell`. Он не сохраняет
-> ручные переклассификации: перед запуском убедитесь, что кандидаты, привязанные к
-> проверенным записям `measurement`, будут восстановлены (см. раздел 2.1 анализа).
+> `--additive` заполняет только ячейки без кандидата и никогда не переписывает
+> существующую строку. Режим `--replace-existing` пересоздаёт слой целиком и
+> **не сохраняет ручные переклассификации** — используйте его только при
+> сознательной полной пересборке (см. раздел 2.1 аудита).
 
 ### Локальный просмотр портала
 
