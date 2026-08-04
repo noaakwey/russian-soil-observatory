@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/leaflet-1.9.4.css">
-<link rel="stylesheet" href="assets/portal.css?v=20260804b">
+<link rel="stylesheet" href="assets/portal.css?v=20260804c">
 </head>
 <body>
 
@@ -232,8 +232,14 @@
 
     <div class="grid wide">
       <div class="card">
-        <h2 data-i18n="quality.unit">Статус нормализации единиц</h2>
+        <h2 data-i18n="quality.unit">Уверенность в единице измерения</h2>
         <div id="chart-normalization"></div>
+        <div class="callout" style="margin-top:.9rem" data-i18n="quality.unit.note">
+          <strong>high</strong> — единица напечатана в заголовке колонки; <strong>medium</strong> —
+          надёжно выведена из контекста статьи, подписи к таблице или соседних колонок;
+          <strong>low</strong> — предположение (обычно каноническая единица показателя по
+          умолчанию), непригодное для количественного сравнения между публикациями.
+        </div>
       </div>
       <div class="card">
         <h2 data-i18n="quality.spatial">Сила пространственной привязки</h2>
@@ -281,10 +287,10 @@
       <div class="card">
         <h2 data-i18n="about.rules">Чего эти данные не утверждают</h2>
         <ul class="clean">
-          <li data-i18n="about.rule1">Значение со статусом <code>missing_unit</code> не имеет подставленной «по смыслу» единицы.</li>
+          <li data-i18n="about.rule1">Единица измерения формально определена для каждого наблюдения (<code>observation_unit_inference</code>), но с разной силой доказательности: значение с уверенностью <code>low</code> получило единицу лишь предположением, а не тем, что напечатано в статье, и непригодно для количественного сравнения между публикациями.</li>
           <li data-i18n="about.rule2">Единственная координата в статье — это контекст документа, а не GPS каждой строки таблицы.</li>
           <li data-i18n="about.rule3">pH(H₂O), pH(KCl) и pH без указания метода — три разных показателя.</li>
-          <li data-i18n="about.rule4">Русский оригинал и его перевод в Eurasian Soil Science не объединены: доказанного соответствия между ними пока нет.</li>
+          <li data-i18n="about.rule4">Для 626 пар статей установлено соответствие «русский оригинал ↔ перевод в Eurasian Soil Science»: 608 — разбором печатной библиографической ссылки на источник, 18 — по отпечатку числовых значений таблиц; документы не объединяются. Верхняя граница риска двойного учёта для остальных статей — 1.4% слоя.</li>
           <li data-i18n="about.rule5">Набор точек не является вероятностной выборкой по территории России.</li>
         </ul>
       </div>
@@ -307,12 +313,17 @@
     <div class="card">
       <h2 data-i18n="about.repro">Воспроизведение</h2>
       <p data-i18n="about.repro.text">Все публикуемые файлы пересобираются из рабочей базы одной командой:</p>
-      <pre class="mono" style="background:var(--surface-2);padding:.8rem;border-radius:9px;overflow-x:auto">python3 observatory_v1/extract_table_measurement_candidates.py --db DB --replace-existing
+      <pre class="mono" style="background:var(--surface-2);padding:.8rem;border-radius:9px;overflow-x:auto">python3 observatory_v1/extract_table_measurement_candidates.py --db DB --additive
 python3 observatory_v1/normalize_table_measurement_candidates.py --db DB
 python3 observatory_v1/materialize_full_table_observations.py --db DB
 python3 observatory_v1/flag_observation_quality.py --db DB
-python3 observatory_v1/infer_springer_publication_year.py --db DB
+python3 observatory_v1/infer_springer_publication_year.py --db DB --crossref docs/data/doi_metadata.csv
+python3 observatory_v1/infer_document_study_region.py --db DB
+python3 observatory_v1/infer_document_precise_coordinates.py --db DB
+python3 observatory_v1/merge_spatial_layers.py --db DB
+python3 observatory_v1/link_springer_translations.py --db DB
 python3 docs/scripts/build_portal.py --db DB --output docs/data</pre>
+      <p class="status" style="margin-top:.6rem" data-i18n="about.repro.note">Полная последовательность, включая сборку научного анализа и отчётов, — в <code>README.md</code> репозитория.</p>
       <p class="status" id="generated-at"></p>
     </div>
 
@@ -332,6 +343,6 @@ python3 docs/scripts/build_portal.py --db DB --output docs/data</pre>
 <button type="button" id="to-top" class="to-top" aria-label="Наверх" title="Наверх">↑</button>
 
 <script src="assets/leaflet.js"></script>
-<script src="assets/portal.js?v=20260804b"></script>
+<script src="assets/portal.js?v=20260804c"></script>
 </body>
 </html>

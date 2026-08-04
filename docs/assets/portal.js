@@ -59,7 +59,8 @@ const STRINGS = {
     'quality.header.note': '<strong>symbol_embedded</strong> — химический символ найден внутри более длинного заголовка («Thickness of horizons, cm A + B»). Такие значения следует исключать из анализа по умолчанию.',
     'quality.value': 'Физическая правдоподобность значений',
     'quality.value.note': 'Проверка диапазона запускается только там, где единица действительно известна. pH проверяется всегда — он безразмерен.',
-    'quality.unit': 'Статус нормализации единиц', 'quality.spatial': 'Сила пространственной привязки',
+    'quality.unit': 'Уверенность в единице измерения', 'quality.spatial': 'Сила пространственной привязки',
+    'quality.unit.note': '<strong>high</strong> — единица напечатана в заголовке колонки; <strong>medium</strong> — надёжно выведена из контекста статьи, подписи к таблице или соседних колонок; <strong>low</strong> — предположение (обычно каноническая единица показателя по умолчанию), непригодное для количественного сравнения между публикациями.',
     'query.lede': 'Вся база наблюдений загружается в браузер и выполняет SQL локально — данные никуда не отправляются. Таблицы: <code>observation</code>, <code>reported_site</code>, <code>verified_measurement</code>, <code>meta</code>.',
     'query.run': 'Выполнить', 'query.ex1': 'Свойства с доказанной единицей', 'query.ex2': 'pH по глубине',
     'query.ex3': 'Тяжёлые металлы по годам', 'query.ex4': 'Только «чистые» данные',
@@ -68,14 +69,15 @@ const STRINGS = {
     'about.chain.text': 'Каждое наблюдение прослеживается до конкретной ячейки:',
     'about.chain.text2': 'Поле <code>evidence_locator</code> хранит номер строки и колонки исходной таблицы, напечатанный заголовок свойства и метку строки.',
     'about.rules': 'Чего эти данные не утверждают',
-    'about.rule1': 'Значение со статусом <code>missing_unit</code> не имеет подставленной «по смыслу» единицы.',
+    'about.rule1': 'Единица измерения формально определена для каждого наблюдения (<code>observation_unit_inference</code>), но с разной силой доказательности: значение с уверенностью <code>low</code> получило единицу лишь предположением (обычно — канонической единицей показателя по умолчанию), а не тем, что напечатано в статье, и непригодно для количественного сравнения между публикациями.',
     'about.rule2': 'Единственная координата в статье — это контекст документа, а не GPS каждой строки таблицы.',
     'about.rule3': 'pH(H₂O), pH(KCl) и pH без указания метода — три разных показателя.',
-    'about.rule4': 'Для 47 пар статей соответствие «русский оригинал ↔ перевод в Eurasian Soil Science» установлено по отпечатку числовых значений таблиц (статус candidate, документы не объединяются). Для остальных доказанного соответствия пока нет — верхняя граница риска двойного учёта: 1.3% слоя.',
+    'about.rule4': 'Для 626 пар статей установлено соответствие «русский оригинал ↔ перевод в Eurasian Soil Science» (<code>document_links.csv</code>): 608 — разбором печатной библиографической ссылки на источник (журнал, год, номер, страницы), ещё 18 — по отпечатку числовых значений таблиц (статус candidate); документы не объединяются. Для остальных статей доказанного соответствия пока нет — верхняя граница риска двойного учёта: 1.4% слоя.',
     'about.rule5': 'Набор точек не является вероятностной выборкой по территории России.',
     'about.downloads': 'Данные для скачивания', 'about.dl.file': 'Файл', 'about.dl.what': 'Что это',
     'about.dl.size': 'Размер', 'about.repro': 'Воспроизведение',
     'about.repro.text': 'Все публикуемые файлы пересобираются из рабочей базы одной командой:',
+    'about.repro.note': 'Полная последовательность, включая сборку научного анализа и отчётов, — в README.md репозитория.',
     'about.license': '<strong>Лицензия.</strong> Составленная база и код — CC BY 4.0. Права на исходные статьи принадлежат их издателям; здесь публикуются извлечённые числовые значения и ссылки на источник.',
     'footer': 'Russian Soil Observatory · воспроизводимая сборка · доказательство: документ → OCR-таблица → строка → ячейка',
     't.observations': 'табличных наблюдений', 't.documents': 'полнотекстовых публикаций',
@@ -153,7 +155,8 @@ const STRINGS = {
     'quality.header.note': '<strong>symbol_embedded</strong> — the chemical symbol was found inside a longer header ("Thickness of horizons, cm A + B"). Such values should be excluded from analysis by default.',
     'quality.value': 'Physical plausibility of values',
     'quality.value.note': 'A range check only fires where the unit is actually known. pH is always checked — it is dimensionless.',
-    'quality.unit': 'Unit normalization status', 'quality.spatial': 'Strength of spatial linkage',
+    'quality.unit': 'Unit-of-measurement confidence', 'quality.spatial': 'Strength of spatial linkage',
+    'quality.unit.note': '<strong>high</strong> — the unit is printed in the column header; <strong>medium</strong> — reliably inferred from article context, a table caption, or a neighbouring column; <strong>low</strong> — an assumption (usually the property\'s default canonical unit), not fit for quantitative comparison across publications.',
     'query.lede': 'The whole observation database loads into your browser and runs SQL locally — nothing is sent anywhere. Tables: <code>observation</code>, <code>reported_site</code>, <code>verified_measurement</code>, <code>meta</code>.',
     'query.run': 'Run', 'query.ex1': 'Properties with proven units', 'query.ex2': 'pH by depth',
     'query.ex3': 'Heavy metals by year', 'query.ex4': 'Analysis-ready subset only',
@@ -162,14 +165,15 @@ const STRINGS = {
     'about.chain.text': 'Every observation is traceable to a specific cell:',
     'about.chain.text2': 'The <code>evidence_locator</code> field stores the row and column index of the source table, the printed property header, and the row label.',
     'about.rules': 'What these data do not claim',
-    'about.rule1': 'A value with status <code>missing_unit</code> has no unit assigned "by meaning".',
+    'about.rule1': 'A unit is formally assigned to every observation (<code>observation_unit_inference</code>), but with varying strength of evidence: a value with <code>low</code> confidence got its unit only as a default assumption (usually the property\'s canonical unit), not from what the article printed, and is not fit for quantitative comparison across publications.',
     'about.rule2': 'A single coordinate in an article is document context, not a GPS fix for every table row.',
     'about.rule3': 'pH(H₂O), pH(KCl) and pH with unstated method are three different variables.',
-    'about.rule4': 'For 47 article pairs, correspondence between the Russian original and its Eurasian Soil Science translation has been established by table-value fingerprint (status candidate, documents are not merged). For the rest no proven correspondence exists yet — upper bound on double-counting risk: 1.3% of the layer.',
+    'about.rule4': 'For 626 article pairs, correspondence between the Russian original and its Eurasian Soil Science translation has been established (<code>document_links.csv</code>): 608 by parsing the printed bibliographic citation to the source (journal, year, issue, pages), 18 more by table-value fingerprint (status candidate); documents are not merged. For the rest no proven correspondence exists yet — upper bound on double-counting risk: 1.4% of the layer.',
     'about.rule5': 'The point set is not a probability sample of Russian territory.',
     'about.downloads': 'Downloads', 'about.dl.file': 'File', 'about.dl.what': 'What it is',
     'about.dl.size': 'Size', 'about.repro': 'Reproducing this build',
     'about.repro.text': 'Every published file is rebuilt from the working database with one sequence:',
+    'about.repro.note': 'The full sequence, including the scientific analysis and report build, is in the repository README.md.',
     'about.license': '<strong>Licence.</strong> The compiled database and the code are CC BY 4.0. Rights in the source articles remain with their publishers; what is published here are extracted numeric values and pointers to the source.',
     'footer': 'Russian Soil Observatory · reproducible build · evidence: document → OCR table → row → cell',
     't.observations': 'table observations', 't.documents': 'full-text publications',
@@ -349,7 +353,8 @@ function renderQuality() {
     { value: q.header_match_kind.symbol_embedded || 0, label: 'symbol_embedded' },
     { value: (q.value_plausibility.negative_content || 0) + (q.value_plausibility.out_of_physical_range || 0),
       label: lang === 'ru' ? 'значения вне физического диапазона' : 'values outside physical range' },
-    { value: q.normalization_status.missing_unit || 0, label: 'missing_unit' },
+    { value: (q.unit_confidence && q.unit_confidence.low) || 0,
+      label: lang === 'ru' ? 'единица только предположена (confidence=low)' : 'unit only assumed (confidence=low)' },
   ].map((tile) => `<div class="tile"><div class="value" data-count-to="${tile.value}">0</div>
       <div class="label">${esc(tile.label)}</div>
       ${tile.note ? `<div class="note">${esc(tile.note)}</div>` : ''}</div>`).join('');
@@ -364,7 +369,7 @@ function renderQuality() {
   document.getElementById('chart-plausibility').innerHTML = bars(
     toRows(q.value_plausibility, { ok: 'good' }));
   document.getElementById('chart-normalization').innerHTML = bars(
-    toRows(q.normalization_status, { exact: 'good', converted: 'good' }));
+    toRows(q.unit_confidence || {}, { high: 'good', medium: '' , low: 'muted' }));
   document.getElementById('chart-linkage').innerHTML = bars(
     toRows(q.spatial_linkage, { row_profile_verified: 'good' }));
 }
@@ -372,28 +377,28 @@ function renderQuality() {
 const DOWNLOADS = [
   ['data/full_table_observations.csv', {
     ru: 'Все табличные наблюдения с флагами качества и происхождением',
-    en: 'All table observations with quality flags and provenance' }, '79 MB'],
+    en: 'All table observations with quality flags and provenance' }, '83 MB'],
   ['data/observatory.sqlite.gz', {
     ru: 'База для браузера и локального анализа (SQLite, gzip)',
-    en: 'Database for the browser and local analysis (SQLite, gzip)' }, '9.0 MB'],
+    en: 'Database for the browser and local analysis (SQLite, gzip)' }, '9.6 MB'],
   ['data/aggregates.json', {
-    ru: 'Все сводные показатели портала', en: 'Every aggregate the portal quotes' }, '30 KB'],
+    ru: 'Все сводные показатели портала', en: 'Every aggregate the portal quotes' }, '47 KB'],
   ['data/portal_map.json', {
     ru: 'Точки карты с источниками и измерениями', en: 'Map points with sources and measurements' }, '0.8 MB'],
   ['data/reported_sites.csv', {
     ru: 'Все авторские координаты', en: 'All author-reported coordinates' }, '1.2 MB'],
   ['data/normalized_measurements.csv', {
-    ru: 'Строгий пространственный слой измерений', en: 'Strict spatial measurement layer' }, '1.1 MB'],
+    ru: 'Строгий пространственный слой измерений', en: 'Strict spatial measurement layer' }, '1.0 MB'],
   ['data/profile_descriptions.csv', {
-    ru: 'Описания разрезов и профилей', en: 'Profile and pit descriptions' }, '1.1 MB'],
+    ru: 'Описания разрезов и профилей', en: 'Profile and pit descriptions' }, '1.0 MB'],
   ['data/property_dictionary_ru_public.csv', {
-    ru: 'Словарь свойств и канонических единиц', en: 'Property and canonical-unit dictionary' }, '34 KB'],
+    ru: 'Словарь свойств и канонических единиц', en: 'Property and canonical-unit dictionary' }, '40 KB'],
   ['data/property_census.csv', {
     ru: 'Перепись всех 101 свойств: охват единицей, глубиной, координатой',
-    en: 'Census of all 101 properties: unit, depth and spatial coverage' }, '17 KB'],
+    en: 'Census of all 101 properties: unit, depth and spatial coverage' }, '18 KB'],
   ['data/document_links.csv', {
-    ru: 'Сопоставленные пары «русский оригинал ↔ перевод Springer» (47 пар)',
-    en: 'Matched Russian-original / Springer-translation article pairs (47 pairs)' }, '5 KB'],
+    ru: 'Сопоставленные пары «русский оригинал ↔ перевод Springer» (626 пар: 608 подтверждено разбором печатной ссылки, 18 — по отпечатку значений)',
+    en: 'Matched Russian-original / Springer-translation article pairs (626 pairs: 608 confirmed by parsing the printed citation, 18 by value fingerprint)' }, '121 KB'],
   ['data/full_table_observation_audit.json', {
     ru: 'Аудит полноты слоя наблюдений', en: 'Observation layer coverage audit' }, '1 KB'],
   ['data/observation_quality_audit.json', {
@@ -523,13 +528,15 @@ function renderMap() {
 /* ------------------------------------------------------------------- SQL */
 
 const EXAMPLES = [
-  `-- Properties whose unit is actually proven, most abundant first
+  `-- Properties whose unit is high/medium confidence, most abundant first
+-- (metric=1 means confidence IN ('high','medium') in observation_unit_inference;
+--  confidence='low' is a default assumption, not a printed unit)
 SELECT property, property_ru, category,
        COUNT(*)                                   AS observations,
        ROUND(AVG(value_normalized), 3)            AS mean_value,
        unit_normalized
 FROM observation
-WHERE normalization_status IN ('exact','converted')
+WHERE metric = 1
   AND value_plausibility = 'ok'
 GROUP BY property, property_ru, category, unit_normalized
 ORDER BY observations DESC
@@ -557,12 +564,12 @@ WHERE publication_year IS NOT NULL
 GROUP BY year
 HAVING observations > 200
 ORDER BY year;`,
-  `-- The analysis-ready subset: proven unit, reliable header, plausible value
+  `-- The analysis-ready subset: high/medium-confidence unit, reliable header, plausible value
 SELECT category, property, COUNT(*) AS n
 FROM observation
 WHERE header_match_kind <> 'symbol_embedded'
   AND value_plausibility = 'ok'
-  AND normalization_status IN ('exact','converted')
+  AND metric = 1
 GROUP BY category, property
 ORDER BY n DESC;`,
 ];
