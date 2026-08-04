@@ -6,11 +6,11 @@
     "symbol_embedded": 5598
   },
   "value_plausibility": {
-    "ok": 102712,
-    "out_of_physical_range": 2707,
-    "negative_content": 1420
+    "ok": 102601,
+    "out_of_physical_range": 2851,
+    "negative_content": 1387
   },
-  "unflagged_observations": 97576,
+  "unflagged_observations": 97465,
   "most_affected_properties": {
     "ph_unspecified": {
       "ok": 3539,
@@ -26,22 +26,22 @@
     },
     "clay": {
       "ok": 2449,
-      "negative_content": 88,
-      "out_of_physical_range": 97
+      "negative_content": 83,
+      "out_of_physical_range": 102
     },
     "soil_organic_carbon": {
-      "out_of_physical_range": 60,
-      "ok": 4674,
-      "negative_content": 85
+      "out_of_physical_range": 86,
+      "ok": 4661,
+      "negative_content": 72
+    },
+    "organic_matter": {
+      "ok": 5736,
+      "out_of_physical_range": 70,
+      "negative_content": 58
     },
     "ph_kcl": {
       "out_of_physical_range": 100,
       "ok": 934
-    },
-    "organic_matter": {
-      "ok": 5769,
-      "out_of_physical_range": 30,
-      "negative_content": 65
     },
     "bulk_density": {
       "out_of_physical_range": 94,
@@ -59,6 +59,15 @@
       "ok": 1862,
       "negative_content": 42
     },
+    "total_nitrogen": {
+      "ok": 272,
+      "out_of_physical_range": 41
+    },
+    "sand": {
+      "ok": 1134,
+      "out_of_physical_range": 23,
+      "negative_content": 13
+    },
     "lead": {
       "ok": 1339,
       "negative_content": 35
@@ -66,15 +75,6 @@
     "nickel": {
       "ok": 1314,
       "negative_content": 34
-    },
-    "silt": {
-      "ok": 1347,
-      "negative_content": 33,
-      "out_of_physical_range": 1
-    },
-    "electrical_conductivity": {
-      "ok": 2120,
-      "negative_content": 33
     }
   }
 }

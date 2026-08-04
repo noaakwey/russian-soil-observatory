@@ -294,7 +294,10 @@ function renderOverview() {
     </div>`;
 
   document.getElementById('chart-categories').innerHTML = bars(
-    AGG.categories.map((row) => ({ label: row.category, value: row.observations })));
+    AGG.categories.map((row) => ({
+      label: lang === 'ru' ? (row.category_ru || row.category) : (row.category_en || row.category),
+      value: row.observations,
+    })));
 
   const s = AGG.spatial;
   document.getElementById('spatial-facts').innerHTML = `
@@ -413,12 +416,22 @@ let mapLayer = null;
 let tileBase = null;
 let mapTheme = null;
 
+/* Source PDFs are justified text; the OCR/text layer keeps the line-wrap
+   hyphen and flattens the line break to a space, so "закустарен-\nными"
+   becomes "закустарен- ными" in the stored fragment. A real hyphenated
+   compound ("серо-гумусовая") never has a space after the hyphen, so hyphen
+   + whitespace + a lowercase letter is an unambiguous line-wrap artefact,
+   not a word the extractor should preserve as two.  */
+function dehyphenate(text) {
+  return text.replace(/([a-zа-яё])-\s+(?=[a-zа-яё])/gi, '$1');
+}
+
 function popupHtml(point) {
   const sources = point.sources.map((source) => `<li>
       <b>${esc(source.corpus === 'springer' ? 'Eurasian Soil Science' : 'Почвоведение')}</b>
       ${source.year ? ` · ${t('popup.year')} ${source.year}${source.year_confidence === 'submission_year' ? ' ±1' : ''}` : ''}
       ${source.doi ? `<br><a target="_blank" rel="noopener" href="https://doi.org/${esc(source.doi)}">${esc(source.doi)}</a>` : ''}
-      ${source.evidence ? `<details><summary>${esc(t('popup.evidence'))}</summary>${esc(source.evidence)}</details>` : ''}
+      ${source.evidence ? `<details><summary>${esc(t('popup.evidence'))}</summary>${esc(dehyphenate(source.evidence))}</details>` : ''}
     </li>`).join('');
 
   const rows = point.measurements.map((m) => `<tr>
