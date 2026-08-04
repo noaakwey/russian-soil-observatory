@@ -1,22 +1,22 @@
 {
   "layer": {
     "observations": 106839,
-    "trusted": 97465,
-    "metric": 26794,
+    "trusted": 96101,
+    "metric": 51626,
     "located": 78752,
     "precise": 12917,
     "documents_outside_russia": 160
   },
   "effort": {
-    "documents_located": 881,
-    "observations_located": 73290,
-    "european_documents_pct": 72.8,
+    "documents_located": 875,
+    "observations_located": 72161,
+    "european_documents_pct": 72.6,
     "european_area_pct": 23.0,
     "documents_east_of_100E": 96,
     "by_tier": {
-      "region": 701,
+      "region": 696,
       "reported": 150,
-      "dms": 30
+      "dms": 29
     }
   },
   "zonal": {
@@ -78,68 +78,62 @@
       }
     ],
     "soc_latitude": {
-      "n_documents": 167,
-      "spearman_rho": -0.0,
-      "p_value": 0.997,
-      "median_g_per_kg": 21.6
+      "n_documents": 179,
+      "spearman_rho": -0.023,
+      "p_value": 0.758,
+      "median_g_per_kg": 19.8
     }
   },
   "cooccurrence": {
-    "tables_with_multiple_properties": 1354,
+    "tables_with_multiple_properties": 1342,
     "strongest_pairs": [
       {
         "a": "coarse silt 0.05-0.01 mm",
         "b": "medium silt 0.01-0.005 mm",
-        "jaccard": 0.941,
-        "tables": 111
+        "jaccard": 0.94,
+        "tables": 110
       },
       {
         "a": "fine silt 0.005-0.001 mm",
         "b": "medium silt 0.01-0.005 mm",
-        "jaccard": 0.941,
-        "tables": 111
+        "jaccard": 0.94,
+        "tables": 110
       },
       {
         "a": "fine sand",
         "b": "medium silt 0.01-0.005 mm",
-        "jaccard": 0.911,
-        "tables": 112
+        "jaccard": 0.902,
+        "tables": 111
+      },
+      {
+        "a": "coarse silt 0.05-0.01 mm",
+        "b": "fine silt 0.005-0.001 mm",
+        "jaccard": 0.898,
+        "tables": 106
       },
       {
         "a": "coarse silt 0.05-0.01 mm",
         "b": "fine sand",
-        "jaccard": 0.902,
-        "tables": 110
-      },
-      {
-        "a": "coarse silt 0.05-0.01 mm",
-        "b": "fine silt 0.005-0.001 mm",
-        "jaccard": 0.899,
-        "tables": 107
+        "jaccard": 0.893,
+        "tables": 109
       },
       {
         "a": "fine sand",
         "b": "fine silt 0.005-0.001 mm",
-        "jaccard": 0.871,
-        "tables": 108
+        "jaccard": 0.863,
+        "tables": 107
       },
       {
-        "a": "chloride ion Cl-",
-        "b": "sulfate ion SO4 2-",
-        "jaccard": 0.841,
-        "tables": 74
+        "a": "coarse sand",
+        "b": "coarse silt 0.05-0.01 mm",
+        "jaccard": 0.832,
+        "tables": 99
       },
       {
         "a": "coarse sand",
         "b": "fine sand",
         "jaccard": 0.829,
         "tables": 102
-      },
-      {
-        "a": "coarse sand",
-        "b": "coarse silt 0.05-0.01 mm",
-        "jaccard": 0.825,
-        "tables": 99
       },
       {
         "a": "calcium oxide CaO",
@@ -150,13 +144,19 @@
       {
         "a": "coarse sand",
         "b": "medium silt 0.01-0.005 mm",
-        "jaccard": 0.79,
+        "jaccard": 0.797,
         "tables": 98
+      },
+      {
+        "a": "chloride ion Cl-",
+        "b": "sulfate ion SO4 2-",
+        "jaccard": 0.793,
+        "tables": 69
       },
       {
         "a": "coarse sand",
         "b": "fine silt 0.005-0.001 mm",
-        "jaccard": 0.766,
+        "jaccard": 0.772,
         "tables": 95
       },
       {
@@ -168,7 +168,7 @@
       {
         "a": "copper",
         "b": "zinc",
-        "jaccard": 0.734,
+        "jaccard": 0.738,
         "tables": 138
       },
       {
@@ -184,48 +184,48 @@
         "tables": 58
       },
       {
-        "a": "calcium",
-        "b": "magnesium",
-        "jaccard": 0.685,
-        "tables": 76
-      },
-      {
         "a": "fine fraction <0.001 mm",
         "b": "fine silt 0.005-0.001 mm",
-        "jaccard": 0.675,
-        "tables": 108
+        "jaccard": 0.669,
+        "tables": 107
       },
       {
         "a": "calcium ion Ca2+",
         "b": "magnesium ion Mg2+",
-        "jaccard": 0.663,
-        "tables": 179
+        "jaccard": 0.662,
+        "tables": 178
       },
       {
         "a": "lead",
         "b": "zinc",
-        "jaccard": 0.655,
+        "jaccard": 0.659,
         "tables": 116
+      },
+      {
+        "a": "sand",
+        "b": "silt",
+        "jaccard": 0.656,
+        "tables": 80
       }
     ]
   },
   "depth": {
     "soc_decay_north": {
-      "n": 243,
-      "e_folding_depth_cm": 337.4,
-      "r_squared": 0.008
+      "n": 252,
+      "e_folding_depth_cm": 501.8,
+      "r_squared": 0.004
     },
     "soc_decay_south": {
-      "n": 287,
-      "e_folding_depth_cm": 52.4,
-      "r_squared": 0.387
+      "n": 353,
+      "e_folding_depth_cm": 56.0,
+      "r_squared": 0.315
     },
     "ph_h2o_minus_kcl": 1.18
   },
   "time": {
-    "metal_share_2006_2010": 8.1,
-    "metal_share_2020_2025": 14.0,
-    "longitude_drift_per_year": 0.25,
+    "metal_share_2006_2010": 8.2,
+    "metal_share_2020_2025": 14.1,
+    "longitude_drift_per_year": 0.255,
     "longitude_drift_p": 0.133,
     "median_longitude_2006_2010": 41.0,
     "median_longitude_2020_2025": 44.0
@@ -234,43 +234,43 @@
     {
       "zone": "Арктика и субарктика (>66°)",
       "documents": 73,
-      "observations": 7968,
+      "observations": 7835,
       "properties": 69,
       "precise_pct": 48.0
     },
     {
       "zone": "Северная тайга (60–66°)",
       "documents": 89,
-      "observations": 7722,
+      "observations": 7598,
       "properties": 74,
       "precise_pct": 30.0
     },
     {
       "zone": "Средняя тайга (56–60°)",
       "documents": 198,
-      "observations": 15281,
+      "observations": 15109,
       "properties": 85,
       "precise_pct": 13.0
     },
     {
       "zone": "Южная тайга и лесостепь (52–56°)",
-      "documents": 281,
-      "observations": 25961,
+      "documents": 278,
+      "observations": 25418,
       "properties": 87,
-      "precise_pct": 14.0
+      "precise_pct": 13.0
     },
     {
       "zone": "Степь (48–52°)",
-      "documents": 113,
-      "observations": 6625,
-      "properties": 73,
-      "precise_pct": 27.0
+      "documents": 112,
+      "observations": 6558,
+      "properties": 72,
+      "precise_pct": 28.0
     },
     {
       "zone": "Сухая степь и предгорья (<48°)",
-      "documents": 127,
-      "observations": 9733,
-      "properties": 79,
+      "documents": 125,
+      "observations": 9643,
+      "properties": 77,
       "precise_pct": 18.0
     }
   ],
@@ -278,56 +278,56 @@
     "total_properties": 101,
     "best_unit_proven": [
       {
-        "property": "pH in water",
-        "unit_proven_pct": 97.4,
-        "observations": 5062
-      },
-      {
-        "property": "base saturation",
-        "unit_proven_pct": 93.2,
-        "observations": 473
-      },
-      {
-        "property": "pH in KCl",
-        "unit_proven_pct": 88.9,
-        "observations": 1034
-      },
-      {
         "property": "pH (method unspecified)",
-        "unit_proven_pct": 85.8,
+        "unit_proven_pct": 100.0,
         "observations": 4860
       },
       {
-        "property": "total porosity",
-        "unit_proven_pct": 78.3,
-        "observations": 608
-      }
-    ],
-    "worst_unit_proven": [
+        "property": "base saturation",
+        "unit_proven_pct": 96.6,
+        "observations": 473
+      },
       {
-        "property": "magnesium ion Mg2+",
-        "unit_proven_pct": 0.0,
-        "observations": 4035
+        "property": "chloride ion Cl-",
+        "unit_proven_pct": 83.2,
+        "observations": 1148
       },
       {
         "property": "sodium ion Na+",
-        "unit_proven_pct": 0.0,
+        "unit_proven_pct": 83.1,
         "observations": 3369
       },
+      {
+        "property": "clay",
+        "unit_proven_pct": 83.1,
+        "observations": 2634
+      }
+    ],
+    "worst_unit_proven": [
       {
         "property": "C:N ratio",
         "unit_proven_pct": 0.0,
         "observations": 2255
       },
       {
-        "property": "potassium ion K+",
+        "property": "fine silt 0.005-0.001 mm",
         "unit_proven_pct": 0.0,
-        "observations": 1721
+        "observations": 1827
       },
       {
-        "property": "magnesium",
+        "property": "medium silt 0.01-0.005 mm",
         "unit_proven_pct": 0.0,
-        "observations": 1530
+        "observations": 1823
+      },
+      {
+        "property": "very coarse sand 3-1 mm",
+        "unit_proven_pct": 0.0,
+        "observations": 259
+      },
+      {
+        "property": "urease activity",
+        "unit_proven_pct": 0.0,
+        "observations": 207
       }
     ],
     "best_depth_coverage": [
@@ -384,77 +384,77 @@
         "observations": 2665
       }
     ],
-    "median_unit_proven_pct": 4.7,
+    "median_unit_proven_pct": 40.3,
     "properties_over_1000_obs": 40,
     "properties_under_50_obs": 13
   },
   "correlations": {
-    "pairs_tested": 56,
-    "pairs_significant_fdr5": 33,
+    "pairs_tested": 57,
+    "pairs_significant_fdr5": 31,
     "strongest": [
       {
-        "a": "pH(H2O)",
-        "b": "pH(KCl)",
-        "n": 114,
-        "pearson_r": 0.909,
+        "a": "песок",
+        "b": "физ. глина",
+        "n": 55,
+        "pearson_r": -0.923,
         "ci": [
-          0.871,
-          0.936
+          -0.954,
+          -0.871
         ],
         "q_value": 0.0
       },
       {
-        "a": "физ. глина",
-        "b": "ил <0.001",
-        "n": 148,
-        "pearson_r": 0.775,
+        "a": "ил <0.002",
+        "b": "физ. глина",
+        "n": 150,
+        "pearson_r": 0.88,
         "ci": [
-          0.701,
-          0.832
+          0.839,
+          0.912
+        ],
+        "q_value": 0.0
+      },
+      {
+        "a": "пыль",
+        "b": "физ. глина",
+        "n": 37,
+        "pearson_r": 0.859,
+        "ci": [
+          0.741,
+          0.925
         ],
         "q_value": 0.0
       },
       {
         "a": "pH(H2O)",
         "b": "V, %",
-        "n": 312,
-        "pearson_r": 0.731,
+        "n": 278,
+        "pearson_r": 0.751,
         "ci": [
-          0.674,
-          0.779
+          0.695,
+          0.798
+        ],
+        "q_value": 0.0
+      },
+      {
+        "a": "C орг.",
+        "b": "пыль",
+        "n": 64,
+        "pearson_r": 0.674,
+        "ci": [
+          0.513,
+          0.789
         ],
         "q_value": 0.0
       },
       {
         "a": "ил <0.002",
         "b": "Fe2O3",
-        "n": 77,
-        "pearson_r": 0.702,
-        "ci": [
-          0.567,
-          0.8
-        ],
-        "q_value": 0.0
-      },
-      {
-        "a": "pH(KCl)",
-        "b": "CaCO3",
-        "n": 40,
+        "n": 70,
         "pearson_r": 0.669,
         "ci": [
-          0.452,
-          0.812
-        ],
-        "q_value": 0.0
-      },
-      {
-        "a": "физ. глина",
-        "b": "CaCO3",
-        "n": 45,
-        "pearson_r": 0.665,
-        "ci": [
-          0.462,
-          0.802
+          0.515,
+          0.781
         ],
         "q_value": 0.0
       },
@@ -470,37 +470,37 @@
         "q_value": 0.0
       },
       {
-        "a": "pH(H2O)",
-        "b": "пыль",
-        "n": 43,
-        "pearson_r": -0.598,
+        "a": "физ. глина",
+        "b": "CaCO3",
+        "n": 58,
+        "pearson_r": 0.636,
         "ci": [
-          -0.761,
-          -0.363
+          0.452,
+          0.768
         ],
-        "q_value": 0.0001
+        "q_value": 0.0
       },
       {
-        "a": "гумус",
-        "b": "EC",
-        "n": 32,
-        "pearson_r": 0.533,
+        "a": "pH(KCl)",
+        "b": "гумус",
+        "n": 64,
+        "pearson_r": 0.586,
         "ci": [
-          0.226,
-          0.743
+          0.398,
+          0.727
         ],
-        "q_value": 0.0034
+        "q_value": 0.0
       },
       {
         "a": "pH(H2O)",
-        "b": "P подв.",
-        "n": 30,
-        "pearson_r": -0.532,
+        "b": "ил <0.001",
+        "n": 156,
+        "pearson_r": 0.519,
         "ci": [
-          -0.749,
-          -0.212
+          0.395,
+          0.626
         ],
-        "q_value": 0.0047
+        "q_value": 0.0
       }
     ]
   },
@@ -521,17 +521,17 @@
     },
     "soc": {
       "label": "log(SOC)",
-      "n_observations": 1929,
-      "n_documents": 167,
-      "naive_ols_slope_per_degree": -0.0048,
+      "n_observations": 2325,
+      "n_documents": 179,
+      "naive_ols_slope_per_degree": -0.006,
       "naive_ols_r_squared": 0.001,
-      "mixed_slope_per_degree": -0.0008,
+      "mixed_slope_per_degree": -0.0019,
       "mixed_ci": [
-        -0.0331,
-        0.0315
+        -0.0341,
+        0.0303
       ],
-      "mixed_p_value": 0.96,
-      "icc_document": 0.467
+      "mixed_p_value": 0.907,
+      "icc_document": 0.507
     },
     "ph_multiple": {
       "n_observations": 621,
@@ -573,53 +573,53 @@
     }
   },
   "zonal_sweep": {
-    "properties_eligible": 19,
+    "properties_eligible": 39,
     "properties_total": 101,
     "properties_significant_fdr5": 4,
     "strengthening": [
       {
         "property": "physical clay",
-        "n_documents": 34,
-        "slope_per_degree": -1.0711,
+        "n_documents": 49,
+        "slope_per_degree": -1.1097,
         "ci": [
-          -1.8102,
-          -0.332
+          -1.7576,
+          -0.4619
         ],
         "log_transformed": false,
-        "q_value": 0.0214
+        "q_value": 0.0102
       },
       {
         "property": "fine fraction <0.001 mm",
-        "n_documents": 25,
-        "slope_per_degree": -0.951,
+        "n_documents": 15,
+        "slope_per_degree": -0.8866,
         "ci": [
-          -1.4771,
-          -0.425
+          -1.4642,
+          -0.309
         ],
         "log_transformed": false,
-        "q_value": 0.0025
+        "q_value": 0.0256
       },
       {
         "property": "pH in water",
-        "n_documents": 206,
-        "slope_per_degree": -0.0816,
+        "n_documents": 163,
+        "slope_per_degree": -0.0807,
         "ci": [
-          -0.1071,
-          -0.056
+          -0.1072,
+          -0.0541
         ],
         "log_transformed": false,
         "q_value": 0.0
       },
       {
         "property": "pH (method unspecified)",
-        "n_documents": 127,
-        "slope_per_degree": -0.0763,
+        "n_documents": 144,
+        "slope_per_degree": -0.0774,
         "ci": [
-          -0.1162,
-          -0.0365
+          -0.116,
+          -0.0389
         ],
         "log_transformed": false,
-        "q_value": 0.0017
+        "q_value": 0.0016
       }
     ]
   }

@@ -1,100 +1,100 @@
 property_id,property,property_ru,category,category_ru,observations,documents,unit_proven_pct,header_trusted_pct,value_plausible_pct,with_depth_pct,with_spatial_pct,unit_mode,median,p25,p75,n_metric
-organic_matter,organic matter/humus,органическое вещество (гумус),organic,органическое вещество и углерод,5864,316,66.1,100.0,97.8,36.5,75.8,%,3.2,1.3,5.1,3809
-ph_h2o,pH in water,pH водной вытяжки,acid_base,кислотно-основные,5062,270,97.4,100.0,80.9,47.1,86.9,pH,6.4,5.4,7.7,3974
-ph_unspecified,pH (method unspecified),pH (экстрагент не указан автором),acid_base,кислотно-основные,4860,335,85.8,100.0,72.8,23.5,52.9,pH,6.7,5.16,7.8,2951
-soil_organic_carbon,soil organic carbon,органический углерод почвы,organic,органическое вещество и углерод,4819,321,72.0,100.0,96.7,36.7,72.0,g/kg,15.3,5.7,39.0,3385
-magnesium_ion,magnesium ion Mg2+,ион магния Mg2+ (метод не указан),soil_solution,почвенный раствор,4035,176,0.0,100.0,99.7,49.8,83.5,,,,,0
-calcium_ion,calcium ion Ca2+,ион кальция Ca2+ (метод не указан),soil_solution,почвенный раствор,3761,165,2.7,100.0,99.7,51.5,82.8,cmolc/kg,9.97,1.8,17.1,102
-sodium_ion,sodium ion Na+,ион натрия Na+ (метод не указан),soil_solution,почвенный раствор,3369,117,0.0,100.0,99.7,40.5,86.3,,,,,0
-physical_clay,physical clay,физическая глина,particle_size,гранулометрический состав,3183,199,27.1,100.0,99.0,55.0,83.2,%,32.3,20.0,47.68,850
-iron,iron,железо,microelement,микроэлементы,3178,131,3.2,49.2,99.2,25.0,78.9,mg/kg,136.0,2.73,247.0,56
-iron_oxide_fe2o3,iron oxide Fe2O3,оксид железа (Fe₂O₃),geochemical,геохимические свойства,2665,91,38.5,100.0,99.7,40.5,96.0,%,0.47,0.05,3.96,1021
-clay,clay,глина,particle_size,гранулометрический состав,2634,155,52.2,100.0,93.0,38.6,66.4,%,21.0,8.0,33.0,1273
-boron,boron,бор,microelement,микроэлементы,2559,62,0.3,29.0,84.3,16.9,84.8,,,,,0
-fine_fraction_lt_0_001mm,fine fraction <0.001 mm,"илистая фракция (<0,001 мм)",particle_size,гранулометрический состав,2514,156,20.6,100.0,99.7,57.6,83.7,%,14.0,5.0,25.0,518
+organic_matter,organic matter/humus,органическое вещество (гумус),organic,органическое вещество и углерод,5864,316,73.3,100.0,96.2,36.5,75.8,%,3.2,1.3,5.5,4161
+ph_h2o,pH in water,pH водной вытяжки,acid_base,кислотно-основные,5062,270,79.2,100.0,80.9,47.1,86.9,pH,6.3,5.3,7.66,3104
+ph_unspecified,pH (method unspecified),pH (экстрагент не указан автором),acid_base,кислотно-основные,4860,335,100.0,100.0,72.8,23.5,52.9,pH,6.6,5.19,7.74,3539
+soil_organic_carbon,soil organic carbon,органический углерод почвы,organic,органическое вещество и углерод,4819,321,81.6,100.0,96.0,36.7,72.0,g/kg,15.0,5.5,39.0,3785
+magnesium_ion,magnesium ion Mg2+,ион магния Mg2+ (метод не указан),soil_solution,почвенный раствор,4035,176,80.5,100.0,99.5,49.8,83.5,meq/100g,1.87,0.5,6.3,3229
+calcium_ion,calcium ion Ca2+,ион кальция Ca2+ (метод не указан),soil_solution,почвенный раствор,3761,165,80.6,100.0,99.1,51.5,82.8,meq/100g,3.7,0.56,17.2,3008
+sodium_ion,sodium ion Na+,ион натрия Na+ (метод не указан),soil_solution,почвенный раствор,3369,117,83.1,100.0,98.0,40.5,86.3,meq/100g,1.2,0.2,6.0,2765
+physical_clay,physical clay,физическая глина,particle_size,гранулометрический состав,3183,199,31.4,100.0,97.5,55.0,83.2,%,35.0,20.9,49.6,998
+iron,iron,железо,microelement,микроэлементы,3178,131,38.6,49.2,98.9,25.0,78.9,mg/kg,7.25,7.25,21.5,757
+iron_oxide_fe2o3,iron oxide Fe2O3,оксид железа (Fe₂O₃),geochemical,геохимические свойства,2665,91,64.1,100.0,98.3,40.5,96.0,%,1.39,0.17,6.39,1662
+clay,clay,глина,particle_size,гранулометрический состав,2634,155,83.1,100.0,91.3,38.6,66.4,%,17.0,4.65,31.92,2003
+boron,boron,бор,microelement,микроэлементы,2559,62,0.4,29.0,84.3,16.9,84.8,mg/kg,300.0,300.0,300.0,1
+fine_fraction_lt_0_001mm,fine fraction <0.001 mm,"илистая фракция (<0,001 мм)",particle_size,гранулометрический состав,2514,156,13.5,100.0,99.7,57.6,83.7,%,16.0,7.8,26.0,339
 carbon_nitrogen_ratio,C:N ratio,отношение C:N,organic,органическое вещество и углерод,2255,153,0.0,100.0,99.2,33.6,77.2,,,,,0
-electrical_conductivity,electrical conductivity,электропроводность,salinity,засоление и минерализация,2153,58,7.2,100.0,98.5,6.8,8.8,dS/m,1.09,0.5417,3.1,154
-calcium,calcium,кальций,exchange,обменный комплекс,2102,104,0.7,64.1,96.9,17.7,72.2,,,,,0
-available_phosphorus,available phosphorus,подвижный фосфор,macronutrient,макроэлементы,2028,125,10.6,100.0,99.5,31.3,93.3,mg/kg,67.0,39.41,184.0,214
-zinc,zinc,цинк,microelement,микроэлементы,1979,124,2.5,88.5,99.5,16.0,72.9,mg/kg,4.56,2.34,37.0,50
-copper,copper,медь,microelement,микроэлементы,1904,125,4.2,91.3,97.8,14.7,72.8,mg/kg,55.0,36.0,85.16,64
-fine_silt,fine silt 0.005-0.001 mm,мелкая пыль (0.005–0.001 мм),particle_size,гранулометрический состав,1827,106,5.4,100.0,100.0,66.7,87.6,%,9.0,6.0,12.0,99
-medium_silt,medium silt 0.01-0.005 mm,средняя пыль (0.01–0.005 мм),particle_size,гранулометрический состав,1823,108,5.4,100.0,100.0,65.6,87.0,%,7.31,4.0,9.5,99
-fine_sand,fine sand,мелкий песок,particle_size,гранулометрический состав,1809,112,8.3,100.0,100.0,65.3,86.8,%,16.0,5.47,26.0,150
-potassium_ion,potassium ion K+,ион калия K+ (метод не указан),soil_solution,почвенный раствор,1721,76,0.0,100.0,99.3,43.9,79.7,,,,,0
-coarse_silt,coarse silt 0.05-0.01 mm,крупная пыль (0.05–0.01 мм),particle_size,гранулометрический состав,1694,106,6.4,100.0,100.0,65.8,87.3,%,31.9,21.0,42.68,109
-coarse_sand,coarse sand,крупный песок,particle_size,гранулометрический состав,1672,104,70.5,100.0,99.5,66.9,86.4,%,2.0,0.2,13.0,1179
-cation_exchange_capacity,cation exchange capacity,ёмкость катионного обмена,exchange,обменный комплекс,1671,72,0.3,100.0,99.8,25.6,87.0,cmolc/kg,17.8,1.0,29.93,5
-silicon_dioxide,silicon dioxide,диоксид кремния (SiO₂),geochemical,геохимические свойства,1565,62,38.1,100.0,99.8,47.4,91.3,%,10.0,2.32,58.7,596
-magnesium,magnesium,магний,exchange,обменный комплекс,1530,83,0.0,82.0,98.6,22.4,66.5,,,,,0
-aluminum_oxide_al2o3,aluminum oxide Al2O3,оксид алюминия (Al₂O₃),geochemical,геохимические свойства,1488,74,16.4,100.0,99.3,45.6,68.3,%,14.94,2.4,21.45,241
-manganese,manganese,марганец,microelement,микроэлементы,1422,93,4.6,94.7,98.6,12.7,66.0,mg/kg,293.0,171.7,525.0,66
-silt,silt,пылеватая фракция,particle_size,гранулометрический состав,1381,98,38.8,100.0,97.5,22.9,52.9,%,22.0,2.95,34.6,533
-lead,lead,свинец,contaminant,потенциальные загрязнители,1374,94,1.6,93.4,97.5,15.5,80.6,mg/kg,42.0,23.0,96.0,15
-available_potassium,available potassium,подвижный калий,macronutrient,макроэлементы,1365,97,2.7,100.0,99.0,40.7,92.8,mg/kg,160.0,71.5,295.1,37
-nickel,nickel,никель,microelement,микроэлементы,1348,87,3.9,89.2,97.5,18.6,76.3,mg/kg,158.0,151.0,161.0,7
-bulk_density,bulk density,плотность сложения,physical,физические свойства,1295,73,57.5,100.0,92.7,52.4,76.5,g/cm3,1.27,1.0,1.45,650
-sand,sand,песок,particle_size,гранулометрический состав,1170,115,53.2,100.0,96.9,20.8,45.9,%,39.0,12.46,60.5,600
-chloride_ion,chloride ion Cl-,хлорид-ион Cl-,soil_solution,почвенный раствор,1148,63,0.0,100.0,99.1,60.9,81.6,,,,,0
-sulfate_ion,sulfate ion SO4 2-,сульфат-ион SO4 2-,soil_solution,почвенный раствор,1132,61,0.0,100.0,98.9,57.7,79.8,,,,,0
-ph_kcl,pH in KCl,pH солевой (KCl) вытяжки,acid_base,кислотно-основные,1034,81,88.9,100.0,90.3,45.6,75.2,pH,5.06,4.4,5.81,838
-chromium,chromium,хром,microelement,микроэлементы,1011,53,5.6,100.0,91.0,9.3,43.7,mg/kg,237.0,15.9,1308.0,57
-cadmium,cadmium,кадмий,contaminant,потенциальные загрязнители,990,66,4.7,83.8,98.0,9.6,71.6,mg/kg,0.05,0.02,0.12,39
-exchangeable_calcium,exchangeable calcium,обменный кальций,exchange,обменный комплекс,837,52,3.5,100.0,100.0,68.7,87.6,mol(+)/kg,0.37,0.28,0.74,29
-calcium_oxide_cao,calcium oxide CaO,оксид кальция (CaO),geochemical,геохимические свойства,760,66,30.8,100.0,99.1,49.3,85.7,%,2.2,0.76,6.23,230
-bicarbonate_ion,bicarbonate ion HCO3-,гидрокарбонат-ион HCO3-,soil_solution,почвенный раствор,709,41,0.0,100.0,100.0,50.5,89.3,,,,,0
-cobalt,cobalt,кобальт,microelement,микроэлементы,693,50,1.4,86.6,98.6,16.7,86.6,mg/kg,0.07,0.05,0.15,10
-potassium_oxide_k2o,potassium oxide K2O,оксид калия (K₂O),geochemical,геохимические свойства,686,37,19.5,100.0,100.0,33.7,98.5,%,1.09,0.31,4.3,134
-carbonate_equivalent,carbonate equivalent (CaCO3),карбонатный эквивалент (CaCO₃),organic,органическое вещество и углерод,685,52,64.4,100.0,99.1,41.6,74.5,%,2.0,0.4,8.42,437
-phosphorus_pentoxide,phosphorus pentoxide (P2O5),пентаоксид фосфора (P₂O₅),elemental_oxide,элементный и оксидный состав,626,38,26.2,100.0,99.2,42.0,98.6,%,0.15,0.09,0.78,164
-magnesium_oxide_mgo,magnesium oxide MgO,оксид магния (MgO),geochemical,геохимические свойства,619,55,27.9,100.0,99.0,58.2,85.3,%,2.46,1.42,3.62,170
-porosity,total porosity,общая пористость,physical,физические свойства,608,37,78.3,100.0,99.3,36.5,70.4,%,48.8,41.8,55.0,472
-arsenic,arsenic,мышьяк,contaminant,потенциальные загрязнители,529,28,0.0,71.1,99.1,13.2,89.0,,,,,0
-hydrogen_ion,hydrogen ion H+,ион водорода H+ (метод не указан),soil_solution,почвенный раствор,509,24,0.0,100.0,100.0,58.7,74.7,,,,,0
-base_saturation,base saturation,степень насыщенности основаниями,exchange,обменный комплекс,473,25,93.2,100.0,99.8,71.7,79.9,%,66.0,25.0,86.0,440
-basal_respiration,basal respiration,базальное дыхание,biological,биологические свойства,388,21,0.0,100.0,92.8,5.7,65.5,,,,,0
-manganese_oxide_mno,manganese oxide MnO,оксид марганца MnO,geochemical,геохимия,381,37,27.3,100.0,100.0,60.6,92.1,%,0.17,0.06,0.68,104
-titanium_dioxide,titanium dioxide TiO2,диоксид титана TiO2,geochemical,геохимия,357,36,37.0,100.0,100.0,61.6,92.2,%,0.95,0.72,2.18,132
+electrical_conductivity,electrical conductivity,электропроводность,salinity,засоление и минерализация,2153,58,18.0,100.0,98.5,6.8,8.8,dS/m,0.698,0.3,2.3,354
+calcium,calcium,кальций,exchange,обменный комплекс,2102,104,24.5,64.1,92.3,17.7,72.2,cmolc/kg,0.54,0.0424,7.7998,323
+available_phosphorus,available phosphorus,подвижный фосфор,macronutrient,макроэлементы,2028,125,56.4,100.0,80.0,31.3,93.3,mg/kg,296.0,42.0,1800.0,725
+zinc,zinc,цинк,microelement,микроэлементы,1979,124,64.8,88.5,98.6,16.0,72.9,mg/kg,16.04,1.29,80.0,1098
+copper,copper,медь,microelement,микроэлементы,1904,125,61.2,91.3,97.6,14.7,72.8,mg/kg,10.56,1.0,63.7,1029
+fine_silt,fine silt 0.005-0.001 mm,мелкая пыль (0.005–0.001 мм),particle_size,гранулометрический состав,1827,106,0.0,100.0,99.8,66.7,87.6,,,,,0
+medium_silt,medium silt 0.01-0.005 mm,средняя пыль (0.01–0.005 мм),particle_size,гранулометрический состав,1823,108,0.0,100.0,99.8,65.6,87.0,,,,,0
+fine_sand,fine sand,мелкий песок,particle_size,гранулометрический состав,1809,112,2.4,100.0,99.9,65.3,86.8,%,12.0,1.0,15.0,44
+potassium_ion,potassium ion K+,ион калия K+ (метод не указан),soil_solution,почвенный раствор,1721,76,78.8,100.0,98.7,43.9,79.7,meq/100g,0.2,0.03,0.6,1345
+coarse_silt,coarse silt 0.05-0.01 mm,крупная пыль (0.05–0.01 мм),particle_size,гранулометрический состав,1694,106,0.6,100.0,99.8,65.8,87.3,%,32.62,31.9,35.84,10
+coarse_sand,coarse sand,крупный песок,particle_size,гранулометрический состав,1672,104,67.7,100.0,99.5,66.9,86.4,%,2.0,0.1,11.0,1126
+cation_exchange_capacity,cation exchange capacity,ёмкость катионного обмена,exchange,обменный комплекс,1671,72,13.3,100.0,99.8,25.6,87.0,cmolc/kg,4.3,1.9,38.32,54
+silicon_dioxide,silicon dioxide,диоксид кремния (SiO₂),geochemical,геохимические свойства,1565,62,48.2,100.0,99.7,47.4,91.3,%,30.6,2.49,68.9,751
+magnesium,magnesium,магний,exchange,обменный комплекс,1530,83,49.7,82.0,96.3,22.4,66.5,cmolc/kg,0.0413,0.0074,0.5596,683
+aluminum_oxide_al2o3,aluminum oxide Al2O3,оксид алюминия (Al₂O₃),geochemical,геохимические свойства,1488,74,42.1,100.0,99.3,45.6,68.3,%,10.74,1.22,15.3,620
+manganese,manganese,марганец,microelement,микроэлементы,1422,93,44.4,94.7,95.3,12.7,66.0,mg/kg,45.0,1.33,240.0,560
+silt,silt,пылеватая фракция,particle_size,гранулометрический состав,1381,98,56.0,100.0,94.7,22.9,52.9,%,21.5,2.6,35.5,737
+lead,lead,свинец,contaminant,потенциальные загрязнители,1374,94,68.7,93.4,97.5,15.5,80.6,mg/kg,9.0,1.0,43.9,857
+available_potassium,available potassium,подвижный калий,macronutrient,макроэлементы,1365,97,35.8,100.0,99.0,40.7,92.8,mg/kg,28200.0,2200.0,111900.0,482
+nickel,nickel,никель,microelement,микроэлементы,1348,87,68.8,89.2,97.3,18.6,76.3,mg/kg,11.0,1.12,62.58,779
+bulk_density,bulk density,плотность сложения,physical,физические свойства,1295,73,80.6,100.0,87.2,52.4,76.5,g/cm3,1.29,1.03,1.48,743
+sand,sand,песок,particle_size,гранулометрический состав,1170,115,61.1,100.0,94.9,20.8,45.9,%,40.0,12.46,65.5,694
+chloride_ion,chloride ion Cl-,хлорид-ион Cl-,soil_solution,почвенный раствор,1148,63,83.2,100.0,96.3,60.9,81.6,meq/100g,1.01,0.174,8.4,932
+sulfate_ion,sulfate ion SO4 2-,сульфат-ион SO4 2-,soil_solution,почвенный раствор,1132,61,80.7,100.0,96.0,57.7,79.8,g/L,3.4,0.72,17.5,889
+ph_kcl,pH in KCl,pH солевой (KCl) вытяжки,acid_base,кислотно-основные,1034,81,30.8,100.0,90.3,45.6,75.2,pH,4.9,4.5,5.7,265
+chromium,chromium,хром,microelement,микроэлементы,1011,53,42.6,100.0,91.0,9.3,43.7,mg/kg,3.6,0.54,60.0,419
+cadmium,cadmium,кадмий,contaminant,потенциальные загрязнители,990,66,62.4,83.8,98.0,9.6,71.6,mg/kg,0.7,0.16,2.6,485
+exchangeable_calcium,exchangeable calcium,обменный кальций,exchange,обменный комплекс,837,52,23.2,100.0,100.0,68.7,87.6,mol(+)/kg,0.148,0.0574,0.33,158
+calcium_oxide_cao,calcium oxide CaO,оксид кальция (CaO),geochemical,геохимические свойства,760,66,53.3,100.0,98.9,49.3,85.7,%,1.74,0.72,4.34,397
+bicarbonate_ion,bicarbonate ion HCO3-,гидрокарбонат-ион HCO3-,soil_solution,почвенный раствор,709,41,77.3,100.0,98.3,50.5,89.3,meq/100g,0.57,0.3,2.4,547
+cobalt,cobalt,кобальт,microelement,микроэлементы,693,50,60.0,86.6,98.6,16.7,86.6,mg/kg,4.1,0.37,16.05,399
+potassium_oxide_k2o,potassium oxide K2O,оксид калия (K₂O),geochemical,геохимические свойства,686,37,13.3,100.0,97.5,33.7,98.5,%,2.91,1.3,7.3,91
+carbonate_equivalent,carbonate equivalent (CaCO3),карбонатный эквивалент (CaCO₃),organic,органическое вещество и углерод,685,52,60.1,100.0,92.4,41.6,74.5,%,2.1,0.4,9.0,412
+phosphorus_pentoxide,phosphorus pentoxide (P2O5),пентаоксид фосфора (P₂O₅),elemental_oxide,элементный и оксидный состав,626,38,5.3,100.0,97.9,42.0,98.6,%,0.42,0.13,0.67,33
+magnesium_oxide_mgo,magnesium oxide MgO,оксид магния (MgO),geochemical,геохимические свойства,619,55,60.7,100.0,98.5,58.2,85.3,%,1.37,0.8,2.08,370
+porosity,total porosity,общая пористость,physical,физические свойства,608,37,80.1,100.0,98.7,36.5,70.4,%,48.8,41.8,55.0,472
+arsenic,arsenic,мышьяк,contaminant,потенциальные загрязнители,529,28,38.9,71.1,99.1,13.2,89.0,mg/kg,4.0,0.8,14.9,197
+hydrogen_ion,hydrogen ion H+,ион водорода H+ (метод не указан),soil_solution,почвенный раствор,509,24,52.5,100.0,99.4,58.7,74.7,meq/100g,0.7,0.05,4.6,266
+base_saturation,base saturation,степень насыщенности основаниями,exchange,обменный комплекс,473,25,96.6,100.0,99.8,71.7,79.9,%,67.4,26.5,86.0,456
+basal_respiration,basal respiration,базальное дыхание,biological,биологические свойства,388,21,0.8,100.0,92.8,5.7,65.5,,,,,0
+manganese_oxide_mno,manganese oxide MnO,оксид марганца MnO,geochemical,геохимия,381,37,49.6,100.0,100.0,60.6,92.1,%,0.13,0.06,0.2,189
+titanium_dioxide,titanium dioxide TiO2,диоксид титана TiO2,geochemical,геохимия,357,36,43.4,100.0,100.0,61.6,92.2,%,0.86,0.73,1.38,155
 sulfur,sulfur,общая сера,macronutrient,макроэлементы,316,4,16.1,100.0,100.0,10.1,94.0,mg/kg,111.0,7.0,2550.0,51
-total_nitrogen,total nitrogen,общий азот,macronutrient,макроэлементы,313,40,52.4,100.0,86.9,38.0,72.2,g/kg,1.94,0.98,3.2,123
-aluminium_ion,aluminium ion Al3+,ион алюминия Al3+ (метод не указан),soil_solution,почвенный раствор,306,20,0.0,100.0,100.0,70.3,91.5,,,,,0
-wilting_point,wilting point,влажность завядания,hydrophysical,гидрофизические свойства,291,13,3.1,100.0,99.7,88.3,97.9,%,20.0,18.3,21.7,8
-sodium_oxide_na2o,sodium oxide Na2O,оксид натрия (Na₂O),geochemical,геохимические свойства,279,33,28.0,100.0,98.9,53.8,90.7,%,1.46,0.62,2.72,78
-total_phosphorus,total phosphorus,общий фосфор,macronutrient,макроэлементы,277,10,6.1,100.0,100.0,10.8,79.8,g/kg,1.81,1.33,26.5,17
-nitrate_ion,nitrate ion NO3-,нитрат-ион NO3- (метод не указан),soil_solution,почвенный раствор,275,32,7.6,100.0,95.6,22.2,78.9,mg/kg,4.5,2.5,8.2,21
-very_coarse_sand,very coarse sand 3-1 mm,очень крупный песок (3–1 мм),particle_size,гранулометрический состав,259,12,23.2,100.0,97.7,26.6,70.7,%,0.63,0.1,120.0,60
-ammonium_ion,ammonium ion NH4+,ион аммония NH4+ (метод не указан),soil_solution,почвенный раствор,237,24,0.0,100.0,96.2,21.9,87.8,,,,,0
-field_capacity,field capacity,наименьшая влагоёмкость,hydrophysical,гидрофизические свойства,231,23,12.6,100.0,93.1,19.0,70.1,%,20.9,7.9,24.08,27
-carbonate_ion,carbonate ion CO3 2-,карбонат-ион CO3 2-,soil_solution,почвенный раствор,214,18,0.0,100.0,94.9,67.8,81.3,,,,,0
+total_nitrogen,total nitrogen,общий азот,macronutrient,макроэлементы,313,40,40.3,100.0,85.6,38.0,72.2,g/kg,0.98,0.38,2.36,92
+aluminium_ion,aluminium ion Al3+,ион алюминия Al3+ (метод не указан),soil_solution,почвенный раствор,306,20,66.7,100.0,100.0,70.3,91.5,meq/100g,1.3,0.6,4.9,204
+wilting_point,wilting point,влажность завядания,hydrophysical,гидрофизические свойства,291,13,4.1,100.0,90.7,88.3,97.9,%,21.2,18.3,22.03,11
+sodium_oxide_na2o,sodium oxide Na2O,оксид натрия (Na₂O),geochemical,геохимические свойства,279,33,47.3,100.0,98.9,53.8,90.7,%,1.23,0.8,2.02,129
+total_phosphorus,total phosphorus,общий фосфор,macronutrient,макроэлементы,277,10,20.9,100.0,100.0,10.8,79.8,g/kg,0.2479,0.17,0.76,58
+nitrate_ion,nitrate ion NO3-,нитрат-ион NO3- (метод не указан),soil_solution,почвенный раствор,275,32,23.6,100.0,95.6,22.2,78.9,mg/L,3.3,0.3,8.63,63
+very_coarse_sand,very coarse sand 3-1 mm,очень крупный песок (3–1 мм),particle_size,гранулометрический состав,259,12,0.0,100.0,91.5,26.6,70.7,,,,,0
+ammonium_ion,ammonium ion NH4+,ион аммония NH4+ (метод не указан),soil_solution,почвенный раствор,237,24,21.5,100.0,94.1,21.9,87.8,mg/L,3.3,0.3,4.4,46
+field_capacity,field capacity,наименьшая влагоёмкость,hydrophysical,гидрофизические свойства,231,23,20.3,100.0,71.4,19.0,70.1,%,20.4,4.8,24.4,32
+carbonate_ion,carbonate ion CO3 2-,карбонат-ион CO3 2-,soil_solution,почвенный раствор,214,18,64.0,100.0,94.9,67.8,81.3,meq/100g,0.0,0.0,0.15,134
 urease_activity,urease activity,уреазная активность,biological,биологические свойства,207,12,0.0,100.0,91.3,52.2,83.6,,,,,0
-mercury,mercury,ртуть,contaminant,потенциальные загрязнители,195,13,11.8,87.2,97.9,5.6,97.9,mg/kg,21000.0,0.023,31000.0,23
-exchangeable_acidity,exchangeable acidity,обменная кислотность,acid_base,кислотно-основные,176,12,0.0,100.0,100.0,50.6,92.0,,,,,0
+mercury,mercury,ртуть,contaminant,потенциальные загрязнители,195,13,31.3,87.2,89.7,5.6,97.9,mg/kg,0.12,0.03,0.71,44
+exchangeable_acidity,exchangeable acidity,обменная кислотность,acid_base,кислотно-основные,176,12,25.0,100.0,100.0,50.6,92.0,cmolc/kg,0.32,0.1,0.96,44
 hydrogen_carbon_ratio,H:C ratio,отношение H:C,organic,органическое вещество и углерод,164,22,0.0,100.0,100.0,4.3,92.1,,,,,0
-total_dissolved_solids,total dissolved solids,общее содержание растворённых веществ,salinity,засоление и минерализация,142,12,4.2,100.0,100.0,59.2,93.0,g/L,35.3,30.1,40.0,6
+total_dissolved_solids,total dissolved solids,общее содержание растворённых веществ,salinity,засоление и минерализация,142,12,99.3,100.0,98.6,59.2,93.0,g/L,1.3,0.18,4.04,139
 sodium_adsorption_ratio,sodium adsorption ratio,коэффициент адсорбции натрия (SAR),salinity,засоление и минерализация,139,9,0.0,100.0,100.0,7.9,21.6,,,,,0
 aggregate_stability,aggregate stability,агрегатная устойчивость,physical,физические свойства,125,8,33.6,100.0,100.0,6.4,87.2,%,2.2,1.0,4.8,42
 dehydrogenase_activity,dehydrogenase activity,дегидрогеназная активность,biological,биологические свойства,121,12,0.0,100.0,100.0,35.5,86.8,,,,,0
 molybdenum,molybdenum,молибден,microelement,микроэлементы,112,12,0.0,100.0,99.1,29.5,74.1,,,,,0
 oxygen_carbon_ratio,O:C ratio,отношение O:C,organic,органическое вещество и углерод,112,19,0.0,100.0,97.3,6.2,92.0,,,,,0
 carbon_phosphorus_ratio,C:P ratio,отношение C:P,organic,органическое вещество и углерод,96,4,0.0,100.0,100.0,3.1,43.8,,,,,0
-saturated_hydraulic_conductivity,saturated hydraulic conductivity,насыщенная гидравлическая проводимость,hydrophysical,гидрофизические свойства,95,11,3.2,100.0,100.0,51.6,76.8,cm/day,8.9,7.5,8.9,3
-exchangeable_sodium_percentage,exchangeable sodium percentage,доля обменного натрия (ESP),salinity,засоление и минерализация,94,7,89.4,100.0,98.9,66.0,9.6,%,8.0,3.0,23.5,83
+saturated_hydraulic_conductivity,saturated hydraulic conductivity,насыщенная гидравлическая проводимость,hydrophysical,гидрофизические свойства,95,11,22.1,100.0,100.0,51.6,76.8,cm/day,7.5,0.1,8.9,10
+exchangeable_sodium_percentage,exchangeable sodium percentage,доля обменного натрия (ESP),salinity,засоление и минерализация,94,7,86.2,100.0,98.9,66.0,9.6,%,9.84,3.15,24.3,80
 gravimetric_water_content,gravimetric water content,массовая влажность,hydrophysical,гидрофизические свойства,93,12,52.7,100.0,87.1,7.5,40.9,%,30.0,15.0,45.0,49
-redox_potential,redox potential,окислительно-восстановительный потенциал (Eh),geochemical,геохимические свойства,86,10,32.6,100.0,100.0,17.4,44.2,mV,-48.0,-148.0,317.0,28
-potassium_exchangeable,exchangeable potassium,обменный калий,exchange,обменный комплекс,70,5,0.0,100.0,100.0,4.3,22.9,,,,,0
-soil_temperature,soil temperature,температура почвы,environmental,условия среды,64,10,0.0,100.0,100.0,3.1,59.4,,,,,0
-sodium,sodium,натрий,exchange,обменный комплекс,62,4,0.0,100.0,100.0,48.4,100.0,,,,,0
+redox_potential,redox potential,окислительно-восстановительный потенциал (Eh),geochemical,геохимические свойства,86,10,73.3,100.0,100.0,17.4,44.2,mV,120.0,-112.0,251.0,40
+potassium_exchangeable,exchangeable potassium,обменный калий,exchange,обменный комплекс,70,5,72.9,100.0,100.0,4.3,22.9,cmolc/kg,0.7596,0.5063,1.443,51
+soil_temperature,soil temperature,температура почвы,environmental,условия среды,64,10,32.8,100.0,100.0,3.1,59.4,C,0.65,-0.3,4.2,21
+sodium,sodium,натрий,exchange,обменный комплекс,62,4,11.3,100.0,100.0,48.4,100.0,,,,,0
 exchangeable_hydrogen,exchangeable hydrogen,обменный водород,acid_base,кислотно-основные,60,4,0.0,100.0,100.0,80.0,100.0,,,,,0
-nitrate_n,nitrate nitrogen,нитратный азот,macronutrient,макроэлементы,57,8,17.5,100.0,100.0,1.8,100.0,mg/kg,50.0,40.0,89.0,10
-ammonium_n,ammonium nitrogen,аммонийный азот,macronutrient,макроэлементы,54,5,0.0,100.0,100.0,1.9,88.9,,,,,0
-penetration_resistance,penetration resistance,сопротивление пенетрации,physical,физические свойства,45,2,0.0,100.0,100.0,0.0,0.0,,,,,0
-exchangeable_magnesium,exchangeable magnesium,обменный магний,exchange,обменный комплекс,35,2,82.9,100.0,100.0,100.0,100.0,mol(+)/kg,0.28,0.16,0.55,29
-particle_density,particle density,плотность твёрдой фазы,physical,физические свойства,34,6,79.4,100.0,100.0,0.0,17.6,g/cm3,2.56,2.495,2.61,27
-microbial_biomass_carbon,microbial biomass carbon,углерод микробной биомассы,biological,биологические свойства,33,4,0.0,100.0,100.0,18.2,18.2,,,,,0
-inorganic_carbon,inorganic carbon,неорганический углерод,organic,органическое вещество и углерод,29,5,65.5,100.0,100.0,20.7,100.0,g/kg,6.1,2.0,11.0,19
-total_potassium,total potassium,общий калий,macronutrient,макроэлементы,23,3,82.6,100.0,21.7,13.0,30.4,g/kg,46.0,46.0,46.0,1
-mineral_nitrogen,mineral nitrogen,минеральный азот,macronutrient,макроэлементы,20,4,50.0,100.0,100.0,40.0,100.0,mg/kg,7.0,4.0,14.0,10
-calcium_ion_activity_paste,calcium ion activity in soil paste,активность ионов кальция в почвенной пасте,soil_solution,почвенный раствор,16,1,100.0,100.0,100.0,62.5,100.0,mmol/L,0.032,0.003,0.063,16
+nitrate_n,nitrate nitrogen,нитратный азот,macronutrient,макроэлементы,57,8,54.4,100.0,87.7,1.8,100.0,mg/kg,44.0,0.16,100.0,24
+ammonium_n,ammonium nitrogen,аммонийный азот,macronutrient,макроэлементы,54,5,37.0,100.0,100.0,1.9,88.9,,,,,0
+penetration_resistance,penetration resistance,сопротивление пенетрации,physical,физические свойства,45,2,60.0,100.0,100.0,0.0,0.0,MPa,0.0462,0.0236,0.0874,27
+exchangeable_magnesium,exchangeable magnesium,обменный магний,exchange,обменный комплекс,35,2,0.0,100.0,100.0,100.0,100.0,,,,,0
+particle_density,particle density,плотность твёрдой фазы,physical,физические свойства,34,6,79.4,100.0,100.0,0.0,17.6,g/cm3,2.535,2.495,2.58,21
+microbial_biomass_carbon,microbial biomass carbon,углерод микробной биомассы,biological,биологические свойства,33,4,6.1,100.0,100.0,18.2,18.2,mg/kg,0.306,0.306,0.306,2
+inorganic_carbon,inorganic carbon,неорганический углерод,organic,органическое вещество и углерод,29,5,55.2,100.0,100.0,20.7,100.0,g/kg,4.9,1.2,7.0,16
+total_potassium,total potassium,общий калий,macronutrient,макроэлементы,23,3,13.0,100.0,30.4,13.0,30.4,g/kg,46.0,46.0,46.0,1
+mineral_nitrogen,mineral nitrogen,минеральный азот,macronutrient,макроэлементы,20,4,65.0,100.0,85.0,40.0,100.0,mg/kg,7.0,4.0,14.0,10
+calcium_ion_activity_paste,calcium ion activity in soil paste,активность ионов кальция в почвенной пасте,soil_solution,почвенный раствор,16,1,0.0,100.0,100.0,62.5,100.0,,,,,0
 phosphatase_activity,phosphatase activity,фосфатазная активность,biological,биологические свойства,11,2,0.0,100.0,100.0,90.9,90.9,,,,,0
 aluminium_exchangeable,exchangeable aluminium,обменный алюминий,exchange,обменный комплекс,6,1,0.0,100.0,100.0,0.0,100.0,,,,,0
 selenium,selenium,селен,contaminant,потенциальные загрязнители,6,1,0.0,100.0,66.7,0.0,0.0,,,,,0

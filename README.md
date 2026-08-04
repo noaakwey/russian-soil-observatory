@@ -57,12 +57,19 @@ soil-science publications, with a bilingual (RU/EN) geoportal.*
 SELECT * FROM observation
 WHERE header_match_kind <> 'symbol_embedded'   -- свойство надёжно опознано
   AND value_plausibility = 'ok'                -- значение физически возможно
-  AND normalization_status IN ('exact','converted');  -- единица доказана
--- 26 794 наблюдения из 106 839
+  AND metric = 1;                              -- единица доказана, не предположена
+-- 51 626 наблюдений из 106 839
 ```
 
-- `normalization_status = 'missing_unit'` (53.4%) — единицу нельзя доказать по
-  напечатанному заголовку или подписи к таблице. Она **намеренно не подставляется**.
+- `metric` — единица определена для каждого наблюдения без исключения, но с
+  разной силой; `metric = 1` означает `confidence IN ('high','medium')` в
+  исходной базе (`observation_unit_inference`): `high` — напечатана в
+  заголовке колонки (25.4%); `medium` — надёжно выведена из контекста статьи,
+  подписи к таблице или соседних колонок (27.6%). Оставшиеся 47.0%
+  (`metric = 0`, `confidence = 'low'`) — предположение, обычно каноническая
+  единица показателя по умолчанию, а не то, что напечатано в статье; полный
+  метод и уровень уверенности по каждому наблюдению — в
+  `full_table_observations.csv` (столбцы `unit_confidence`, `unit_method`).
 - `header_match_kind = 'symbol_embedded'` (5.2%) — химический символ найден внутри
   более длинного текста заголовка; вероятное ложное срабатывание.
 - `spatial_linkage` — сила привязки к координате; `document_single_reported_coordinate`
@@ -85,7 +92,7 @@ WHERE header_match_kind <> 'symbol_embedded'   -- свойство надёжн�
 4. Значения получены OCR-распознаванием и содержат ошибки; они помечены, а не удалены.
 
 Подробно — в [аудите базы](docs/data_audit.md) и
-[пространственно-временно́м анализе](docs/insights.md).
+[пространственно-временном анализе](docs/insights.md).
 
 ## Воспроизведение
 

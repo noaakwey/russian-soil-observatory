@@ -96,6 +96,7 @@ const STRINGS = {
     'popup.measurements': 'Проверенные измерения', 'popup.property': 'Свойство',
     'popup.value': 'Значение', 'popup.none': 'Для этой точки пока нет измерения, прошедшего строгую пространственную связь.',
     'popup.records': 'записей с этой координатой', 'popup.year': 'год',
+    'popup.soilType': 'Тип почвы', 'popup.soilTypeLow': 'название распространено на всю статью, не построчно',
     'sql.rows': 'строк', 'sql.time': 'мс', 'sql.error': 'Ошибка SQL: ',
     'sql.loading': 'Загрузка базы (9,5 МБ)…', 'sql.ready': 'База загружена. Выполните запрос.',
     'sql.truncated': 'показаны первые 1000 строк',
@@ -189,6 +190,7 @@ const STRINGS = {
     'popup.measurements': 'Verified measurements', 'popup.property': 'Property',
     'popup.value': 'Value', 'popup.none': 'No measurement has passed strict spatial linkage for this point yet.',
     'popup.records': 'records at this coordinate', 'popup.year': 'year',
+    'popup.soilType': 'Soil type', 'popup.soilTypeLow': 'name applies to the whole article, not this row',
     'sql.rows': 'rows', 'sql.time': 'ms', 'sql.error': 'SQL error: ',
     'sql.loading': 'Loading database (9.5 MB)…', 'sql.ready': 'Database loaded. Run a query.',
     'sql.truncated': 'first 1000 rows shown',
@@ -440,8 +442,17 @@ function popupHtml(point) {
       <td>${m.doi ? `<a target="_blank" rel="noopener" href="https://doi.org/${esc(m.doi)}">DOI</a>` : ''}</td>
     </tr>`).join('');
 
+  const soilTypes = (point.soil_types || []).map((st) => {
+    const label = st.wrb_group
+      ? `${esc(st.soil_type)} (WRB: ${esc(st.wrb_group)})`
+      : esc(st.soil_type);
+    const low = st.confidence === 'low';
+    return `<li>${label}${low ? ` <em>(${esc(t('popup.soilTypeLow'))})</em>` : ''}</li>`;
+  }).join('');
+
   return `<h3>${point.lat.toFixed(5)}° N, ${point.lon.toFixed(5)}° E</h3>
     <p>${point.records} ${esc(t('popup.records'))}</p>
+    ${soilTypes ? `<h4>${esc(t('popup.soilType'))}</h4><ul>${soilTypes}</ul>` : ''}
     <h4>${esc(t('popup.sources'))}</h4><ul>${sources}</ul>
     ${rows ? `<h4>${esc(t('popup.measurements'))}</h4>
       <table><thead><tr><th>${esc(t('popup.property'))}</th><th>${esc(t('popup.value'))}</th><th></th></tr></thead>

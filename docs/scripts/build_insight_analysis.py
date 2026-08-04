@@ -85,7 +85,8 @@ QUERY = """
 SELECT o.observation_id, o.document_id, o.artifact_id, o.row_index, o.property_id,
        p.canonical_name AS property, p.category,
        o.value_num_raw, o.value_normalized, o.unit_normalized,
-       o.normalization_status, f.header_match_kind, f.value_plausibility,
+       o.normalization_status, u.confidence AS unit_confidence,
+       f.header_match_kind, f.value_plausibility,
        o.depth_top_cm, o.depth_bottom_cm, o.row_label_raw,
        y.publication_year, y.year_confidence, d.corpus,
        t.latitude, t.longitude, t.tier, t.radius_km
@@ -95,6 +96,7 @@ JOIN observation_quality_flag f ON f.observation_id = o.observation_id
 JOIN document d ON d.document_id = o.document_id
 LEFT JOIN document_publication_year y ON y.document_id = o.document_id
 LEFT JOIN document_spatial_tier t ON t.document_id = o.document_id
+LEFT JOIN observation_unit_inference u ON u.observation_id = o.observation_id
 """
 
 
@@ -110,7 +112,12 @@ def load(db: Path) -> pd.DataFrame:
         frame = pd.read_sql(QUERY, con)
     frame['trusted'] = ((frame.header_match_kind != 'symbol_embedded')
                         & (frame.value_plausibility == 'ok'))
-    frame['metric'] = frame.normalization_status.isin(['exact', 'converted'])
+    # normalization_status is no longer a useful "is the unit proven" signal:
+    # observation_unit_inference now assigns *some* unit to every observation,
+    # including low-confidence fallbacks (property's usual unit, guessed from
+    # article context). Only high/medium confidence is evidence strong enough
+    # for quantitative comparison; 'low' is an assumption, not a printed unit.
+    frame['metric'] = frame.unit_confidence.isin(['high', 'medium'])
     frame['in_russia'] = (
         frame.latitude.between(*RUSSIA_BOUNDS['lat'])
         & frame.longitude.between(*RUSSIA_BOUNDS['lon']))
@@ -500,7 +507,13 @@ def property_landscape(frame: pd.DataFrame, output: Path) -> dict:
 
     rows = []
     for pid, group in frame.groupby('property_id'):
-        rows.append({
+        # Descriptive statistics only mean something on a value with a proven
+        # unit; the raw column mixes mg/kg, %, g/kg and unconverted numbers
+        # for the same property, so a "mean" over it would not describe
+        # anything real. Trusted + metric only.
+        clean = group[group.trusted & group.metric].value_normalized.dropna()
+        unit = group.loc[group.trusted & group.metric, 'unit_normalized']
+        row = {
             'property_id': pid,
             'property': group.property.iloc[0],
             'category': group.category.iloc[0],
@@ -511,7 +524,17 @@ def property_landscape(frame: pd.DataFrame, output: Path) -> dict:
             'unit_proven_pct': pct(group.metric),
             'depth_pct': pct(group.depth_top_cm.notna()),
             'spatial_pct': pct(group.latitude.notna()),
-        })
+            'unit': unit.mode().iat[0] if len(unit) else None,
+            'n_metric': len(clean),
+            'mean': round(float(clean.mean()), 4) if len(clean) else None,
+            'sd': round(float(clean.std()), 4) if len(clean) > 1 else None,
+            'min': round(float(clean.min()), 4) if len(clean) else None,
+            'p25': round(float(clean.quantile(.25)), 4) if len(clean) else None,
+            'median': round(float(clean.median()), 4) if len(clean) else None,
+            'p75': round(float(clean.quantile(.75)), 4) if len(clean) else None,
+            'max': round(float(clean.max()), 4) if len(clean) else None,
+        }
+        rows.append(row)
     census = pd.DataFrame(rows).sort_values('observations', ascending=False)
     census.to_csv(output / 'table_property_census.csv', index=False)
 
@@ -778,6 +801,114 @@ def mixed_effects_models(frame: pd.DataFrame, output: Path) -> dict:
     return result
 
 
+# --------------------------------------------------------------------------
+# 8. Zonal sweep: the same rigor, run across every property that supports it
+# --------------------------------------------------------------------------
+
+ZONAL_SWEEP_MIN_DOCS = 15
+
+# Properties whose canonical unit is a bounded scale (pH) or already a ratio
+# stay linear; concentration-type properties are typically right-skewed and
+# are log-transformed when every value is strictly positive, same rule a
+# pedologist would apply by hand rather than a blanket policy.
+ZONAL_SWEEP_LINEAR = {'ph_h2o', 'ph_kcl', 'ph_unspecified', 'base_saturation', 'porosity'}
+
+
+def zonal_sweep(frame: pd.DataFrame, output: Path) -> dict:
+    """Fit the §2.5 mixed-effects model for latitude on every property that
+    has enough spatially located, unit-proven data to support one — not only
+    the two properties the rest of the report singles out for narrative
+    depth.  With 101 recognised properties, restricting rigorous statistics
+    to a hand-picked pair would misrepresent how much of the catalogue is
+    actually analysable this way; this sweep reports that honestly, sweep
+    included whether NO zonal analysis is more properties than not.
+    """
+    warnings.filterwarnings('ignore', category=UserWarning)
+    base = frame[frame.trusted & frame.metric & frame.latitude.notna()]
+    eligible = (base.groupby('property_id').document_id.nunique()
+               .loc[lambda s: s >= ZONAL_SWEEP_MIN_DOCS].index.tolist())
+
+    names = base.drop_duplicates('property_id').set_index('property_id')['property']
+    rows = []
+    for pid in eligible:
+        data = base[base.property_id == pid][['document_id', 'latitude', 'value_normalized']].dropna()
+        values = data.value_normalized
+        # A concentration/content property is usually right-skewed and wants
+        # a log scale, but a handful of exact-zero OCR reads (true trace
+        # values, not negative) must not block that for the whole property:
+        # they get a per-property floor at half the smallest positive value
+        # actually observed, not an arbitrary global constant.
+        use_log = (pid not in ZONAL_SWEEP_LINEAR and (values >= 0).all()
+                  and values.skew() > 1 and (values > 0).any())
+        if use_log:
+            floor = values[values > 0].min() / 2
+            data = data.assign(value=np.log(values.clip(lower=floor)))
+        else:
+            data = data.assign(value=values)
+        try:
+            model = smf.mixedlm('value ~ latitude', data, groups=data['document_id'])
+            fitted = model.fit(reml=True)
+        except Exception:
+            continue
+        ci_low, ci_high = fitted.conf_int().loc['latitude']
+        var_doc = float(fitted.cov_re.iloc[0, 0])
+        var_resid = float(fitted.scale)
+        rows.append({
+            'property_id': pid, 'property': names.get(pid, pid),
+            'n_observations': len(data), 'n_documents': data.document_id.nunique(),
+            'log_transformed': use_log,
+            'slope_per_degree': fitted.params['latitude'],
+            'ci_low': ci_low, 'ci_high': ci_high,
+            'p_value': fitted.pvalues['latitude'],
+            'icc_document': var_doc / (var_doc + var_resid),
+        })
+
+    table = pd.DataFrame(rows)
+    if len(table):
+        _, qvals, _, _ = multipletests(table.p_value, method='fdr_bh')
+        table['q_value'] = qvals
+        table['significant_fdr5'] = table.q_value < 0.05
+    table = table.sort_values('slope_per_degree')
+    table.round(5).to_csv(output / 'table_zonal_sweep.csv', index=False)
+
+    for theme_name, theme in THEMES.items():
+        apply_theme(theme)
+        fig, ax = plt.subplots(figsize=(8.4, max(4.2, 0.32 * len(table))))
+        y = np.arange(len(table))
+        colours = [theme['series'][0] if sig else theme['muted']
+                  for sig in table.significant_fdr5]
+        err = [table.slope_per_degree - table.ci_low, table.ci_high - table.slope_per_degree]
+        ax.errorbar(table.slope_per_degree, y, xerr=err, fmt='o', markersize=5.5,
+                   ecolor=colours, capsize=0, elinewidth=1.6, color='none', zorder=3)
+        ax.scatter(table.slope_per_degree, y, s=26, color=colours, zorder=4)
+        ax.axvline(0, color=theme['grid'], linewidth=1)
+        labels = [f"{CORRELATION_LABELS_RU.get(pid, name)}"
+                 f"{' (лог)' if log else ''}"
+                 for pid, name, log in zip(table.property_id, table.property, table.log_transformed)]
+        ax.set_yticks(y); ax.set_yticklabels(labels, fontsize=7.6)
+        ax.set_xlabel('наклон на градус широты (смешанная модель, 95% ДИ)')
+        ax.set_title(f'Широтный градиент по {len(table)} свойствам с достаточным охватом\n'
+                     f'(синим — значимо после FDR-поправки, n≥{ZONAL_SWEEP_MIN_DOCS} публикаций)',
+                     fontsize=10.5, pad=10)
+        ax.grid(axis='x', alpha=.35, linewidth=.6)
+        fig.tight_layout()
+        save(fig, output, 'fig9_zonal_sweep', theme_name)
+
+    total_recognised = int(frame.property_id.nunique())
+    return {
+        'properties_eligible': int(len(table)),
+        'properties_total': total_recognised,
+        'properties_significant_fdr5': int(table.significant_fdr5.sum()) if len(table) else 0,
+        'strengthening': [
+            {'property': r.property, 'n_documents': int(r.n_documents),
+             'slope_per_degree': round(r.slope_per_degree, 4),
+             'ci': [round(r.ci_low, 4), round(r.ci_high, 4)],
+             'log_transformed': bool(r.log_transformed), 'q_value': round(r.q_value, 4)}
+            for r in table[table.significant_fdr5].itertuples()
+        ],
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--db', type=Path, required=True)
@@ -814,6 +945,7 @@ def main() -> None:
     findings['landscape'] = property_landscape(frame, args.output)
     findings['correlations'] = correlation_matrix(frame, args.output)
     findings['mixed_effects'] = mixed_effects_models(frame, args.output)
+    findings['zonal_sweep'] = zonal_sweep(frame, args.output)
 
     (args.output / 'insights.json').write_text(
         json.dumps(findings, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

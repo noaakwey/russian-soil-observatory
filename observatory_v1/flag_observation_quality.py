@@ -68,6 +68,41 @@ PHYSICAL_RANGE: dict[str, tuple[float | None, float | None, str]] = {
     'soil_organic_carbon': (0.0, 600.0, 'organic carbon content 0–600 g/kg (Histosol ceiling)'),
     'total_nitrogen': (0.0, 50.0, 'total nitrogen content 0–50 g/kg'),
     'total_potassium': (0.0, 60.0, 'total potassium content 0–60 g/kg'),
+
+    # Found the same way, once observation_unit_inference (2026-08-04) started
+    # assigning a unit to essentially every observation instead of leaving most
+    # of them 'missing_unit': several properties had no upper bound at all, so
+    # a value evidently pulled from the wrong table column (a neighbouring
+    # index, a magnetic-susceptibility reading, a mis-aligned OCR cell) sailed
+    # through as physically "ok" once it was mapped to mg/kg or meq/100g.
+    # Trace/contaminant elements (microelement, contaminant categories,
+    # mg/kg): even heavily polluted soils rarely exceed a few percent by mass.
+    'iron': (0.0, 300000.0, 'iron content 0–300 000 mg/kg (30% mass ceiling)'),
+    'zinc': (0.0, 50000.0, 'zinc content 0–50 000 mg/kg'),
+    'copper': (0.0, 50000.0, 'copper content 0–50 000 mg/kg'),
+    'nickel': (0.0, 50000.0, 'nickel content 0–50 000 mg/kg'),
+    'manganese': (0.0, 50000.0, 'manganese content 0–50 000 mg/kg'),
+    'mercury': (0.0, 1000.0, 'mercury content 0–1 000 mg/kg'),
+    'nitrate_n': (0.0, 5000.0, 'nitrate nitrogen 0–5 000 mg/kg'),
+    'mineral_nitrogen': (0.0, 5000.0, 'mineral nitrogen 0–5 000 mg/kg'),
+    'available_phosphorus': (0.0, 20000.0, 'available phosphorus 0–20 000 mg/kg'),
+    'total_dissolved_solids': (0.0, 500.0, 'total dissolved solids 0–500 g/L (saturated brine ceiling)'),
+    # Exchangeable cations reported in cmolc/kg: real soils rarely exceed a
+    # few tens; 100 is a generous ceiling that still excludes clear column
+    # mis-alignment (values in the hundreds of thousands were found).
+    'calcium': (0.0, 100.0, 'exchangeable calcium 0–100 cmolc/kg'),
+    'magnesium': (0.0, 100.0, 'exchangeable magnesium 0–100 cmolc/kg'),
+    # Soil-solution ions (meq/100g): saline soils can genuinely reach tens of
+    # meq/100g; 200 is a generous ceiling for real extremes.
+    'calcium_ion': (0.0, 200.0, 'soil-solution ion 0–200 meq/100g'),
+    'magnesium_ion': (0.0, 200.0, 'soil-solution ion 0–200 meq/100g'),
+    'sodium_ion': (0.0, 200.0, 'soil-solution ion 0–200 meq/100g'),
+    'potassium_ion': (0.0, 200.0, 'soil-solution ion 0–200 meq/100g'),
+    'chloride_ion': (0.0, 200.0, 'soil-solution ion 0–200 meq/100g'),
+    'sulfate_ion': (0.0, 200.0, 'soil-solution ion 0–200 meq/100g'),
+    'bicarbonate_ion': (0.0, 200.0, 'soil-solution ion 0–200 meq/100g'),
+    'hydrogen_ion': (0.0, 200.0, 'soil-solution ion 0–200 meq/100g'),
+    'ammonium_ion': (0.0, 200.0, 'soil-solution ion 0–200 meq/100g'),
 }
 
 # Fractions of a whole: meaningless outside 0–100 when the unit really is %.
@@ -77,6 +112,18 @@ PERCENT_PROPERTIES = {
     'carbonate_equivalent', 'exchangeable_sodium_percentage',
     'gravimetric_water_content', 'field_capacity', 'wilting_point',
     'water_holding_capacity',
+    'coarse_silt', 'medium_silt', 'fine_silt', 'very_coarse_sand',
+    'fine_fraction_lt_0_001mm',
+    # Elemental-oxide composition (geochemical/elemental_oxide categories):
+    # every property below has canonical_unit '%' in property_definition and
+    # is a mass fraction of whole-rock/soil composition, so it cannot exceed
+    # 100 either. Missing here until observation_unit_inference exposed
+    # values like "Fe2O3 = 32 978%" (a magnetic-susceptibility reading
+    # mis-aligned to the oxide column) sailing through as physically "ok".
+    'silicon_dioxide', 'iron_oxide_fe2o3', 'aluminum_oxide_al2o3',
+    'calcium_oxide_cao', 'magnesium_oxide_mgo', 'potassium_oxide_k2o',
+    'sodium_oxide_na2o', 'titanium_dioxide', 'manganese_oxide_mno',
+    'phosphorus_pentoxide', 'potassium_oxide',
 }
 
 # Categories whose values are amounts of a substance and cannot be negative.
