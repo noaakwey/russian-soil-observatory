@@ -79,14 +79,16 @@ WHERE header_match_kind <> 'symbol_embedded'   -- свойство надёжн�
 
 1. Точки сильно кластеризованы (индекс Кларка–Эванса 0.34, ≈ 302 независимых
    локалитета на 790 положений) — это **не вероятностная выборка** по территории России.
-2. Для 626 пар статей установлено соответствие «русский оригинал ↔ перевод»
+2. Для 625 пар статей установлено соответствие «русский оригинал ↔ перевод»
    (`document_links.csv`) — 608 подтверждено разбором печатной библиографической
-   ссылки Springer на источник (журнал, год, номер, страницы), 18 дополнительно
-   статусом candidate по отпечатку числовых значений таблиц; документы не
-   объединяются. 146 из 201 статьи «Почвоведение», давшей наблюдения, входят в
-   подтверждённые пары. Остаточная верхняя граница двойного учёта — 1.4%
-   (1532 наблюдения в 39 статьях «Почвоведение», не сопоставленных ни одной парой).
-3. Метка генетического горизонта заполнена у 17 401 наблюдения (16.3%) —
+   ссылки Springer на источник (журнал, год, номер, страницы), 17 дополнительно
+   статусом candidate по отпечатку числовых значений таблиц (16 из них — для
+   статей архива РЦНИ 2024–2026 гг., ещё не прошедших полную материализацию);
+   документы не объединяются. 146 из 201 статьи «Почвоведение», давшей
+   наблюдения, входят в подтверждённые пары. Остаточная верхняя граница
+   двойного учёта — 1.5% (1568 наблюдений в 40 статьях «Почвоведение», не
+   сопоставленных ни одной парой).
+3. Метка генетического горизонта заполнена у 19 933 наблюдений (18.7%) —
    достаточно для укрупнённого сравнения по горизонтам A/B/C; более детальный
    профильный анализ по-прежнему опирается в основном на числовую глубину.
 4. Значения получены OCR-распознаванием и содержат ошибки; они помечены, а не удалены.
@@ -111,6 +113,7 @@ python3 observatory_v1/normalize_table_measurement_candidates.py --db DB
 python3 observatory_v1/materialize_full_table_observations.py --db DB
 python3 observatory_v1/audit_full_table_observations.py --db DB --output docs/data/full_table_observation_audit.json
 python3 observatory_v1/flag_observation_quality.py --db DB --output docs/data/observation_quality_audit.json
+python3 observatory_v1/backfill_horizon_label_from_row_prefix.py --db DB
 
 # датировка, пространственная привязка, связь оригинал/перевод
 python3 observatory_v1/infer_springer_publication_year.py --db DB --crossref docs/data/doi_metadata.csv --output docs/data/publication_year_audit.json
@@ -118,6 +121,7 @@ python3 observatory_v1/infer_document_study_region.py --db DB
 python3 observatory_v1/infer_document_precise_coordinates.py --db DB
 python3 observatory_v1/merge_spatial_layers.py --db DB
 python3 observatory_v1/link_springer_translations.py --db DB
+python3 observatory_v1/extract_coordinate_datum_evidence.py --db DB
 
 # сборка портала, анализа и отчётов
 python3 docs/scripts/build_portal.py --db DB --output docs/data
