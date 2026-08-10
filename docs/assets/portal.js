@@ -401,7 +401,7 @@ const DOWNLOADS = [
     en: 'Census of properties with n>=30 observations: unit, depth and spatial coverage' }, '18 KB'],
   ['data/document_links.csv', {
     ru: 'Связи между документами (966 записей): 625 пар «русский оригинал ↔ перевод Springer» (608 подтверждено печатной ссылкой, 17 — отпечатком значений) и 341 связь «прежний импорт РЦСИ ↔ новый OCR-импорт того же источника»',
-    en: 'Inter-document links (966 rows): 625 Russian-original/Springer-translation pairs (608 confirmed by printed citation, 17 by value fingerprint) and 341 links between the legacy and re-OCR''d import of the same RCSI source' }, '121 KB'],
+    en: "Inter-document links (966 rows): 625 Russian-original/Springer-translation pairs (608 confirmed by printed citation, 17 by value fingerprint) and 341 links between the legacy and re-OCR'd import of the same RCSI source" }, '121 KB'],
   ['data/full_table_observation_audit.json', {
     ru: 'Аудит полноты слоя наблюдений', en: 'Observation layer coverage audit' }, '1 KB'],
   ['data/observation_quality_audit.json', {
