@@ -11,7 +11,7 @@ const STRINGS = {
     'tagline': 'Почвенные наблюдения из «Почвоведения» и Eurasian Soil Science',
     'tab.overview': 'Обзор', 'tab.map': 'Карта', 'tab.props': 'Свойства',
     'tab.quality': 'Качество данных', 'tab.query': 'SQL-запрос', 'tab.about': 'Методика и данные',
-    'overview.lede': 'Воспроизводимая база числовых почвенных наблюдений, извлечённых из полнотекстовых публикаций двух корпусов. Каждое значение сохраняет ссылку на исходную ячейку OCR-таблицы, признак достоверности единицы измерения и явно указанную силу пространственной привязки.',
+    'overview.lede': 'Воспроизводимая база числовых почвенных наблюдений, извлечённых из полнотекстовых публикаций двух корпусов. Каждое значение сохраняет ссылку на исходную ячейку OCR-таблицы, доказанную единицу измерения и явно указанную силу пространственной привязки.',
     'overview.insights': 'Пространство, компоненты, время: зональные градиенты, связи свойств и тренды за 20 лет →',
     'overview.insights.short': 'Пространственно-временной анализ →',
     'overview.report': 'Аудит базы: состав корпуса, качество извлечения, ограничения →',
@@ -29,7 +29,7 @@ const STRINGS = {
     'map.layer': 'Слой', 'map.legend.verified': 'с проверенными значениями',
     'map.legend.plain': 'только координата',
     'map.hint': 'Нажмите на точку, чтобы увидеть источник, фрагмент текста с координатой и привязанные измерения.',
-    'props.lede': 'Полный спектр распознанных свойств. «Единица доказана» — доля значений, у которых единица напечатана в таблице или получена обратимым преобразованием; остальным единица намеренно не приписывается.',
+    'props.lede': 'Полный спектр распознанных свойств. Каждое наблюдение попадает в базу только после того, как его единица доказана (напечатана в таблице или получена обратимым преобразованием) — колонка «Единица доказана» поэтому близка к 100% для всех показателей: это критерий допуска в слой, а не остаточная неопределённость внутри него.',
     'props.sort': 'Сортировка:', 'props.sort.n': 'по числу наблюдений',
     'props.sort.norm': 'по доказанным единицам', 'props.sort.docs': 'по числу публикаций',
     'props.th.property': 'Свойство', 'props.th.category': 'Группа', 'props.th.n': 'Наблюдений',
@@ -59,8 +59,8 @@ const STRINGS = {
     'quality.header.note': '<strong>symbol_embedded</strong> — химический символ найден внутри более длинного заголовка («Thickness of horizons, cm A + B»). Такие значения следует исключать из анализа по умолчанию.',
     'quality.value': 'Физическая правдоподобность значений',
     'quality.value.note': 'Проверка диапазона запускается только там, где единица действительно известна. pH проверяется всегда — он безразмерен.',
-    'quality.unit': 'Уверенность в единице измерения', 'quality.spatial': 'Сила пространственной привязки',
-    'quality.unit.note': '<strong>high</strong> — единица напечатана в заголовке колонки; <strong>medium</strong> — надёжно выведена из контекста статьи, подписи к таблице или соседних колонок; <strong>low</strong> — предположение (обычно каноническая единица показателя по умолчанию), непригодное для количественного сравнения между публикациями.',
+    'quality.unit': 'Допуск кандидатов в слой наблюдений', 'quality.spatial': 'Сила пространственной привязки',
+    'quality.unit.note': 'Кандидат из OCR-таблицы становится наблюдением только после согласованной трёхагентной проверки происхождения и доказанной единицы измерения; <strong>accepted</strong> — кандидат допущен, <strong>rejected</strong> — отклонён или оставлен в очереди ручного разбора. Показанные ниже 95 109 наблюдений — это только допущенные кандидаты.',
     'query.lede': 'Вся база наблюдений загружается в браузер и выполняет SQL локально — данные никуда не отправляются. Таблицы: <code>observation</code>, <code>reported_site</code>, <code>verified_measurement</code>, <code>meta</code>.',
     'query.run': 'Выполнить', 'query.ex1': 'Свойства с доказанной единицей', 'query.ex2': 'pH по глубине',
     'query.ex3': 'Тяжёлые металлы по годам', 'query.ex4': 'Только «чистые» данные',
@@ -69,15 +69,15 @@ const STRINGS = {
     'about.chain.text': 'Каждое наблюдение прослеживается до конкретной ячейки:',
     'about.chain.text2': 'Поле <code>evidence_locator</code> хранит номер строки и колонки исходной таблицы, напечатанный заголовок свойства и метку строки.',
     'about.rules': 'Чего эти данные не утверждают',
-    'about.rule1': 'Единица измерения формально определена для каждого наблюдения (<code>observation_unit_inference</code>), но с разной силой доказательности: значение с уверенностью <code>low</code> получило единицу лишь предположением (обычно — канонической единицей показателя по умолчанию), а не тем, что напечатано в статье, и непригодно для количественного сравнения между публикациями.',
+    'about.rule1': 'Наблюдение попадает в базу только после того, как его единица измерения доказана (напечатана в заголовке/подписи или получена обратимым преобразованием) и прошла согласованную трёхагентную проверку происхождения; кандидаты без доказанной единицы остаются в очереди ручного разбора и не материализуются как наблюдения «на всякий случай».',
     'about.rule2': 'Единственная координата в статье — это контекст документа, а не GPS каждой строки таблицы.',
     'about.rule3': 'pH(H₂O), pH(KCl) и pH без указания метода — три разных показателя.',
-    'about.rule4': 'Для 626 пар статей установлено соответствие «русский оригинал ↔ перевод в Eurasian Soil Science» (<code>document_links.csv</code>): 608 — разбором печатной библиографической ссылки на источник (журнал, год, номер, страницы), ещё 18 — по отпечатку числовых значений таблиц (статус candidate); документы не объединяются. Для остальных статей доказанного соответствия пока нет — верхняя граница риска двойного учёта: 1.4% слоя.',
+    'about.rule4': 'В <code>document_links.csv</code> — 966 связей между документами: 625 пар «русский оригинал ↔ перевод в Eurasian Soil Science» (608 — разбором печатной библиографической ссылки, 17 — по отпечатку числовых значений таблиц) и 341 связь «прежний импорт РЦСИ ↔ новый OCR-импорт того же источника» (покрывает все статьи этого архива). Документы не объединяются. Для остальных статей «Почвоведения» доказанного соответствия переводу пока нет — верхняя граница риска двойного учёта: 6.8% слоя (6464 наблюдения в 61 статье).',
     'about.rule5': 'Набор точек не является вероятностной выборкой по территории России.',
     'about.downloads': 'Данные для скачивания', 'about.dl.file': 'Файл', 'about.dl.what': 'Что это',
     'about.dl.size': 'Размер', 'about.repro': 'Воспроизведение',
     'about.repro.text': 'Все публикуемые файлы пересобираются из рабочей базы одной командой:',
-    'about.repro.note': 'Полная последовательность, включая сборку научного анализа и отчётов, — в README.md репозитория.',
+    'about.repro.note': 'Полная последовательность, включая сборку научного анализа и отчётов, — в README.md репозитория. Текущий рабочий снимок дополнительно прошёл трёхагентную ручную сверку происхождения и единиц измерения (2026-08-06 — 2026-08-09), не сводимую к одной команде; журнал — в docs/database_rebuild_note.md и docs/recovery_journal_2026-08-09.md.',
     'about.license': '<strong>Лицензия.</strong> Составленная база и код — CC BY 4.0. Права на исходные статьи принадлежат их издателям; здесь публикуются извлечённые числовые значения и ссылки на источник.',
     'footer': 'Russian Soil Observatory · воспроизводимая сборка · доказательство: документ → OCR-таблица → строка → ячейка',
     't.observations': 'табличных наблюдений', 't.documents': 'полнотекстовых публикаций',
@@ -125,7 +125,7 @@ const STRINGS = {
     'map.layer': 'Layer', 'map.legend.verified': 'with verified values',
     'map.legend.plain': 'coordinate only',
     'map.hint': 'Click a point to see its source, the text fragment carrying the coordinate, and any linked measurements.',
-    'props.lede': 'The full spectrum of recognised properties. "Unit proven" is the share of values whose unit is printed in the table or obtained by a reversible conversion; the rest are deliberately left without an assigned unit.',
+    'props.lede': 'The full spectrum of recognised properties. An observation only enters the database once its unit is proven (printed in the table or obtained by a reversible conversion), so the "unit proven" column is close to 100% for every property — it is the admission criterion for the layer, not residual uncertainty inside it.',
     'props.sort': 'Sort by:', 'props.sort.n': 'observation count',
     'props.sort.norm': 'proven units', 'props.sort.docs': 'publication count',
     'props.th.property': 'Property', 'props.th.category': 'Group', 'props.th.n': 'Observations',
@@ -155,8 +155,8 @@ const STRINGS = {
     'quality.header.note': '<strong>symbol_embedded</strong> — the chemical symbol was found inside a longer header ("Thickness of horizons, cm A + B"). Such values should be excluded from analysis by default.',
     'quality.value': 'Physical plausibility of values',
     'quality.value.note': 'A range check only fires where the unit is actually known. pH is always checked — it is dimensionless.',
-    'quality.unit': 'Unit-of-measurement confidence', 'quality.spatial': 'Strength of spatial linkage',
-    'quality.unit.note': '<strong>high</strong> — the unit is printed in the column header; <strong>medium</strong> — reliably inferred from article context, a table caption, or a neighbouring column; <strong>low</strong> — an assumption (usually the property\'s default canonical unit), not fit for quantitative comparison across publications.',
+    'quality.unit': 'Candidate admission into the observation layer', 'quality.spatial': 'Strength of spatial linkage',
+    'quality.unit.note': 'An OCR-table candidate becomes an observation only after agreed three-agent provenance review and a proven unit; <strong>accepted</strong> — the candidate was admitted, <strong>rejected</strong> — it was declined or left in the manual-review queue. The 95,109 observations shown elsewhere on this portal are only the admitted candidates.',
     'query.lede': 'The whole observation database loads into your browser and runs SQL locally — nothing is sent anywhere. Tables: <code>observation</code>, <code>reported_site</code>, <code>verified_measurement</code>, <code>meta</code>.',
     'query.run': 'Run', 'query.ex1': 'Properties with proven units', 'query.ex2': 'pH by depth',
     'query.ex3': 'Heavy metals by year', 'query.ex4': 'Analysis-ready subset only',
@@ -165,15 +165,15 @@ const STRINGS = {
     'about.chain.text': 'Every observation is traceable to a specific cell:',
     'about.chain.text2': 'The <code>evidence_locator</code> field stores the row and column index of the source table, the printed property header, and the row label.',
     'about.rules': 'What these data do not claim',
-    'about.rule1': 'A unit is formally assigned to every observation (<code>observation_unit_inference</code>), but with varying strength of evidence: a value with <code>low</code> confidence got its unit only as a default assumption (usually the property\'s canonical unit), not from what the article printed, and is not fit for quantitative comparison across publications.',
+    'about.rule1': 'An observation enters the database only once its unit is proven (printed in a header/caption or obtained by a reversible conversion) and has passed agreed three-agent provenance review; candidates without a proven unit stay in the manual-review queue rather than being materialized as observations just in case.',
     'about.rule2': 'A single coordinate in an article is document context, not a GPS fix for every table row.',
     'about.rule3': 'pH(H₂O), pH(KCl) and pH with unstated method are three different variables.',
-    'about.rule4': 'For 626 article pairs, correspondence between the Russian original and its Eurasian Soil Science translation has been established (<code>document_links.csv</code>): 608 by parsing the printed bibliographic citation to the source (journal, year, issue, pages), 18 more by table-value fingerprint (status candidate); documents are not merged. For the rest no proven correspondence exists yet — upper bound on double-counting risk: 1.4% of the layer.',
+    'about.rule4': '<code>document_links.csv</code> holds 966 inter-document links: 625 Russian-original/Eurasian-Soil-Science-translation pairs (608 by parsing the printed bibliographic citation, 17 by table-value fingerprint) and 341 links between the legacy and re-OCR\'d import of the same RCSI archive source (covers every article in that archive). Documents are not merged. For the remaining Pochvovedenie articles no proven translation correspondence exists yet — upper bound on double-counting risk: 6.8% of the layer (6,464 observations in 61 articles).',
     'about.rule5': 'The point set is not a probability sample of Russian territory.',
     'about.downloads': 'Downloads', 'about.dl.file': 'File', 'about.dl.what': 'What it is',
     'about.dl.size': 'Size', 'about.repro': 'Reproducing this build',
     'about.repro.text': 'Every published file is rebuilt from the working database with one sequence:',
-    'about.repro.note': 'The full sequence, including the scientific analysis and report build, is in the repository README.md.',
+    'about.repro.note': 'The full sequence, including the scientific analysis and report build, is in the repository README.md. The current working snapshot additionally went through a three-agent manual provenance and unit review (2026-08-06 to 2026-08-09) not reducible to one command; see docs/database_rebuild_note.md and docs/recovery_journal_2026-08-09.md.',
     'about.license': '<strong>Licence.</strong> The compiled database and the code are CC BY 4.0. Rights in the source articles remain with their publishers; what is published here are extracted numeric values and pointers to the source.',
     'footer': 'Russian Soil Observatory · reproducible build · evidence: document → OCR table → row → cell',
     't.observations': 'table observations', 't.documents': 'full-text publications',
@@ -348,13 +348,16 @@ function renderProperties() {
 function renderQuality() {
   const q = AGG.quality;
   const total = AGG.observations;
+  const candidatesTotal = ((q.candidate_status && q.candidate_status.accepted) || 0)
+    + ((q.candidate_status && q.candidate_status.rejected) || 0);
   document.getElementById('quality-tiles').innerHTML = [
     { value: q.unflagged, label: t('t.ready'), note: `${Math.round(100 * q.unflagged / total)}% / ${num(total)}` },
     { value: q.header_match_kind.symbol_embedded || 0, label: 'symbol_embedded' },
     { value: (q.value_plausibility.negative_content || 0) + (q.value_plausibility.out_of_physical_range || 0),
       label: lang === 'ru' ? 'значения вне физического диапазона' : 'values outside physical range' },
-    { value: (q.unit_confidence && q.unit_confidence.low) || 0,
-      label: lang === 'ru' ? 'единица только предположена (confidence=low)' : 'unit only assumed (confidence=low)' },
+    { value: (q.candidate_status && q.candidate_status.accepted) || 0,
+      label: lang === 'ru' ? 'кандидатов допущено после проверки' : 'candidates admitted after review',
+      note: candidatesTotal ? `${Math.round(100 * ((q.candidate_status && q.candidate_status.accepted) || 0) / candidatesTotal)}% / ${num(candidatesTotal)}` : '' },
   ].map((tile) => `<div class="tile"><div class="value" data-count-to="${tile.value}">0</div>
       <div class="label">${esc(tile.label)}</div>
       ${tile.note ? `<div class="note">${esc(tile.note)}</div>` : ''}</div>`).join('');
@@ -369,7 +372,7 @@ function renderQuality() {
   document.getElementById('chart-plausibility').innerHTML = bars(
     toRows(q.value_plausibility, { ok: 'good' }));
   document.getElementById('chart-normalization').innerHTML = bars(
-    toRows(q.unit_confidence || {}, { high: 'good', medium: '' , low: 'muted' }));
+    toRows(q.candidate_status || {}, { accepted: 'good', rejected: 'muted' }));
   document.getElementById('chart-linkage').innerHTML = bars(
     toRows(q.spatial_linkage, { row_profile_verified: 'good' }));
 }
@@ -394,11 +397,11 @@ const DOWNLOADS = [
   ['data/property_dictionary_ru_public.csv', {
     ru: 'Словарь свойств и канонических единиц', en: 'Property and canonical-unit dictionary' }, '40 KB'],
   ['data/property_census.csv', {
-    ru: 'Перепись всех 101 свойств: охват единицей, глубиной, координатой',
-    en: 'Census of all 101 properties: unit, depth and spatial coverage' }, '18 KB'],
+    ru: 'Перепись свойств с n≥30 наблюдений: охват единицей, глубиной, координатой',
+    en: 'Census of properties with n>=30 observations: unit, depth and spatial coverage' }, '18 KB'],
   ['data/document_links.csv', {
-    ru: 'Сопоставленные пары «русский оригинал ↔ перевод Springer» (626 пар: 608 подтверждено разбором печатной ссылки, 18 — по отпечатку значений)',
-    en: 'Matched Russian-original / Springer-translation article pairs (626 pairs: 608 confirmed by parsing the printed citation, 18 by value fingerprint)' }, '121 KB'],
+    ru: 'Связи между документами (966 записей): 625 пар «русский оригинал ↔ перевод Springer» (608 подтверждено печатной ссылкой, 17 — отпечатком значений) и 341 связь «прежний импорт РЦСИ ↔ новый OCR-импорт того же источника»',
+    en: 'Inter-document links (966 rows): 625 Russian-original/Springer-translation pairs (608 confirmed by printed citation, 17 by value fingerprint) and 341 links between the legacy and re-OCR''d import of the same RCSI source' }, '121 KB'],
   ['data/full_table_observation_audit.json', {
     ru: 'Аудит полноты слоя наблюдений', en: 'Observation layer coverage audit' }, '1 KB'],
   ['data/observation_quality_audit.json', {
@@ -528,9 +531,11 @@ function renderMap() {
 /* ------------------------------------------------------------------- SQL */
 
 const EXAMPLES = [
-  `-- Properties whose unit is high/medium confidence, most abundant first
--- (metric=1 means confidence IN ('high','medium') in observation_unit_inference;
---  confidence='low' is a default assumption, not a printed unit)
+  `-- Properties in the observation layer, most abundant first
+-- (metric=1 means normalization_status IN ('exact','converted') — true for
+--  every row here, since a row only enters this layer once its unit is
+--  proven; unproven candidates are rejected before materialization, not
+--  kept with a low-confidence flag)
 SELECT property, property_ru, category,
        COUNT(*)                                   AS observations,
        ROUND(AVG(value_normalized), 3)            AS mean_value,

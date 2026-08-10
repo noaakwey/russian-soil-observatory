@@ -40,10 +40,9 @@ def main() -> None:
             FROM table_observation o
             JOIN observation_soil_type st ON st.observation_id = o.observation_id
             JOIN observation_quality_flag f ON f.observation_id = o.observation_id
-            JOIN observation_unit_inference u ON u.observation_id = o.observation_id
             WHERE st.confidence = 'high' AND st.wrb_confidence IN ('high','medium')
               AND o.property_id IN ('ph_h2o','organic_matter')
-              AND u.confidence IN ('high','medium')
+              AND o.normalization_status IN ('exact','converted')
               AND f.header_match_kind <> 'symbol_embedded' AND f.value_plausibility = 'ok'
         """, con)
     finally:

@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/leaflet-1.9.4.css">
-<link rel="stylesheet" href="assets/portal.css?v=20260804c">
+<link rel="stylesheet" href="assets/portal.css?v=20260809a">
 </head>
 <body>
 
@@ -69,7 +69,7 @@
       <p class="lede" data-i18n="overview.lede">
         Воспроизводимая база числовых почвенных наблюдений, извлечённых из полнотекстовых
         публикаций двух корпусов. Каждое значение сохраняет ссылку на исходную ячейку
-        OCR-таблицы, признак достоверности единицы измерения и явно указанную силу
+        OCR-таблицы, доказанную единицу измерения и явно указанную силу
         пространственной привязки.
       </p>
       <div class="hero-actions">
@@ -137,9 +137,10 @@
   <!-- ============ PROPERTIES ============ -->
   <section class="panel" id="panel-props" hidden>
     <p class="lede" data-i18n="props.lede">
-      Полный спектр распознанных свойств. «Единица доказана» — доля значений, у которых
-      единица напечатана в таблице или получена обратимым преобразованием; остальным
-      единица намеренно не приписывается.
+      Полный спектр распознанных свойств. Каждое наблюдение попадает в базу только после
+      того, как его единица доказана (напечатана в таблице или получена обратимым
+      преобразованием) — колонка «Единица доказана» поэтому близка к 100% для всех
+      показателей: это критерий допуска в слой, а не остаточная неопределённость внутри него.
     </p>
     <div class="card">
       <div class="toolbar">
@@ -232,13 +233,13 @@
 
     <div class="grid wide">
       <div class="card">
-        <h2 data-i18n="quality.unit">Уверенность в единице измерения</h2>
+        <h2 data-i18n="quality.unit">Допуск кандидатов в слой наблюдений</h2>
         <div id="chart-normalization"></div>
         <div class="callout" style="margin-top:.9rem" data-i18n="quality.unit.note">
-          <strong>high</strong> — единица напечатана в заголовке колонки; <strong>medium</strong> —
-          надёжно выведена из контекста статьи, подписи к таблице или соседних колонок;
-          <strong>low</strong> — предположение (обычно каноническая единица показателя по
-          умолчанию), непригодное для количественного сравнения между публикациями.
+          Кандидат из OCR-таблицы становится наблюдением только после согласованной
+          трёхагентной проверки происхождения и доказанной единицы измерения;
+          <strong>accepted</strong> — кандидат допущен, <strong>rejected</strong> — отклонён
+          или оставлен в очереди ручного разбора.
         </div>
       </div>
       <div class="card">
@@ -287,10 +288,10 @@
       <div class="card">
         <h2 data-i18n="about.rules">Чего эти данные не утверждают</h2>
         <ul class="clean">
-          <li data-i18n="about.rule1">Единица измерения формально определена для каждого наблюдения (<code>observation_unit_inference</code>), но с разной силой доказательности: значение с уверенностью <code>low</code> получило единицу лишь предположением, а не тем, что напечатано в статье, и непригодно для количественного сравнения между публикациями.</li>
+          <li data-i18n="about.rule1">Наблюдение попадает в базу только после того, как его единица измерения доказана (напечатана в заголовке/подписи или получена обратимым преобразованием) и прошла согласованную трёхагентную проверку происхождения; кандидаты без доказанной единицы остаются в очереди ручного разбора.</li>
           <li data-i18n="about.rule2">Единственная координата в статье — это контекст документа, а не GPS каждой строки таблицы.</li>
           <li data-i18n="about.rule3">pH(H₂O), pH(KCl) и pH без указания метода — три разных показателя.</li>
-          <li data-i18n="about.rule4">Для 626 пар статей установлено соответствие «русский оригинал ↔ перевод в Eurasian Soil Science»: 608 — разбором печатной библиографической ссылки на источник, 18 — по отпечатку числовых значений таблиц; документы не объединяются. Верхняя граница риска двойного учёта для остальных статей — 1.4% слоя.</li>
+          <li data-i18n="about.rule4">В <code>document_links.csv</code> — 966 связей между документами: 625 пар «русский оригинал ↔ перевод в Eurasian Soil Science» (608 по печатной ссылке, 17 по отпечатку значений) и 341 связь «прежний импорт РЦСИ ↔ новый OCR-импорт того же источника». Документы не объединяются. Верхняя граница риска двойного учёта для остальных статей «Почвоведения» — 6.8% слоя.</li>
           <li data-i18n="about.rule5">Набор точек не является вероятностной выборкой по территории России.</li>
         </ul>
       </div>
@@ -323,7 +324,7 @@ python3 observatory_v1/infer_document_precise_coordinates.py --db DB
 python3 observatory_v1/merge_spatial_layers.py --db DB
 python3 observatory_v1/link_springer_translations.py --db DB
 python3 docs/scripts/build_portal.py --db DB --output docs/data</pre>
-      <p class="status" style="margin-top:.6rem" data-i18n="about.repro.note">Полная последовательность, включая сборку научного анализа и отчётов, — в <code>README.md</code> репозитория.</p>
+      <p class="status" style="margin-top:.6rem" data-i18n="about.repro.note">Полная последовательность, включая сборку научного анализа и отчётов, — в <code>README.md</code> репозитория. Текущий рабочий снимок дополнительно прошёл трёхагентную ручную сверку происхождения и единиц измерения (2026-08-06 — 2026-08-09), не сводимую к одной команде; журнал — в <code>docs/database_rebuild_note.md</code> и <code>docs/recovery_journal_2026-08-09.md</code>.</p>
       <p class="status" id="generated-at"></p>
     </div>
 
@@ -343,6 +344,6 @@ python3 docs/scripts/build_portal.py --db DB --output docs/data</pre>
 <button type="button" id="to-top" class="to-top" aria-label="Наверх" title="Наверх">↑</button>
 
 <script src="assets/leaflet.js"></script>
-<script src="assets/portal.js?v=20260804c"></script>
+<script src="assets/portal.js?v=20260809a"></script>
 </body>
 </html>

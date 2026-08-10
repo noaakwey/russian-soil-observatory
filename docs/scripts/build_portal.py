@@ -33,6 +33,12 @@ from property_dictionary_ru import CATEGORY_EN, CATEGORY_RU
 
 EARTH_RADIUS_KM = 6371.0
 RUSSIA_AREA_KM2 = 17_098_246
+# site.country_code is a label, not a geographic filter — some rows are
+# foreign case-study/comparison sites an author cites in an otherwise
+# Russian study. Match the bounding box build_insight_analysis.py uses so
+# the portal's own spatial stats (Clark-Evans, nearest neighbour, cells)
+# describe the domestic record, not a mix of it and foreign context points.
+RUSSIA_BOUNDS = dict(lat=(41.0, 82.0), lon=(19.0, 190.0))
 
 # Legacy rows carry absolute extraction paths from a machine that no longer
 # exists.  The file name is the useful part of that provenance; the host
@@ -153,7 +159,7 @@ CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 
 OBSERVATION_QUERY = """
 SELECT o.observation_id, o.document_id, d.corpus, d.doi,
-       y.publication_year, y.year_confidence,
+       COALESCE(y.publication_year, d.publication_year), y.year_confidence,
        o.property_id, p.canonical_name, p.category,
        o.property_header_raw, o.value_num_raw, o.unit_raw,
        o.value_normalized, o.unit_normalized, o.normalization_status,
@@ -189,10 +195,12 @@ def build_browser_database(source: sqlite3.Connection, target_path: Path,
          latitude, longitude, tier, page_start, table_label, unit_confidence) = row
         localized = names.get(property_id, {})
         trusted = int(header_kind != 'symbol_embedded' and plausibility == 'ok')
-        # normalization_status is ~universal now (observation_unit_inference
-        # assigns some unit to every row); only high/medium confidence is
-        # strong enough evidence to count as "proven" for quantitative use.
-        metric = int(unit_confidence in ('high', 'medium'))
+        # 2026-08 rebuild: table_observation is admission-gated (three-agent
+        # verified provenance, unit required before a row is accepted), so
+        # normalization_status is 'exact'/'converted' for every row and the
+        # old post-hoc observation_unit_inference confidence tier is empty.
+        # "Proven unit" is the admission criterion itself, not a per-row flag.
+        metric = int(status in ('exact', 'converted'))
         rows.append((
             observation_id, document_id, corpus, doi, year, year_confidence,
             property_id, canonical, localized.get('ru'), category,
@@ -209,7 +217,7 @@ def build_browser_database(source: sqlite3.Connection, target_path: Path,
         "INSERT INTO reported_site VALUES(?,?,?,?,?,?,?,?)",
         source.execute("""
             SELECT s.site_id, s.latitude, s.longitude, s.region, s.spatial_confidence,
-                   MIN(a.document_id), MIN(d.corpus), MIN(y.publication_year)
+                   MIN(a.document_id), MIN(d.corpus), MIN(COALESCE(y.publication_year, d.publication_year))
             FROM site s
             LEFT JOIN site_evidence se ON se.site_id = s.site_id
             LEFT JOIN source_artifact a ON a.artifact_id = se.artifact_id
@@ -256,7 +264,7 @@ def build_map(source: sqlite3.Connection) -> dict:
     sites: dict[tuple[float, float], dict] = {}
     for site_id, latitude, longitude, region, corpus, doi, year, confidence, evidence in source.execute("""
         SELECT s.site_id, s.latitude, s.longitude, s.region,
-               MIN(d.corpus), MIN(d.doi), MIN(y.publication_year), MIN(y.year_confidence),
+               MIN(d.corpus), MIN(d.doi), MIN(COALESCE(y.publication_year, d.publication_year)), MIN(y.year_confidence),
                MIN(se.evidence_text)
         FROM site s
         LEFT JOIN site_evidence se ON se.site_id = s.site_id
@@ -345,14 +353,14 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
     for pid, value, unit, has_depth, is_metric, is_trusted, has_spatial in rows("""
         SELECT o.property_id, o.value_normalized, o.unit_normalized,
                CASE WHEN o.depth_top_cm IS NOT NULL THEN 1 ELSE 0 END,
-               CASE WHEN u.confidence IN ('high','medium') THEN 1 ELSE 0 END,
+               CASE WHEN o.normalization_status IN ('exact','converted') THEN 1 ELSE 0 END,
                CASE WHEN f.header_match_kind <> 'symbol_embedded'
                          AND f.value_plausibility = 'ok' THEN 1 ELSE 0 END,
                CASE WHEN t.document_id IS NOT NULL THEN 1 ELSE 0 END
         FROM table_observation o
         JOIN observation_quality_flag f ON f.observation_id = o.observation_id
         LEFT JOIN document_spatial_tier t ON t.document_id = o.document_id
-        LEFT JOIN observation_unit_inference u ON u.observation_id = o.observation_id
+        WHERE o.property_id <> 'unclassified_table_metric'
     """):
         entry = census[pid]
         entry['depth'] += has_depth
@@ -364,14 +372,14 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
     properties = []
     for pid, canonical, category, count, normalized, clean, plausible, docs in rows("""
         SELECT o.property_id, p.canonical_name, p.category, COUNT(*),
-               SUM(u.confidence IN ('high','medium')),
+               SUM(o.normalization_status IN ('exact','converted')),
                SUM(f.header_match_kind <> 'symbol_embedded'),
                SUM(f.value_plausibility = 'ok'),
                COUNT(DISTINCT o.document_id)
         FROM table_observation o
         JOIN property_definition p ON p.property_id = o.property_id
         JOIN observation_quality_flag f ON f.observation_id = o.observation_id
-        LEFT JOIN observation_unit_inference u ON u.observation_id = o.observation_id
+        WHERE o.property_id <> 'unclassified_table_metric'
         GROUP BY 1,2,3 ORDER BY 4 DESC
     """):
         localized = names.get(pid, {})
@@ -396,9 +404,10 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
     per_year = [
         {'year': year, 'observations': observations, 'documents': documents}
         for year, observations, documents in rows("""
-            SELECT y.publication_year, COUNT(*), COUNT(DISTINCT o.document_id)
+            SELECT COALESCE(y.publication_year, d.publication_year), COUNT(*), COUNT(DISTINCT o.document_id)
             FROM table_observation o
-            JOIN document_publication_year y ON y.document_id = o.document_id
+            JOIN document d ON d.document_id = o.document_id
+            LEFT JOIN document_publication_year y ON y.document_id = o.document_id
             GROUP BY 1 ORDER BY 1
         """)
     ]
@@ -406,15 +415,18 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
     documents_per_year = [
         {'year': year, 'pochvovedenie': russian, 'springer': springer}
         for year, russian, springer in rows("""
-            SELECT y.publication_year,
-                   SUM(d.corpus='pochvovedenie'), SUM(d.corpus='springer')
-            FROM document d JOIN document_publication_year y USING(document_id)
+            SELECT COALESCE(y.publication_year, d.publication_year),
+                   SUM(d.corpus IN ('pochvovedenie','rcsi')), SUM(d.corpus='springer')
+            FROM document d LEFT JOIN document_publication_year y USING(document_id)
             GROUP BY 1 ORDER BY 1
         """)
     ]
 
-    points = rows("""SELECT DISTINCT ROUND(latitude,5), ROUND(longitude,5) FROM site
-                     WHERE latitude IS NOT NULL AND spatial_confidence IN ('exact','reported')""")
+    points = [(lat, lon) for lat, lon in rows(
+        """SELECT DISTINCT ROUND(latitude,5), ROUND(longitude,5) FROM site
+           WHERE latitude IS NOT NULL AND spatial_confidence IN ('exact','reported')""")
+        if RUSSIA_BOUNDS['lat'][0] <= lat <= RUSSIA_BOUNDS['lat'][1]
+        and RUSSIA_BOUNDS['lon'][0] <= lon <= RUSSIA_BOUNDS['lon'][1]]
     neighbours = sorted(
         min(haversine(point, other) for index, other in enumerate(points) if index != position)
         for position, point in enumerate(points)
@@ -426,8 +438,10 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
 
     spatial = {
         'unique_positions': len(points),
-        'coordinate_records': rows("""SELECT COUNT(*) FROM site
-             WHERE latitude IS NOT NULL AND spatial_confidence IN ('exact','reported')""")[0][0],
+        'coordinate_records': rows(f"""SELECT COUNT(*) FROM site
+             WHERE latitude IS NOT NULL AND spatial_confidence IN ('exact','reported')
+               AND latitude BETWEEN {RUSSIA_BOUNDS['lat'][0]} AND {RUSSIA_BOUNDS['lat'][1]}
+               AND longitude BETWEEN {RUSSIA_BOUNDS['lon'][0]} AND {RUSSIA_BOUNDS['lon'][1]}""")[0][0],
         'nearest_neighbour_km': {
             'median': round(percentile(neighbours, 0.5), 2),
             'p25': round(percentile(neighbours, 0.25), 2),
@@ -448,16 +462,21 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
             "SELECT value_plausibility, COUNT(*) FROM observation_quality_flag GROUP BY 1")),
         'normalization_status': dict(rows(
             "SELECT normalization_status, COUNT(*) FROM table_observation GROUP BY 1")),
-        'unit_confidence': dict(rows(
-            "SELECT confidence, COUNT(*) FROM observation_unit_inference GROUP BY 1")),
+        # 2026-08 rebuild: table_observation is admission-gated (three-agent
+        # verified provenance; a row only exists here once its unit is
+        # proven), so normalization_status is 'exact'/'converted' for
+        # everything in it and the old per-row confidence tier
+        # (observation_unit_inference) is retired. The meaningful "how much
+        # of the source material actually made it in" number is now the
+        # candidate admission rate.
+        'candidate_status': dict(rows(
+            "SELECT status, COUNT(*) FROM table_measurement_candidate GROUP BY 1")),
         'spatial_linkage': dict(rows(
             "SELECT spatial_linkage, COUNT(*) FROM table_observation GROUP BY 1")),
         'analysis_ready': rows("""
             SELECT COUNT(*) FROM table_observation o
             JOIN observation_quality_flag f ON f.observation_id = o.observation_id
-            JOIN observation_unit_inference u ON u.observation_id = o.observation_id
-            WHERE f.header_match_kind <> 'symbol_embedded' AND f.value_plausibility = 'ok'
-              AND u.confidence IN ('high','medium')""")[0][0],
+            WHERE f.header_match_kind <> 'symbol_embedded' AND f.value_plausibility = 'ok'""")[0][0],
         'unflagged': rows("""
             SELECT COUNT(*) FROM observation_quality_flag
             WHERE header_match_kind <> 'symbol_embedded' AND value_plausibility = 'ok'""")[0][0],
@@ -524,7 +543,7 @@ def export_csv(source: sqlite3.Connection, path: Path, names: dict[str, dict[str
         writer.writerow(CSV_COLUMNS)
         for row in source.execute("""
             SELECT o.observation_id, o.candidate_id, o.document_id, d.corpus, d.doi,
-                   y.publication_year, y.year_confidence, p.canonical_name, o.property_id,
+                   COALESCE(y.publication_year, d.publication_year), y.year_confidence, p.canonical_name, o.property_id,
                    p.category, o.property_header_raw, o.value_num_raw, o.unit_raw,
                    o.value_normalized, o.unit_normalized, o.normalization_status,
                    u.confidence, u.method,

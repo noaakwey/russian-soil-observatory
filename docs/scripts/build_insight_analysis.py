@@ -88,7 +88,8 @@ SELECT o.observation_id, o.document_id, o.artifact_id, o.row_index, o.property_i
        o.normalization_status, u.confidence AS unit_confidence,
        f.header_match_kind, f.value_plausibility,
        o.depth_top_cm, o.depth_bottom_cm, o.row_label_raw,
-       y.publication_year, y.year_confidence, d.corpus,
+       COALESCE(y.publication_year, d.publication_year) AS publication_year,
+       y.year_confidence, d.corpus,
        t.latitude, t.longitude, t.tier, t.radius_km
 FROM table_observation o
 JOIN property_definition p ON p.property_id = o.property_id
@@ -110,14 +111,16 @@ RUSSIA_BOUNDS = dict(lat=(41.0, 82.0), lon=(19.0, 190.0))
 def load(db: Path) -> pd.DataFrame:
     with sqlite3.connect(db) as con:
         frame = pd.read_sql(QUERY, con)
+    # 2026-08 rebuild: table_observation is now admission-gated (three-agent
+    # verified provenance, unit required before a row is accepted at all), so
+    # normalization_status is 'exact'/'converted' for every row by
+    # construction and observation_unit_inference (the old post-hoc
+    # confidence tier) is no longer populated. "Proven unit" is therefore no
+    # longer a per-row filter — it is the admission criterion itself.
+    frame = frame[frame.property_id != 'unclassified_table_metric'].copy()
     frame['trusted'] = ((frame.header_match_kind != 'symbol_embedded')
                         & (frame.value_plausibility == 'ok'))
-    # normalization_status is no longer a useful "is the unit proven" signal:
-    # observation_unit_inference now assigns *some* unit to every observation,
-    # including low-confidence fallbacks (property's usual unit, guessed from
-    # article context). Only high/medium confidence is evidence strong enough
-    # for quantitative comparison; 'low' is an assumption, not a printed unit.
-    frame['metric'] = frame.unit_confidence.isin(['high', 'medium'])
+    frame['metric'] = frame.normalization_status.isin(['exact', 'converted'])
     frame['in_russia'] = (
         frame.latitude.between(*RUSSIA_BOUNDS['lat'])
         & frame.longitude.between(*RUSSIA_BOUNDS['lon']))
@@ -505,6 +508,17 @@ def property_landscape(frame: pd.DataFrame, output: Path) -> dict:
     def pct(series: pd.Series) -> float:
         return round(100 * series.mean(), 1) if len(series) else 0.0
 
+    # 2026-08 rebuild: the property catalog grew from 101 curated properties
+    # to ~2600, most of them source-specific (one article's own idiosyncratic
+    # column, created rather than force-mapped onto an incompatible canonical
+    # unit). A per-property census/figure over all of them is unreadable and
+    # dominated by singletons; restrict to properties with a minimum shared
+    # footprint, the same n>=30 threshold used for the distribution-shape
+    # table elsewhere in this pipeline.
+    counts = frame.property_id.value_counts()
+    covered_ids = counts[counts >= 30].index
+    frame = frame[frame.property_id.isin(covered_ids)]
+
     rows = []
     for pid, group in frame.groupby('property_id'):
         # Descriptive statistics only mean something on a value with a proven
@@ -541,7 +555,8 @@ def property_landscape(frame: pd.DataFrame, output: Path) -> dict:
     for theme_name, theme in THEMES.items():
         apply_theme(theme)
         categories = sorted(census.category.unique())
-        palette = dict(zip(categories, CATEGORY_PALETTE[theme_name]))
+        base = CATEGORY_PALETTE[theme_name]
+        palette = {c: base[i % len(base)] for i, c in enumerate(categories)}
         ordered = census.sort_values('observations')
         fig, ax = plt.subplots(figsize=(9.6, max(9, 0.16 * len(ordered))))
         ax.barh(ordered.property, ordered.observations,
@@ -549,7 +564,7 @@ def property_landscape(frame: pd.DataFrame, output: Path) -> dict:
         ax.set_xscale('log')
         ax.set_xlabel(('число наблюдений (лог. шкала)' if theme_name == 'light'
                        else 'число наблюдений (лог. шкала)'))
-        ax.set_title('Все 101 распознанных свойства', pad=12)
+        ax.set_title(f'Все {len(ordered)} свойства с n≥30', pad=12)
         ax.tick_params(axis='y', labelsize=7.2)
         handles = [plt.Rectangle((0, 0), 1, 1, color=palette[c]) for c in categories]
         ax.legend(handles, categories, loc='lower right', fontsize=7.4, frameon=False, ncol=1)

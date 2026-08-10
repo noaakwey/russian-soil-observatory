@@ -23,6 +23,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import csv
 import re
 from pathlib import Path
 
@@ -48,9 +49,8 @@ MAIN_FIGURES = [
     (10, 'figR6_depth_sweep', 5),
 ]
 SUPP_FIGURES = [
-    (1, None, 1), (3, 'figR8_density_grid', 2), (5, None, 3), (7, None, 4),
-    (9, None, 5), (11, None, 6), (12, 'figR7_correlations', 7), (13, None, 8),
-    (14, None, 9), (15, 'figR9_soil_type', 10),
+    (3, 'figR8_density_grid', 1), (12, 'figR7_correlations', 2),
+    (15, 'figR9_soil_type', 3),
 ]
 MAIN_TABLES = [(1, 1), (3, 2), (4, 3), (7, 4), (13, 5)]
 SUPP_TABLES = [(2, 1), (5, 2), (6, 3), (8, 4), (9, 5), (10, 6), (11, 7),
@@ -257,8 +257,6 @@ def write_table(document, rows, *, font=Pt(10)):
 # --- document assembly -----------------------------------------------------
 
 def first_page(document, meta: dict) -> None:
-    para(document, '[ЗАПОЛНИТЬ: рубрика журнала — одна из восьми предусмотренных]',
-         indent=0, italic=True, align=WD_ALIGN_PARAGRAPH.LEFT, space_after=6)
     para(document, f"УДК {meta['udk']}", indent=0,
          align=WD_ALIGN_PARAGRAPH.LEFT, space_after=12)
     para(document, meta['title'], bold=True, indent=0,
@@ -267,22 +265,20 @@ def first_page(document, meta: dict) -> None:
          align=WD_ALIGN_PARAGRAPH.CENTER, space_after=6)
     para(document,
          'Казанский (Приволжский) федеральный университет, '
-         '[ЗАПОЛНИТЬ: институт, кафедра], '
          'ул. Кремлёвская, 18, Казань, 420000, Россия',
          indent=0, italic=True, align=WD_ALIGN_PARAGRAPH.CENTER, space_after=6)
-    para(document, 'e-mail: [ЗАПОЛНИТЬ]', indent=0,
+    para(document, 'e-mail: adark4u@gmail.com', indent=0,
          align=WD_ALIGN_PARAGRAPH.CENTER, space_after=6)
     para(document, 'ORCID: 0000-0002-0812-1750', indent=0,
          align=WD_ALIGN_PARAGRAPH.CENTER, space_after=6)
-    para(document, 'Поступила в редакцию [ЗАПОЛНИТЬ]', indent=0,
-         align=WD_ALIGN_PARAGRAPH.CENTER, space_after=14)
+    para(document, '', indent=0, space_after=8)
     for block in meta['abstract']:
         para(document, remap_references(block), space_after=6)
     para(document, '', space_after=6)
     para(document, meta['keywords'], space_after=6)
 
 
-def build_main(markdown: str, figures: Path, out: Path) -> dict:
+def build_main(markdown: str, figures: Path, tables: Path, out: Path) -> dict:
     document = Document()
     setup(document)
 
@@ -329,7 +325,7 @@ def build_main(markdown: str, figures: Path, out: Path) -> dict:
                     stats['chars'] += len(text)
 
     references(document, markdown)
-    tables_section(document, markdown, MAIN_TABLES, 'ТАБЛИЦЫ')
+    tables_section(document, markdown, MAIN_TABLES, 'ТАБЛИЦЫ', tables)
     captions_and_figures(document, markdown, figures)
 
     document.save(out)
@@ -338,20 +334,59 @@ def build_main(markdown: str, figures: Path, out: Path) -> dict:
 
 def references(document, markdown: str) -> None:
     heading(document, 'СПИСОК ЛИТЕРАТУРЫ', 1)
-    para(document,
-         '*Список приведён в рабочем виде: позиции, выходные данные которых '
-         'подлежат установлению, помечены. Перед подачей список необходимо '
-         'переупорядочить по алфавиту (сначала русскоязычные, затем '
-         'иностранные работы) и заменить упоминания в тексте на номера в '
-         'квадратных скобках согласно правилам журнала.*',
-         italic=True, space_after=8)
     body = markdown.split('## СПИСОК ЛИТЕРАТУРЫ')[1].split('## ТАБЛИЦЫ')[0]
-    for kind, payload in blocks(body):
-        if kind == 'para' and payload.strip():
-            para(document, payload, space_after=0)
+    body = body.replace('\n---', '')
+    for item in re.split(r'\n(?=\d+\.\s)', body.strip()):
+        item = ' '.join(item.split())
+        if item:
+            para(document, item, space_after=3)
 
 
-def tables_section(document, markdown: str, wanted, title: str) -> None:
+def current_model_table(number: int, tables: Path):
+    if number == 11:
+        path = tables / 'table_spatial_autocorrelation.csv'
+        if not path.exists():
+            return None
+        with path.open(encoding='utf-8', newline='') as handle:
+            source = list(csv.DictReader(handle))
+        rows = [['Показатель', 'Публикаций', 'I по значениям', 'q',
+                 'I по остаткам', 'q']]
+        for row in source:
+            rows.append([
+                row['property'], row['n_documents'],
+                f"{float(row['morans_I_values']):+.3f}", row['q_values'],
+                f"{float(row['morans_I_residuals']):+.3f}", row['q_residuals'],
+            ])
+        return rows
+    specs = {
+        4: ('table_zonal_sweep.csv', 'slope_per_degree', 'Наклон на градус'),
+        5: ('table_depth_sweep.csv', 'slope_per_cm', 'Наклон на см'),
+    }
+    if number not in specs:
+        return None
+    filename, slope, slope_label = specs[number]
+    path = tables / filename
+    if not path.exists():
+        return None
+    with path.open(encoding='utf-8', newline='') as handle:
+        source = list(csv.DictReader(handle))
+    rows = [['Показатель', 'Ед.', 'Набл.', 'Публ.', 'Логарифм.', slope_label,
+             '95% ДИ', 'q', 'ICC', 'Значим']]
+    for row in source:
+        rows.append([
+            row['property'], row.get('unit', '—'), row['n_observations'], row['n_documents'],
+            'да' if row['log_transformed'].lower() == 'true' else '—',
+            f"{float(row[slope]):+.4f}",
+            f"[{float(row['ci_low']):+.4f}; {float(row['ci_high']):+.4f}]",
+            '<0.001' if float(row['q_value']) < .001 else f"{float(row['q_value']):.3f}",
+            f"{float(row['icc_document']):.2f}",
+            'да' if row['significant_fdr5'].lower() == 'true' else 'нет',
+        ])
+    return rows
+
+
+def tables_section(document, markdown: str, wanted, title: str,
+                   tables_dir: Path | None = None) -> None:
     document.add_page_break()
     heading(document, title, 1)
     src = markdown.split('## ТАБЛИЦЫ')[1].split('## ПОДПИСИ К РИСУНКАМ')[0]
@@ -378,7 +413,8 @@ def tables_section(document, markdown: str, wanted, title: str) -> None:
         para(document, remap_references(caption), indent=0, space_before=10,
              space_after=4, align=WD_ALIGN_PARAGRAPH.LEFT)
         table_lines = [l for l in body_lines if l.startswith('|')]
-        write_table(document, parse_table(table_lines))
+        rows = current_model_table(old, tables_dir) if tables_dir else None
+        write_table(document, rows or parse_table(table_lines))
         tail = [l for l in body_lines if l and not l.startswith('|')]
         if tail:
             para(document, remap_references(' '.join(' '.join(tail).split())),
@@ -414,7 +450,7 @@ def captions_and_figures(document, markdown: str, figures: Path) -> None:
              align=WD_ALIGN_PARAGRAPH.CENTER)
 
 
-def build_supplement(markdown: str, figures: Path, out: Path) -> None:
+def build_supplement(markdown: str, figures: Path, tables: Path, out: Path) -> None:
     document = Document()
     setup(document)
     para(document, 'ДОПОЛНИТЕЛЬНЫЕ МАТЕРИАЛЫ', bold=True, indent=0,
@@ -429,18 +465,20 @@ def build_supplement(markdown: str, figures: Path, out: Path) -> None:
          'соответствует ссылкам в основном тексте.', space_after=10)
 
     tables_section(document, markdown, [(o, f'S{n}') for o, n in SUPP_TABLES],
-                   'ТАБЛИЦЫ ДОПОЛНИТЕЛЬНЫХ МАТЕРИАЛОВ')
+                   'ТАБЛИЦЫ ДОПОЛНИТЕЛЬНЫХ МАТЕРИАЛОВ', tables)
     src = markdown.split('## ТАБЛИЦЫ')[1].split('## ПОДПИСИ К РИСУНКАМ')[0]
     census = [c for c in re.split(r'\n(?=\*\*Таблица )', src)
               if c.strip().startswith('**Таблица П1')]
     if census:
-        para(document, remap_references(' '.join(census[0].split()).replace(
-            '**Таблица П1** (приложение).', '**Таблица S9.**')),
+        census_caption = ' '.join(census[0].split()).replace(
+            '**Таблица П1** (приложение).', '**Таблица S10.**').rstrip(' -')
+        para(document, remap_references(census_caption),
             indent=0, space_before=10, space_after=8)
 
     document.add_page_break()
     heading(document, 'ПОДПИСИ К РИСУНКАМ ДОПОЛНИТЕЛЬНЫХ МАТЕРИАЛОВ', 1)
-    caps = markdown.split('## ПОДПИСИ К РИСУНКАМ')[1]
+    caps = markdown.split('## ПОДПИСИ К РИСУНКАМ')[1].split(
+        '## ОТКРЫТЫЕ ВОПРОСЫ И НЕОБХОДИМЫЕ ДЕЙСТВИЯ АВТОРОВ')[0]
     chunks = re.split(r'\n(?=\*\*Рис\. )', caps)
     by_number = {}
     for chunk in chunks:
@@ -451,6 +489,8 @@ def build_supplement(markdown: str, figures: Path, out: Path) -> None:
         caption = by_number.get(old, '')
         caption = re.sub(r'\*\*Рис\. \d+\.\*\*', f'**Рис. S{new}.**', caption)
         caption = re.sub(r'\s*\*\(`[^`]+`\)\*', '', caption)
+        caption = re.sub(r'\s*\[ПРОВЕРИТЬ:[^\]]*\]', '', caption)
+        caption = caption.rstrip(' -')
         para(document, remap_references(caption), indent=0, space_after=8,
              align=WD_ALIGN_PARAGRAPH.LEFT)
 
@@ -474,6 +514,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--manuscript', type=Path, required=True)
     parser.add_argument('--figures', type=Path, required=True)
+    parser.add_argument('--tables', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
@@ -481,8 +522,8 @@ def main() -> None:
     markdown = args.manuscript.read_text(encoding='utf-8')
     main_path = args.output / 'Гафуров_Почвоведение_рукопись.docx'
     supp_path = args.output / 'Гафуров_Почвоведение_доп_материалы.docx'
-    stats = build_main(markdown, args.figures, main_path)
-    build_supplement(markdown, args.figures, supp_path)
+    stats = build_main(markdown, args.figures, args.tables, main_path)
+    build_supplement(markdown, args.figures, args.tables, supp_path)
 
     figure_dir = args.output / 'рисунки'
     figure_dir.mkdir(exist_ok=True)

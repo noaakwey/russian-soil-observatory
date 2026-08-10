@@ -86,10 +86,12 @@ QUERY = """
 SELECT o.observation_id, o.document_id, o.artifact_id, o.row_index, o.column_index,
        o.property_id, p.canonical_name AS property, p.category,
        o.value_num_raw, o.value_normalized, o.unit_raw, o.unit_normalized,
+       o.property_header_raw,
        o.normalization_status, u.confidence AS unit_confidence,
        f.header_match_kind, f.value_plausibility,
        o.depth_top_cm, o.depth_bottom_cm, o.row_label_raw, o.horizon_label_raw,
-       y.publication_year, y.year_confidence, d.corpus,
+       COALESCE(y.publication_year, d.publication_year) AS publication_year,
+       y.year_confidence, d.corpus,
        t.latitude, t.longitude, t.tier,
        st.soil_type_normalized, st.confidence AS soil_type_confidence,
        st.method AS soil_type_method, st.wrb_reference_group, st.wrb_confidence
@@ -112,12 +114,26 @@ def load(db: Path) -> pd.DataFrame:
         con.close()
     frame['trusted'] = ((frame.header_match_kind != 'symbol_embedded')
                         & (frame.value_plausibility == 'ok'))
-    # normalization_status is no longer a useful "is the unit proven" signal:
-    # observation_unit_inference now assigns *some* unit to every observation,
-    # including low-confidence fallbacks (property's usual unit, guessed from
-    # article context). Only high/medium confidence is evidence strong enough
-    # for quantitative comparison; 'low' is an assumption, not a printed unit.
-    frame['metric'] = frame.unit_confidence.isin(['high', 'medium'])
+    # Corg in a table header can denote concentration, reserve, or a column
+    # adjacent to a service row. The latter two are not comparable to g/kg and
+    # must not enter distributional or regression analyses. Keep the original
+    # observations and their locators in the database; this is an analytic
+    # eligibility rule, not a destructive correction of source data.
+    carbon = frame.property_id == 'soil_organic_carbon'
+    carbon_context = (frame.property_header_raw.fillna('') + ' ' +
+                      frame.row_label_raw.fillna('')).str.lower()
+    carbon_nonconcentration = carbon_context.str.contains(
+        r'reserv|stock|t/ha|t ha|g\s*c/m|g/m|number of|measurements|samples',
+        regex=True)
+    frame.loc[carbon & carbon_nonconcentration, 'trusted'] = False
+    # 2026-08 rebuild: table_observation is now admission-gated (three-agent
+    # verified provenance, unit required before a row is accepted at all), so
+    # normalization_status is 'exact'/'converted' for every row by
+    # construction and observation_unit_inference (the old post-hoc
+    # confidence tier) is no longer populated. "Proven unit" is therefore no
+    # longer a per-row filter — it is the admission criterion itself.
+    frame = frame[frame.property_id != 'unclassified_table_metric'].copy()
+    frame['metric'] = frame.normalization_status.isin(['exact', 'converted'])
     frame['in_russia'] = (frame.latitude.between(*RUSSIA_BOUNDS['lat'])
                           & frame.longitude.between(*RUSSIA_BOUNDS['lon']))
     frame.loc[~frame.in_russia, ['latitude', 'longitude']] = np.nan
@@ -637,7 +653,8 @@ def soil_type_stratification(frame: pd.DataFrame, tables: Path) -> dict:
     for pid in sorted(candidate_properties):
         base = reliable[(reliable.property_id == pid) & reliable.trusted
                         & reliable.metric
-                        & reliable.wrb_reference_group.isin(eligible_groups)]
+                        & reliable.wrb_reference_group.isin(eligible_groups)
+                        & reliable.value_normalized.notna()]
         if base.empty:
             continue
         per_doc = (base.groupby(['wrb_reference_group', 'document_id'])
@@ -695,11 +712,13 @@ def independent_localities(db: Path, tables: Path) -> dict:
     """
     con = sqlite3.connect(f'file:{db}?mode=ro', uri=True)
     try:
-        points = pd.read_sql("""
+        points = pd.read_sql(f"""
             SELECT DISTINCT ROUND(latitude, 5) AS lat, ROUND(longitude, 5) AS lon
             FROM site
             WHERE latitude IS NOT NULL
               AND spatial_confidence IN ('exact', 'reported')
+              AND latitude BETWEEN {RUSSIA_BOUNDS['lat'][0]} AND {RUSSIA_BOUNDS['lat'][1]}
+              AND longitude BETWEEN {RUSSIA_BOUNDS['lon'][0]} AND {RUSSIA_BOUNDS['lon'][1]}
         """, con)
     finally:
         con.close()
