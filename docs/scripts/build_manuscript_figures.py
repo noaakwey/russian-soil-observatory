@@ -203,7 +203,8 @@ def figure_distribution_shape(shape: pd.DataFrame, output: Path) -> None:
     """
     fig, ax = plt.subplots(figsize=(FULL, 4.0))
     categories = sorted(shape.category.unique())
-    colours = dict(zip(categories, CATEGORY_COLOURS))
+    colours = {c: CATEGORY_COLOURS[i % len(CATEGORY_COLOURS)]
+               for i, c in enumerate(categories)}
     for category in categories:
         part = shape[shape.category == category]
         ax.scatter(part.cv, part.skewness, s=26,

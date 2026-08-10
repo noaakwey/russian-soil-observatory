@@ -287,14 +287,22 @@ def build_map(source: sqlite3.Connection) -> dict:
                 'evidence': (evidence or '')[:420],
             })
 
+    # Per-point measurements are read straight off `table_observation` via its
+    # `context_site_id` link to `site` — NOT via the legacy `measurement`
+    # table's `operational_measurement_id` back-reference, which a live audit
+    # showed ties only 516 of the current 94,996 observations (the old
+    # promotion step was never rerun against the rebuilt observation layer).
+    # `context_site_id` is the link the rebuilt pipeline actually populates:
+    # 15,124 observations reference it, 12,792 of them at sites with
+    # coordinates.
     for latitude, longitude, canonical, value, unit, qa, doi in source.execute("""
-        SELECT s.latitude, s.longitude, p.canonical_name, m.value_num,
-               COALESCE(m.unit_normalized, m.unit_raw), m.qa_status, d.doi
-        FROM measurement m
-        JOIN site s ON s.site_id = m.site_id
-        JOIN property_definition p ON p.property_id = m.property_id
-        LEFT JOIN source_artifact a ON a.artifact_id = m.evidence_artifact_id
-        LEFT JOIN document d ON d.document_id = a.document_id
+        SELECT s.latitude, s.longitude, p.canonical_name,
+               COALESCE(o.value_normalized, o.value_num_raw),
+               COALESCE(o.unit_normalized, o.unit_raw), o.qa_status, d.doi
+        FROM table_observation o
+        JOIN site s ON s.site_id = o.context_site_id
+        JOIN property_definition p ON p.property_id = o.property_id
+        JOIN document d ON d.document_id = o.document_id
         WHERE s.latitude IS NOT NULL
     """):
         key = (round(latitude, 5), round(longitude, 5))
@@ -304,16 +312,13 @@ def build_map(source: sqlite3.Connection) -> dict:
                 'qa': qa, 'doi': doi,
             })
 
-    # Soil type isn't printed per measurement; it's read off the same table
-    # row (table_observation) a strict measurement was promoted from, via the
-    # operational_measurement_id back-reference materialize_full_table_
-    # observations.py already records.
+    # Soil type is read off the same `context_site_id` link, for the same
+    # reason (see above).
     for latitude, longitude, soil_type, confidence, wrb_group, wrb_confidence in source.execute("""
         SELECT s.latitude, s.longitude, st.soil_type_normalized, st.confidence,
                st.wrb_reference_group, st.wrb_confidence
-        FROM measurement m
-        JOIN site s ON s.site_id = m.site_id
-        JOIN table_observation o ON o.operational_measurement_id = m.measurement_id
+        FROM table_observation o
+        JOIN site s ON s.site_id = o.context_site_id
         JOIN observation_soil_type st ON st.observation_id = o.observation_id
         WHERE s.latitude IS NOT NULL AND st.soil_type_normalized IS NOT NULL
     """):
