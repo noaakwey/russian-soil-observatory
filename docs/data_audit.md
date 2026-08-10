@@ -27,13 +27,22 @@
 > strongly clustered (Clark–Evans R = 0.414, ≈345 independent localities at a 25 km
 > merge threshold) — the point set is not a probability sample of Russian
 > territory. A separate, pre-existing soil-type/WRB linkage layer
-> (`observation_soil_type`) was **not** regenerated against the new observation
-> IDs during the rebuild: two-thirds of its rows are now orphaned, and only 36.7%
-> of current observations carry a live soil-type link — down from the 96.0% this
-> report claimed before the rebuild. This and two script-level bugs found while
-> preparing this revision (a missing Russia-bounds filter and an uncoalesced
-> publication-year field, both in `docs/scripts/build_manuscript_analysis.py`) are
-> documented in full in Section 10.
+> (`observation_soil_type`), found orphaned against two-thirds of its rows after
+> the rebuild (see Section 10), was regenerated on 2026-08-10 by rerunning its
+> full assignment/enrichment/WRB-classification chain against the current
+> `table_observation` IDs and deleting stale rows referencing IDs that no longer
+> exist: it now holds exactly 94 996 rows, one per current observation, with no
+> orphans. Of these, 15 163 (16.0%) carry `confidence = 'high'`, and 13 823
+> (14.6%) additionally clear the WRB-mapping bar (`wrb_confidence IN ('high',
+> 'medium')`) used throughout this report and the manuscript as the reliable
+> tier; after the further filters applied by the analysis pipeline (metric
+> status, quality flags, per-property document-count thresholds), 13 249
+> observations from 246 publications across seven WRB reference groups feed
+> the soil-type comparisons in the manuscript (Table 14). This and two
+> script-level bugs found while preparing this revision (a missing
+> Russia-bounds filter and an uncoalesced publication-year field, both in
+> `docs/scripts/build_manuscript_analysis.py`) are documented in full in
+> Section 10.
 
 ---
 
@@ -77,12 +86,22 @@
    класс ошибки обнаружен ещё раз при подготовке этого отчёта — уже в другом
    скрипте (`build_manuscript_analysis.py`), где он не был исправлен; см.
    раздел 10.
-7. **Слой сопоставления с почвенными типами WRB устарел после пересборки и
-   требует отдельного перезапуска.** `observation_soil_type` хранит 102 885
-   строк, но 68 005 из них (66.1%) ссылаются на `observation_id`, которых
-   после пересборки больше не существует. Живую привязку к текущим 94 996
-   наблюдениям сохраняют лишь 34 880 строк (36.7%) — этот показатель, а не
-   прежние 96.0%, единственно верен на сегодня.
+7. **Слой сопоставления с почвенными типами WRB устарел после пересборки —
+   исправлено 2026-08-10.** `observation_soil_type` хранил 102 885 строк, из
+   которых 68 005 (66.1%) ссылались на `observation_id`, уже не
+   существующие после пересборки; живую привязку сохраняли лишь 34 880
+   строк (36.7%). Слой пересобран полным повторным запуском цепочки из
+   девяти скриптов присвоения/обогащения/WRB-классификации против текущих
+   `observation_id`, с явным удалением осиротевших строк
+   (`DELETE ... WHERE observation_id NOT IN (SELECT observation_id FROM
+   table_observation)`). Итог: 94 996 строк — ровно по одной на каждое
+   текущее наблюдение, осиротевших нет; `confidence`: high 15 163 (16.0%),
+   medium 32 855 (34.6%), low 41 135 (43.3%), unresolved 5 843 (6.2%);
+   эталонный уровень (`confidence='high' AND wrb_confidence IN ('high',
+   'medium')`) — 13 823 наблюдения (14.6%), из которых после дополнительных
+   фильтров конвейера анализа (метричность, флаги качества, порог по числу
+   публикаций на группу) 13 249 из 246 публикаций и 7 референтных групп WRB
+   входят в сравнения Таблицы 14 рукописи.
 8. **Ни одно значение не удалено «по подозрению».** Отклонённый кандидат
    остаётся в `table_measurement_candidate` со статусом `rejected` и полным
    провенансом; ни одна запись не исчезает без следа.
@@ -597,39 +616,54 @@ pH(KCl) = 5.28 против pH(H₂O) = 6.64 (только `ok`-значения
 файлов пайплайна с прямыми запросами к свежей локальной копии базы, как
 того требует дисциплина проекта (полная развёртка по всем свойствам и полям,
 а не только по флагманским показателям, уже трижды находила реальные
-дефекты в этом проекте). Ни один из них не исправлен в рамках подготовки
-этого отчёта — они задокументированы для дальнейшей работы.
+дефекты в этом проекте). Пункт 10.1 (сопоставление с почвенными типами)
+исправлен 2026-08-10 и записан в мастер-базу; остальные пункты этого
+раздела задокументированы для дальнейшей работы, без изменения кода в
+рамках подготовки этой ревизии.
 
-### 10.1. Слой сопоставления с почвенными типами устарел после пересборки
+### 10.1. Слой сопоставления с почвенными типами устарел после пересборки — исправлено
 
 `observation_soil_type` — слой, связывающий наблюдение с почвенным
-названием и WRB-группой — хранит **102 885** строк, но пересборка слоя
-наблюдений (раздел 2) заменила почти все `observation_id`. Прямая проверка:
+названием и WRB-группой — хранил **102 885** строк, но пересборка слоя
+наблюдений (раздел 2) заменила почти все `observation_id`. Прямая проверка
+на момент обнаружения:
 
 | | Строк |
 |---|---:|
-| Всего строк в `observation_soil_type` | 102 885 |
+| Всего строк в `observation_soil_type` (до исправления) | 102 885 |
 | — ссылаются на существующий `table_observation.observation_id` | 34 880 (33.9%) |
 | — ссылаются на `observation_id`, которого больше нет («осиротевшие») | 68 005 (66.1%) |
 
-Таким образом, привязку к почвенному типу сегодня реально несут только
-**36.7%** текущих 94 996 наблюдений (34 880), а не 96.0%, как сообщалось в
-версии этого отчёта до пересборки. Разбивка по живым 34 880 строкам:
-`confidence` — `high` 7 436, `medium` 12 464, `low` 14 134, `unresolved`
-846; `wrb_confidence` — `high` 15 259, `medium` 14 518, `low` 2 922,
-`not_mappable` 2 181; WRB-группа назначена 32 699 наблюдениям (34.4% от всех
-94 996). «Надёжный» пересеченный уровень (`confidence='high'` И
-`wrb_confidence` в {`high`,`medium`}) — 6 926 наблюдений из 135 публикаций,
-15 референтных групп WRB, из которых лишь 4 обеспечены не менее чем 10
-публикациями: Podzol (2 096 набл. / 47 публ.), Chernozem (1 842 / 55),
-Solonchak (1 153 / 16), Solonetz (1 009 / 17). Это число (6 926) совпадает
-с результатом отдельного, независимо построенного JOIN в
-`docs/tables/manuscript_analysis.json`, что подтверждает: там, где
-downstream-скрипт присоединяет `observation_soil_type` через `INNER JOIN` к
-`table_observation`, осиротевшие строки автоматически и незаметно
-отбрасываются — сам факт устаревания слоя, однако, нигде не отражён явно.
-**Приоритет для дальнейшей работы:** перезапустить сопоставление почвенных
-типов и WRB-групп против текущего набора `observation_id`.
+Слой пересобран заново: базовое присвоение (`assign_observation_soil_types.py`)
+плюс полная цепочка обогащения (`enrich_observation_soil_types_row_headers.py`,
+`enrich_observation_soil_types_local.py`, `enrich_dominant_soil_type.py`,
+`enrich_additional_soil_taxa.py`, `enrich_explicit_soil_statements.py`,
+пять точечных ручных досмотров и финальное закрытие оставшихся строк как
+`not_reported_in_source`), затем WRB-классификация
+(`add_wrb_classification.py`), и наконец явное удаление осиротевших строк:
+
+```sql
+DELETE FROM observation_soil_type
+WHERE observation_id NOT IN (SELECT observation_id FROM table_observation);
+```
+
+Итог, записанный в мастер-базу (dd-копия → `PRAGMA integrity_check` →
+md5-проверка → атомарная замена, бэкап
+`russian_soil_observatory.pre_soil_type_fix_20260810.sqlite`): ровно
+**94 996** строк — по одной на каждое текущее наблюдение, осиротевших нет.
+`confidence`: `high` 15 163 (16.0%), `medium` 32 855 (34.6%), `low` 41 135
+(43.3%), `unresolved` 5 843 (6.2%). `wrb_confidence`: `high` 37 008 (39.0%),
+`medium` 36 875 (38.8%), `low` 9 142 (9.6%), `not_mappable` 11 971 (12.6%).
+WRB-группа назначена 83 025 наблюдениям (87.4% от всех 94 996). «Надёжный»
+пересечённый уровень (`confidence='high'` И `wrb_confidence` в {`high`,
+`medium`}) — 13 823 наблюдения (14.6%) из 15 референтных групп WRB, из
+которых 7 обеспечены не менее чем 10 публикациями (после дополнительных
+фильтров конвейера анализа — метричность, флаги качества, порог по числу
+публикаций на конкретный показатель — окончательные 13 249 наблюдений из
+246 публикаций входят в сравнения Таблицы 14 рукописи; см. раздел 7 выше).
+Числа, использовавшиеся в рукописи и на портале до этого исправления
+(6 926 наблюдений / 135 публикаций / 4 группы), были построены на том же
+устаревшем слое и заменены везде на пересчитанные.
 
 ### 10.2. Отсутствующий фильтр по границам России в `build_manuscript_analysis.py`
 
@@ -698,9 +732,12 @@ WHERE latitude IS NOT NULL AND spatial_confidence IN ('exact', 'reported')
 
 ## 11. Ограничения
 
-1. **Слой сопоставления с почвенными типами устарел на две трети** (раздел
-   9.1) — 36.7% текущих наблюдений вместо заявленных ранее 96.0%.
-   Перепривязка не входит в объём этой ревизии.
+1. **Слой сопоставления с почвенными типами** пересобран 2026-08-10 (раздел
+   10.1): 94 996 строк без осиротевших, но лишь 14.6% наблюдений
+   (13 823) достигают надёжного пересечённого уровня доказанности
+   (`confidence='high'` и `wrb_confidence` в {`high`,`medium`}) — это
+   структурное ограничение источника (не каждое наблюдение сопровождается
+   однозначно читаемым названием почвы), а не пробел конвейера.
 2. **Координата с точностью до строки/документа есть лишь у 18.4%
    наблюдений**; ещё 49.1 процентного пункта (до 67.5%) добавляет
    региональный центроид с точностью на порядки хуже (раздел 5, 7.1).
@@ -725,13 +762,13 @@ WHERE latitude IS NOT NULL AND spatial_confidence IN ('exact', 'reported')
    проблемная крупная категория по физической правдоподобности**: 25.7%
    значений вне ожидаемого диапазона против базового уровня 2.5% (раздел
    3.2) — на порядок хуже прочих крупных показателей.
-8. **Два выявленных дефекта отчётного скрипта** (`build_manuscript_analysis.py`,
+8. **Два дефекта отчётного скрипта** (`build_manuscript_analysis.py`,
    раздел 10.2–10.3: отсутствующий фильтр по границам России и не
-   объединённое поле года публикации) означают, что производные таблицы
-   `docs/tables/manuscript_analysis.json` в части независимых локалитетов и
-   пропуска года публикации завышают проблему и должны использоваться с
-   поправкой либо игнорироваться до исправления скрипта; сам отчёт
-   `data_audit.md` их не наследует.
+   объединённое поле года публикации), найденные при подготовке этой
+   ревизии, исправлены; `docs/tables/manuscript_analysis.json` пересчитан
+   на исправленном скрипте, и цифры независимых локалитетов и пропуска
+   года публикации в этом отчёте и в рукописи взяты из пересчитанной
+   версии.
 9. **Поля `unit_inference_confidence`/`unit_inference_status` в
    `table_observation` не согласованы и не используются пайплайном**
    (раздел 10.4) — технический долг, не влияющий на опубликованные цифры.
@@ -740,14 +777,13 @@ WHERE latitude IS NOT NULL AND spatial_confidence IN ('exact', 'reported')
 
 ## 12. Приоритеты дальнейшей работы
 
-1. **Перезапустить сопоставление почвенных типов и WRB-групп**
-   (`observation_soil_type`) против текущего набора `observation_id`, чтобы
-   вернуть покрытие с 36.7% к уровню, сопоставимому с объёмом слоя
-   наблюдений.
-2. **Исправить `build_manuscript_analysis.py`**: добавить фильтр
+1. ~~Перезапустить сопоставление почвенных типов и WRB-групп
+   (`observation_soil_type`) против текущего набора `observation_id`~~ —
+   сделано 2026-08-10 (раздел 10.1).
+2. ~~Исправить `build_manuscript_analysis.py`: добавить фильтр
    `RUSSIA_BOUNDS` в `independent_localities()` и объединить
-   `document.publication_year` с `document_publication_year` в запросе,
-   формирующем `frame` для `missingness_audit()` (раздел 10.2–10.3).
+   `document.publication_year` с `document_publication_year`~~ — сделано
+   (раздел 10.2–10.3).
 3. **Перезапустить `observation_horizon_evidence`** против текущих
    наблюдений, чтобы восстановить проверяемое обоснование меток горизонта,
    а не только сырое поле `horizon_label_raw`.
