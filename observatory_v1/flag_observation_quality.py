@@ -126,6 +126,17 @@ PERCENT_PROPERTIES = {
     'phosphorus_pentoxide', 'potassium_oxide',
 }
 
+# Generic table metrics have no semantic property-specific range. Once the
+# printed unit is proven, a few units still have useful physical ceilings.
+UNCLASSIFIED_UNIT_RANGE: dict[str, tuple[float | None, float | None, str]] = {
+    'cm': (0.0, 2000.0, 'generic length 0–2 000 cm'),
+    'mm': (0.0, 2000.0, 'generic length 0–2 000 mm'),
+    '%': (0.0, 100.0, 'percentage 0–100'),
+    'mg/kg': (0.0, 300000.0, 'generic concentration 0–300 000 mg/kg'),
+    '°c': (-100.0, 100.0, 'temperature −100–100 °C'),
+    'в°c': (-100.0, 100.0, 'temperature −100–100 °C'),
+}
+
 # Categories whose values are amounts of a substance and cannot be negative.
 CONTENT_CATEGORIES = {
     'organic', 'macronutrient', 'exchange', 'particle_size', 'microelement',
@@ -134,6 +145,13 @@ CONTENT_CATEGORIES = {
 }
 # Redox potential is genuinely negative in reduced soils.
 SIGNED_PROPERTIES = {'redox_potential', 'soil_temperature'}
+
+
+def normalized_unit_key(unit: str | None) -> str:
+    """Normalize common Unicode/OCR variants without guessing missing units."""
+    value = (unit or '').strip().lower()
+    value = value.replace('º', '°').replace('в°', '°')
+    return re.sub(r'\s+', '', value)
 
 
 def header_kind(property_id: str, header_raw: str) -> str:
@@ -159,6 +177,13 @@ def plausibility(property_id: str, category: str, value: float | None,
         # pH is dimensionless, so its range applies to the raw cell directly;
         # densities need a proven unit before a bound means anything.
         if property_id.startswith('ph_') or status in ('exact', 'converted'):
+            if (low is not None and value < low) or (high is not None and value > high):
+                return 'out_of_physical_range', rule
+
+    if property_id == 'unclassified_table_metric':
+        bounds = UNCLASSIFIED_UNIT_RANGE.get(normalized_unit_key(unit))
+        if bounds:
+            low, high, rule = bounds
             if (low is not None and value < low) or (high is not None and value > high):
                 return 'out_of_physical_range', rule
 

@@ -18,7 +18,7 @@ potassium_ion,potassium ion K+,ион калия K+ (метод не указа�
 zinc,zinc,цинк,microelement,микроэлементы,1223,110,100.0,94.7,99.6,14.9,78.7,mg/kg,20.0,1.0,76.0,919
 magnesium,magnesium,магний,exchange,обменный комплекс,1115,124,100.0,51.3,83.2,19.5,71.9,meq/100 g,0.85,0.85,5.2,421
 copper,copper,медь,microelement,микроэлементы,1071,103,100.0,97.1,98.3,20.1,74.0,mg/kg,10.6,1.0,45.98,830
-horizon_thickness,soil horizon thickness,,radioactivity,,1020,84,100.0,100.0,100.0,4.8,86.0,cm,12.0,0.5,42.0,960
+horizon_thickness,soil horizon thickness,,soil_property,,1020,84,100.0,100.0,100.0,4.8,86.0,cm,12.0,0.5,42.0,960
 potassium_oxide_k2o,potassium oxide K2O,оксид калия (K₂O),geochemical,геохимические свойства,1014,99,100.0,100.0,87.6,45.4,93.7,%,4.0,1.28,25.6,878
 base_saturation,base saturation,степень насыщенности основаниями,exchange,обменный комплекс,932,29,100.0,100.0,99.9,48.0,79.8,%,58.8,23.0,83.0,506
 silt,silt,пылеватая фракция,particle_size,гранулометрический состав,928,87,100.0,100.0,95.3,36.5,32.2,%,25.0,13.0,37.52,557
@@ -32,7 +32,7 @@ lead,lead,свинец,contaminant,потенциальные загрязнит
 chromium,chromium,хром,microelement,микроэлементы,675,52,100.0,99.9,90.8,10.7,44.9,mg/kg,0.77,0.0,26.0,594
 cation_exchange_capacity,cation exchange capacity,ёмкость катионного обмена,exchange,обменный комплекс,599,57,100.0,100.0,99.7,24.9,78.5,cmolc/kg,12.9,12.0,18.0,596
 bicarbonate_ion,bicarbonate ion HCO3-,гидрокарбонат-ион HCO3-,soil_solution,почвенный раствор,591,38,100.0,100.0,96.1,60.4,88.8,g/kg,2.31,0.63,4.0,58
-silicon_dioxide_sio2,silicon dioxide SiO2,,chemical,,582,41,100.0,100.0,100.0,51.5,90.7,%,6.72,0.35,60.8,582
+silicon_dioxide,silicon dioxide,диоксид кремния (SiO₂),geochemical,геохимические свойства,585,42,100.0,100.0,100.0,51.3,90.8,%,6.5,0.32,60.8,585
 aluminum_oxide_al2o3,aluminum oxide Al2O3,оксид алюминия (Al₂O₃),geochemical,геохимические свойства,572,49,100.0,100.0,100.0,71.5,95.5,%,11.39,0.55,16.54,572
 carbonate_equivalent,carbonate equivalent (CaCO3),карбонатный эквивалент (CaCO₃),organic,органическое вещество и углерод,551,46,100.0,100.0,97.5,46.1,70.6,%,2.82,0.58,9.26,375
 cadmium,cadmium,кадмий,contaminant,потенциальные загрязнители,514,52,100.0,98.4,99.0,8.2,78.4,mg/kg,0.6,0.14,1.3,501
@@ -115,7 +115,7 @@ available_phosphorus,available phosphorus,подвижный фосфор,macron
 sodium_oxide_na2o,sodium oxide Na2O,оксид натрия (Na₂O),geochemical,геохимические свойства,62,14,100.0,100.0,100.0,54.8,88.7,%,1.29,0.74,1.62,62
 aggregate_stability_index,aggregate stability index,,physical,,60,1,100.0,100.0,100.0,0.0,100.0,1,1.7,1.2,2.4,60
 exchangeable_magnesium,exchangeable magnesium,обменный магний,exchange,обменный комплекс,60,2,100.0,100.0,100.0,0.0,100.0,meq/100 g,5.0,4.2,6.7,60
-air_capacity_field_capacity,air capacity at field capacity,,radioactivity,,56,2,100.0,100.0,100.0,71.4,100.0,%,18.0,12.5,25.0,56
+air_capacity_field_capacity,air capacity at field capacity,,soil_property,,56,2,100.0,100.0,100.0,71.4,100.0,%,18.0,12.5,25.0,56
 rcsi280285_cn,Inorganic carbon Cн [rcsi280285],,soil,,54,1,100.0,100.0,100.0,98.1,0.0,%,3.2,0.6,6.1,54
 rcsi280285_corg,Organic carbon Corg [rcsi280285],,soil,,54,1,100.0,100.0,100.0,98.1,0.0,%,3.8,1.1,11.0,54
 rcsi280285_ph_h2o_c,pH H2O-c [rcsi280285],,soil,,54,1,100.0,100.0,100.0,98.1,0.0,pH,7.62,7.0,7.9,54
@@ -137,7 +137,7 @@ sodium_adsorption_ratio,sodium adsorption ratio,коэффициент адсо�
 manual_9323603402_clay,Clay [9323603402],,soil_physicochemical,,43,1,100.0,100.0,100.0,100.0,0.0,%,14.3,13.2,17.3,43
 manual_9323603402_sand,Sand [9323603402],,soil_physicochemical,,43,1,100.0,100.0,100.0,100.0,0.0,%,25.0,15.6,33.5,43
 manual_9323603402_silt,Silt [9323603402],,soil_physicochemical,,43,1,100.0,100.0,100.0,100.0,0.0,%,57.8,51.9,68.1,43
-ph_salt_extract,pH in salt extract,,radioactivity,,43,2,100.0,100.0,100.0,100.0,18.6,pH,9.72,8.18,10.16,43
+ph_salt_extract,pH in salt extract,,soil_property,,43,2,100.0,100.0,100.0,100.0,18.6,pH,9.72,8.18,10.16,43
 corg,Organic carbon rcsi405804,,soil_measurement,,42,3,100.0,100.0,100.0,38.1,0.0,%,1.65,0.9,2.67,42
 aggregate_stability,aggregate stability,агрегатная устойчивость,physical,физические свойства,41,2,100.0,100.0,100.0,0.0,100.0,%,23.67,10.67,32.02,41
 ph,pH H2O rcsi405803,,soil_measurement,,40,3,100.0,100.0,100.0,97.5,0.0,pH,7.2,6.8,7.6,40
@@ -1834,7 +1834,6 @@ rcsi308803_ph_h2o,pH H2O [rcsi308803],,soil,,3,1,100.0,100.0,100.0,0.0,0.0,pH,7.
 rso_9310100029_cia,CIA,,soil_geochemistry,,3,1,100.0,100.0,100.0,100.0,100.0,index,78.0,76.0,78.0,3
 rso_9310100029_kaolinite,kaolinite,,soil_mineralogy,,3,1,100.0,100.0,100.0,100.0,100.0,%,34.0,27.0,34.0,3
 rso_9310100029_quartz_chlorite,quartz + chlorite,,soil_mineralogy,,3,1,100.0,100.0,100.0,100.0,100.0,%,8.0,6.0,8.0,3
-silicon_dioxide,silicon dioxide,диоксид кремния (SiO₂),geochemical,геохимические свойства,3,1,100.0,100.0,100.0,0.0,100.0,%,0.12,0.12,0.12,3
 silt_9311120064,silt [9311120064],,soil_chemistry,,3,1,100.0,100.0,100.0,0.0,100.0,%,22.0,12.0,22.0,3
 soil_metal_rb,soil metal Rb,,soil_chemical,,3,1,100.0,100.0,100.0,0.0,0.0,mg/kg,69.0,63.0,69.0,3
 soil_metal_ti,soil metal Ti,,soil_chemical,,3,1,100.0,100.0,100.0,0.0,0.0,%,0.3,0.23,0.3,3
