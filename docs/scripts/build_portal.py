@@ -31,7 +31,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from property_dictionary_ru import CATEGORY_EN, CATEGORY_RU
+from property_dictionary_ru import CATEGORY_EN, CATEGORY_RU, merged_category
 
 EARTH_RADIUS_KM = 6371.0
 RUSSIA_AREA_KM2 = 17_098_246
@@ -196,6 +196,7 @@ def build_browser_database(source: sqlite3.Connection, target_path: Path,
          value_normalized, unit_normalized, status, header_kind, plausibility,
          spatial, row_label, horizon, depth_top, depth_bottom,
          latitude, longitude, tier, page_start, table_label, unit_confidence) = row
+        category = merged_category(category)
         localized = names.get(property_id, {})
         trusted = int(header_kind != 'symbol_embedded' and plausibility == 'ok')
         # 2026-08 rebuild: table_observation is admission-gated (three-agent
@@ -207,7 +208,7 @@ def build_browser_database(source: sqlite3.Connection, target_path: Path,
         rows.append((
             observation_id, document_id, corpus, doi, year, year_confidence,
             property_id, canonical, localized.get('ru'), category,
-            localized.get('category_ru') or CATEGORY_RU.get(category, category), header, value_raw, unit_raw,
+            CATEGORY_RU.get(category, category), header, value_raw, unit_raw,
             value_normalized, unit_normalized, status, header_kind, plausibility,
             spatial, strip_host_paths(row_label), horizon, depth_top, depth_bottom,
             latitude, longitude, tier, trusted, metric, page_start,
@@ -364,6 +365,21 @@ def build_map(source: sqlite3.Connection) -> dict:
 # Aggregates
 # --------------------------------------------------------------------------
 
+def _merge_category_rows(raw_rows):
+    """Fold `(category, distinct_property_count, observation_count)` rows
+    grouped by the *raw* category into CATEGORY_MERGE's canonical slugs.
+    Summing COUNT(DISTINCT property_id) across the merged rows is safe: a
+    property_id has exactly one category in property_definition, so no
+    property can appear under two of the raw categories being combined."""
+    merged: dict[str, dict[str, int]] = {}
+    for category, props, count in raw_rows:
+        canonical = merged_category(category)
+        bucket = merged.setdefault(canonical, {'properties': 0, 'observations': 0})
+        bucket['properties'] += props
+        bucket['observations'] += count
+    return merged
+
+
 def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]]) -> dict:
     def rows(sql: str) -> list[tuple]:
         return source.execute(sql).fetchall()
@@ -410,6 +426,7 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
         WHERE o.property_id <> 'unclassified_table_metric'
         GROUP BY 1,2,3 ORDER BY 4 DESC
     """):
+        category = merged_category(category)
         localized = names.get(pid, {})
         entry = census[pid]
         values = sorted(entry['values'])
@@ -422,7 +439,7 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
             # category slugs CATEGORY_RU now covers, so fall back to that
             # rather than showing the raw snake_case category to a reader.
             'category': category,
-            'category_ru': localized.get('category_ru') or CATEGORY_RU.get(category, category),
+            'category_ru': CATEGORY_RU.get(category, category),
             'observations': count, 'normalized': normalized,
             'header_trusted': clean, 'value_plausible': plausible,
             'documents': docs,
@@ -539,17 +556,17 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
         'artifacts': rows("SELECT COUNT(*) FROM source_artifact")[0][0],
         'ocr_tables': rows("SELECT COUNT(DISTINCT artifact_id) FROM table_cell")[0][0],
         'properties': properties,
-        'categories': [
+        'categories': sorted((
             {'category': category,
              'category_ru': CATEGORY_RU.get(category, category),
              'category_en': CATEGORY_EN.get(category, category),
-             'observations': count, 'properties': props}
-            for category, props, count in rows("""
+             'observations': merged['observations'], 'properties': merged['properties']}
+            for category, merged in _merge_category_rows(rows("""
                 SELECT p.category, COUNT(DISTINCT p.property_id), COUNT(*)
                 FROM table_observation o JOIN property_definition p ON p.property_id=o.property_id
                 WHERE o.property_id <> 'unclassified_table_metric'
-                GROUP BY 1 ORDER BY 3 DESC""")
-        ],
+                GROUP BY 1""")).items()),
+            key=lambda row: -row['observations']),
         'per_year': per_year,
         'documents_per_year': documents_per_year,
         'year_confidence': dict(rows(
@@ -610,6 +627,7 @@ def export_csv(source: sqlite3.Connection, path: Path, names: dict[str, dict[str
             values = [strip_host_paths(cell) for cell in row]
             property_id = values.pop(8)
             values.insert(8, names.get(property_id, {}).get('ru'))
+            values[9] = merged_category(values[9])
             writer.writerow(values)
             written += 1
     return written
@@ -725,6 +743,7 @@ def export_supplemental_layer(
             values = list(row)
             property_id = values[6]
             values.insert(8, names.get(property_id, {}).get('ru'))
+            values[9] = merged_category(values[9])
             values.append('supplemental_semantic_not_core')
             writer.writerow([strip_host_paths(value) for value in values])
 
@@ -737,11 +756,11 @@ def export_supplemental_layer(
         ).fetchone()
         property_rows = [row for row in rows if row[6] == property_id]
         documents = sorted({row[2] for row in property_rows})
+        category = merged_category(definition[2])
         definitions.append([
-            *definition,
+            *definition[:2], category, definition[3],
             names.get(property_id, {}).get('ru'),
-            names.get(property_id, {}).get('category_ru')
-                or CATEGORY_RU.get(definition[2], definition[2]),
+            CATEGORY_RU.get(category, category),
             len(property_rows), len(documents), ';'.join(documents),
             'explicit_header_mapping',
         ])
