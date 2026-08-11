@@ -207,7 +207,7 @@ def build_browser_database(source: sqlite3.Connection, target_path: Path,
         rows.append((
             observation_id, document_id, corpus, doi, year, year_confidence,
             property_id, canonical, localized.get('ru'), category,
-            localized.get('category_ru'), header, value_raw, unit_raw,
+            localized.get('category_ru') or CATEGORY_RU.get(category, category), header, value_raw, unit_raw,
             value_normalized, unit_normalized, status, header_kind, plausibility,
             spatial, strip_host_paths(row_label), horizon, depth_top, depth_bottom,
             latitude, longitude, tier, trusted, metric, page_start,
@@ -268,8 +268,19 @@ def build_browser_database(source: sqlite3.Connection, target_path: Path,
 # --------------------------------------------------------------------------
 
 def build_map(source: sqlite3.Connection) -> dict:
+    """The interactive map, restricted to sites inside Russia's borders.
+
+    217 of the 1431 spatially-confident sites (2026-08-11) sit outside
+    RUSSIA_BOUNDS -- foreign case-study/comparison sites an author cites
+    within an otherwise Russian study (see the manuscript's limitations).
+    The portal's own spatial statistics (Clark-Evans, nearest neighbour,
+    grid occupancy) already exclude them; the map now does too, so a reader
+    of "Russian Soil Observatory" does not open the map to see pins in
+    Chile or Vietnam with no explanation. Excluded sites remain fully
+    queryable via the SQL tab and the CSV/SQLite exports.
+    """
     sites: dict[tuple[float, float], dict] = {}
-    for site_id, latitude, longitude, region, corpus, doi, year, confidence, evidence in source.execute("""
+    for site_id, latitude, longitude, region, corpus, doi, year, confidence, evidence in source.execute(f"""
         SELECT s.site_id, s.latitude, s.longitude, s.region,
                MIN(d.corpus), MIN(d.doi), MIN(COALESCE(y.publication_year, d.publication_year)), MIN(y.year_confidence),
                MIN(se.evidence_text)
@@ -279,6 +290,8 @@ def build_map(source: sqlite3.Connection) -> dict:
         LEFT JOIN document d ON d.document_id = a.document_id
         LEFT JOIN document_publication_year y ON y.document_id = a.document_id
         WHERE s.latitude IS NOT NULL AND s.spatial_confidence IN ('exact','reported')
+          AND s.latitude BETWEEN {RUSSIA_BOUNDS['lat'][0]} AND {RUSSIA_BOUNDS['lat'][1]}
+          AND s.longitude BETWEEN {RUSSIA_BOUNDS['lon'][0]} AND {RUSSIA_BOUNDS['lon'][1]}
         GROUP BY s.site_id
     """):
         key = (round(latitude, 5), round(longitude, 5))
@@ -403,7 +416,13 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
         properties.append({
             'property_id': pid, 'property': canonical,
             'property_ru': localized.get('ru'),
-            'category': category, 'category_ru': localized.get('category_ru'),
+            # The per-property CSV only covers the curated canonical
+            # vocabulary; ~1990 source-specific properties (2026-08-11) have
+            # no row there at all. Their category is still one of the ~90
+            # category slugs CATEGORY_RU now covers, so fall back to that
+            # rather than showing the raw snake_case category to a reader.
+            'category': category,
+            'category_ru': localized.get('category_ru') or CATEGORY_RU.get(category, category),
             'observations': count, 'normalized': normalized,
             'header_trusted': clean, 'value_plausible': plausible,
             'documents': docs,
@@ -721,7 +740,8 @@ def export_supplemental_layer(
         definitions.append([
             *definition,
             names.get(property_id, {}).get('ru'),
-            names.get(property_id, {}).get('category_ru'),
+            names.get(property_id, {}).get('category_ru')
+                or CATEGORY_RU.get(definition[2], definition[2]),
             len(property_rows), len(documents), ';'.join(documents),
             'explicit_header_mapping',
         ])
