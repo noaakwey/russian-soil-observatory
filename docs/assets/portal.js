@@ -29,9 +29,10 @@ const STRINGS = {
     'map.layer': 'Слой', 'map.legend.verified': 'с проверенными значениями',
     'map.legend.plain': 'только координата',
     'map.hint': 'Нажмите на точку, чтобы увидеть источник, фрагмент текста с координатой и привязанные измерения.',
-    'props.lede': 'Полный спектр распознанных свойств. Каждое наблюдение попадает в базу только после того, как его единица доказана (напечатана в таблице или получена обратимым преобразованием) — колонка «Единица доказана» поэтому близка к 100% для всех показателей: это критерий допуска в слой, а не остаточная неопределённость внутри него.',
+    'props.lede': 'Полный спектр распознанных свойств. Каждое наблюдение попадает в базу только после того, как его единица доказана (напечатана в таблице или получена обратимым преобразованием) — колонка «Единица доказана» поэтому близка к 100% для всех показателей: это критерий допуска в слой, а не остаточная неопределённость внутри него. По умолчанию скрыты ~1940 свойств, специфичных для одной публикации (обычно с исходным заголовком таблицы вместо переведённого названия) — их можно показать флажком ниже.',
     'props.sort': 'Сортировка:', 'props.sort.n': 'по числу наблюдений',
     'props.sort.norm': 'по доказанным единицам', 'props.sort.docs': 'по числу публикаций',
+    'props.showRare': 'показать редкие (из одной публикации)',
     'props.th.property': 'Свойство', 'props.th.category': 'Группа', 'props.th.n': 'Наблюдений',
     'props.th.docs': 'Публикаций', 'props.th.unit': 'Единица доказана',
     'props.th.header': 'Заголовок надёжен', 'props.th.value': 'Значение правдоподобно',
@@ -126,9 +127,10 @@ const STRINGS = {
     'map.layer': 'Layer', 'map.legend.verified': 'with verified values',
     'map.legend.plain': 'coordinate only',
     'map.hint': 'Click a point to see its source, the text fragment carrying the coordinate, and any linked measurements.',
-    'props.lede': 'The full spectrum of recognised properties. An observation only enters the database once its unit is proven (printed in the table or obtained by a reversible conversion), so the "unit proven" column is close to 100% for every property — it is the admission criterion for the layer, not residual uncertainty inside it.',
+    'props.lede': 'The full spectrum of recognised properties. An observation only enters the database once its unit is proven (printed in the table or obtained by a reversible conversion), so the "unit proven" column is close to 100% for every property — it is the admission criterion for the layer, not residual uncertainty inside it. ~1,940 single-publication properties (usually keeping the source table\'s own header instead of a translated name) are hidden by default — the checkbox below reveals them.',
     'props.sort': 'Sort by:', 'props.sort.n': 'observation count',
     'props.sort.norm': 'proven units', 'props.sort.docs': 'publication count',
+    'props.showRare': 'show single-publication properties',
     'props.th.property': 'Property', 'props.th.category': 'Group', 'props.th.n': 'Observations',
     'props.th.docs': 'Publications', 'props.th.unit': 'Unit proven',
     'props.th.header': 'Header reliable', 'props.th.value': 'Value plausible',
@@ -324,8 +326,19 @@ function propertyLabel(row) {
 function renderProperties() {
   const sort = document.getElementById('prop-sort').value;
   const query = (document.getElementById('prop-filter').value || '').trim().toLowerCase();
+  const showRare = document.getElementById('prop-show-rare').checked;
   const pct = (part, whole) => whole ? `${Math.round(100 * part / whole)}%` : '—';
   let rows = [...AGG.properties].sort((a, b) => b[sort] - a[sort]);
+  // Most of the 2,064-property catalogue is source-specific: a value that
+  // couldn't be mapped to a shared canonical unit, kept under its own
+  // property_id with the printed header retained verbatim (often a raw
+  // article/table code). Roughly 1,940 of them appear in exactly one
+  // document. Showing all of that by default drowns the ~120 properties a
+  // reader actually recognises in one-off entries like "0.05-0.01 mm
+  // rcsi405789"; hide documents < 2 unless explicitly asked to see them.
+  if (!showRare) {
+    rows = rows.filter((row) => row.documents >= 2);
+  }
   if (query) {
     rows = rows.filter((row) =>
       propertyLabel(row).toLowerCase().includes(query)
@@ -1082,6 +1095,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('prop-sort').onchange = renderProperties;
   document.getElementById('prop-filter').oninput = renderProperties;
+  document.getElementById('prop-show-rare').onchange = renderProperties;
   document.querySelector('#props-table tbody').addEventListener('click', (event) => {
     const row = event.target.closest('tr[data-property-id]');
     if (row) selectProperty(row.dataset.propertyId);

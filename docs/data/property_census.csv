@@ -11,7 +11,7 @@ clay,clay,глина,particle_size,гранулометрический сост
 bulk_density,bulk density,плотность сложения,physical,физические свойства,1664,85,100.0,100.0,87.3,61.4,68.4,g/cm3,1.25,0.86,1.46,996
 sodium_ion,sodium ion Na+,ион натрия Na+ (метод не указан),soil_solution,почвенный раствор,1659,88,100.0,100.0,98.5,65.2,79.9,%,2.07,0.2,8.7,467
 sand,sand,песок,particle_size,гранулометрический состав,1615,121,100.0,100.0,99.6,56.9,67.6,%,9.0,1.0,41.0,1335
-horizon_thickness,soil horizon thickness,,soil_property,почвенное свойство,1609,84,100.0,100.0,100.0,3.0,91.1,cm,18.9,0.35,42.0,1549
+horizon_thickness,soil horizon thickness,мощность горизонта,soil_property,почвенное свойство,1609,84,100.0,100.0,100.0,3.0,91.1,cm,18.9,0.35,42.0,1549
 carbon_nitrogen_ratio,C:N ratio,отношение C:N,organic,органическое вещество и углерод,1475,126,100.0,100.0,99.1,48.9,88.1,1,15.0,10.6,22.13,228
 iron,iron,железо,microelement,микроэлементы,1347,79,100.0,77.0,99.1,23.8,75.2,mg/kg,2.72,0.7,21.5,583
 physical_clay,physical clay,физическая глина,particle_size,гранулометрический состав,1342,90,100.0,100.0,99.9,73.8,78.1,%,35.0,23.0,47.68,953
@@ -38,7 +38,7 @@ carbonate_equivalent,carbonate equivalent (CaCO3),карбонатный экв�
 cadmium,cadmium,кадмий,contaminant,потенциальные загрязнители,514,52,100.0,98.4,99.0,8.2,78.4,mg/kg,0.6,0.14,1.3,501
 porosity,total porosity,общая пористость,physical,физические свойства,499,36,100.0,100.0,98.6,47.7,68.9,%,47.3,35.4,54.0,412
 calcium,calcium,кальций,exchange,обменный комплекс,481,50,100.0,97.5,89.8,37.8,58.2,cmolc/kg,4.3,0.54,12.0,317
-soil_organic_carbon_stock,soil organic carbon stock,,organic,органическое вещество и углерод,443,19,100.0,100.0,100.0,57.6,58.7,t/ha,20.44,6.14,34.32,330
+soil_organic_carbon_stock,soil organic carbon stock,запас органического углерода почвы,organic,органическое вещество и углерод,443,19,100.0,100.0,100.0,57.6,58.7,t/ha,20.44,6.14,34.32,330
 coarse_sand,coarse sand,крупный песок,particle_size,гранулометрический состав,433,34,100.0,100.0,100.0,73.4,64.9,%,1.0,0.2,9.8,329
 fine_fraction_lt_0_001mm,fine fraction <0.001 mm,"илистая фракция (<0,001 мм)",particle_size,гранулометрический состав,430,28,100.0,100.0,100.0,83.7,69.5,%,16.6,8.9,25.1,428
 medium_silt,medium silt 0.01-0.005 mm,средняя пыль (0.01–0.005 мм),particle_size,гранулометрический состав,372,27,100.0,100.0,99.2,64.5,87.4,%,7.83,4.0,10.8,345
@@ -54,7 +54,7 @@ total_nitrogen,total nitrogen,общий азот,macronutrient,макроэле
 titanium_dioxide,titanium dioxide TiO2,диоксид титана TiO2,geochemical,геохимия,200,23,100.0,100.0,100.0,73.0,96.0,%,0.99,0.75,1.71,200
 manganese_oxide_mno,manganese oxide MnO,оксид марганца MnO,geochemical,геохимия,190,21,100.0,100.0,100.0,53.2,91.1,%,0.12,0.07,0.25,190
 cobalt,cobalt,кобальт,microelement,микроэлементы,178,28,100.0,93.3,100.0,36.0,91.0,mg/kg,4.87,0.56,17.0,122
-aggregate_fraction,aggregate size fraction,,manual_article,ручной ввод из статьи,163,2,100.0,100.0,100.0,0.0,92.0,%,24.0,7.1,54.0,163
+aggregate_fraction,aggregate size fraction,доля агрегатной фракции,manual_article,ручной ввод из статьи,163,2,100.0,100.0,100.0,0.0,92.0,%,24.0,7.1,54.0,163
 arsenic,arsenic,мышьяк,contaminant,потенциальные загрязнители,162,17,100.0,45.1,99.4,4.9,98.8,mg/kg,1.95,0.52,5.8,72
 electrical_conductivity,electrical conductivity,электропроводность,salinity,засоление и минерализация,154,16,100.0,100.0,99.4,34.4,31.8,dS/m,0.9,0.43,3.04,153
 sulfur,sulfur,общая сера,macronutrient,макроэлементы,144,3,100.0,100.0,100.0,22.2,97.9,%,0.0,0.0,2.8,144
@@ -65,9 +65,9 @@ manual_9311030094_actinomycetes,Percentage of actinomycetes among soil microorga
 manual_9311030094_bacteria,Percentage of bacteria among soil microorganisms [9311030094],,soil_biological_properties,биологические свойства почвы,131,1,100.0,100.0,100.0,0.0,0.0,%,68.4,65.2,73.5,131
 manual_9311030094_microscopic_fungi,Percentage of microscopic fungi among soil microorganisms [9311030094],,soil_biological_properties,биологические свойства почвы,131,1,100.0,100.0,100.0,0.0,0.0,%,0.2,0.12,1.0,131
 manual_9311030094_spore_forming_bacteria,Percentage of spore-forming bacteria among soil microorganisms [9311030094],,soil_biological_properties,биологические свойства почвы,131,1,100.0,100.0,100.0,0.0,0.0,%,9.6,5.8,11.2,131
-organic_matter_stock,organic matter/humus stock,,organic,органическое вещество и углерод,120,9,100.0,100.0,95.0,0.0,64.2,t/ha,0.11,0.11,0.11,2
+organic_matter_stock,organic matter/humus stock,запас органического вещества (гумуса),organic,органическое вещество и углерод,120,9,100.0,100.0,95.0,0.0,64.2,t/ha,0.11,0.11,0.11,2
 aluminium_ion,aluminium ion Al3+,ион алюминия Al3+ (метод не указан),soil_solution,почвенный раствор,117,10,100.0,100.0,100.0,79.5,88.9,%,0.7,0.5,4.5,55
-soil_organic_carbon_pct,organic carbon,,carbon,углерод,115,18,100.0,100.0,100.0,34.8,22.6,%,2.1,0.38,5.49,115
+soil_organic_carbon_pct,organic carbon,органический углерод (метод не уточнён),carbon,углерод,115,18,100.0,100.0,100.0,34.8,22.6,%,2.1,0.38,5.49,115
 gravimetric_water_content,gravimetric water content,массовая влажность,hydrophysical,гидрофизические свойства,106,9,100.0,100.0,96.2,27.4,63.2,%,31.9,15.0,43.8,91
 total_dissolved_solids,total dissolved solids,общее содержание растворённых веществ,salinity,засоление и минерализация,101,4,100.0,100.0,100.0,78.2,100.0,%,0.12,0.014,0.17,101
 manual_9324600106_pH_KCl,pH KCl [9324600106],,soil_physicochemical,физико-химические свойства,99,1,100.0,100.0,100.0,100.0,0.0,pH,3.8,3.6,4.0,99
@@ -116,7 +116,7 @@ rcsi308805_relative_magnetic_ratio,χ/χs rcsi308805,,soil_measurement,почв�
 sodium_oxide_na2o,sodium oxide Na2O,оксид натрия (Na₂O),geochemical,геохимические свойства,62,14,100.0,100.0,100.0,54.8,88.7,%,1.29,0.74,1.62,62
 aggregate_stability_index,aggregate stability index,,physical,физические свойства,60,1,100.0,100.0,100.0,0.0,100.0,1,1.7,1.2,2.4,60
 exchangeable_magnesium,exchangeable magnesium,обменный магний,exchange,обменный комплекс,60,2,100.0,100.0,100.0,0.0,100.0,meq/100 g,5.0,4.2,6.7,60
-air_capacity_field_capacity,air capacity at field capacity,,soil_property,почвенное свойство,56,2,100.0,100.0,100.0,71.4,100.0,%,18.0,12.5,25.0,56
+air_capacity_field_capacity,air capacity at field capacity,воздухоёмкость при наименьшей влагоёмкости,soil_property,почвенное свойство,56,2,100.0,100.0,100.0,71.4,100.0,%,18.0,12.5,25.0,56
 rcsi280285_cn,Inorganic carbon Cн [rcsi280285],,soil,почва (общее),54,1,100.0,100.0,100.0,98.1,0.0,%,3.2,0.6,6.1,54
 rcsi280285_corg,Organic carbon Corg [rcsi280285],,soil,почва (общее),54,1,100.0,100.0,100.0,98.1,0.0,%,3.8,1.1,11.0,54
 rcsi280285_ph_h2o_c,pH H2O-c [rcsi280285],,soil,почва (общее),54,1,100.0,100.0,100.0,98.1,0.0,pH,7.62,7.0,7.9,54
@@ -134,15 +134,15 @@ rso_9307010048_ph_salt,soil pH in salt extract [9307010048],,manual_article,ру
 rso_9307010048_ph_water_i,"soil pH in water, variant I [9307010048]",,manual_article,ручной ввод из статьи,48,1,100.0,100.0,100.0,0.0,100.0,pH,4.61,4.32,4.83,48
 mercury,mercury,ртуть,contaminant,потенциальные загрязнители,47,7,100.0,100.0,95.7,0.0,95.7,mg/kg,0.1,0.05,0.26,45
 pore_areal_density,pore areal density,,physical_structure,физическая структура,47,1,100.0,100.0,100.0,0.0,100.0,mm,8.2,0.29,26.0,47
-runoff,runoff,,manual_article,ручной ввод из статьи,45,4,100.0,100.0,100.0,0.0,88.9,mm,35.0,17.8,79.0,45
+runoff,runoff,поверхностный сток,manual_article,ручной ввод из статьи,45,4,100.0,100.0,100.0,0.0,88.9,mm,35.0,17.8,79.0,45
 sodium_adsorption_ratio,sodium adsorption ratio,коэффициент адсорбции натрия (SAR),salinity,засоление и минерализация,44,7,100.0,100.0,100.0,9.1,11.4,1,9.47,2.8,16.0,44
 manual_9323603402_clay,Clay [9323603402],,soil_physicochemical,физико-химические свойства,43,1,100.0,100.0,100.0,100.0,0.0,%,14.3,13.2,17.3,43
 manual_9323603402_sand,Sand [9323603402],,soil_physicochemical,физико-химические свойства,43,1,100.0,100.0,100.0,100.0,0.0,%,25.0,15.6,33.5,43
 manual_9323603402_silt,Silt [9323603402],,soil_physicochemical,физико-химические свойства,43,1,100.0,100.0,100.0,100.0,0.0,%,57.8,51.9,68.1,43
-ph_salt_extract,pH in salt extract,,soil_property,почвенное свойство,43,2,100.0,100.0,100.0,100.0,18.6,pH,9.72,8.18,10.16,43
-corg,Organic carbon rcsi405804,,soil_measurement,почвенные измерения,42,3,100.0,100.0,100.0,38.1,0.0,%,1.65,0.9,2.67,42
+ph_salt_extract,pH in salt extract,pH солевой вытяжки (экстрагент не уточнён),soil_property,почвенное свойство,43,2,100.0,100.0,100.0,100.0,18.6,pH,9.72,8.18,10.16,43
+corg,Organic carbon rcsi405804,"органический углерод (Corg, источник-специфичный ряд)",soil_measurement,почвенные измерения,42,3,100.0,100.0,100.0,38.1,0.0,%,1.65,0.9,2.67,42
 aggregate_stability,aggregate stability,агрегатная устойчивость,physical,физические свойства,41,2,100.0,100.0,100.0,0.0,100.0,%,23.67,10.67,32.02,41
-ph,pH H2O rcsi405803,,soil_measurement,почвенные измерения,40,3,100.0,100.0,100.0,97.5,0.0,pH,7.2,6.8,7.6,40
+ph,pH H2O rcsi405803,pH водной вытяжки (источник-специфичный ряд),soil_measurement,почвенные измерения,40,3,100.0,100.0,100.0,97.5,0.0,pH,7.2,6.8,7.6,40
 rcsi273573_cn_ratio,C/N [rcsi273573],,soil,почва (общее),40,1,100.0,100.0,100.0,100.0,0.0,1,15.0,9.0,30.0,40
 rcsi405789_psd_0005_0001_pct,0.005-0.001 mm rcsi405789,,soil_measurement,почвенные измерения,40,1,100.0,100.0,100.0,95.0,0.0,%,11.3,6.8,16.7,40
 rcsi405789_psd_001_0005_pct,0.01-0.005 mm rcsi405789,,soil_measurement,почвенные измерения,40,1,100.0,100.0,100.0,95.0,0.0,%,10.3,4.3,16.0,40
@@ -153,7 +153,7 @@ rcsi405789_psd_lt0001_pct,<0.001 mm rcsi405789,,soil_measurement,почвенн�
 rcsi405789_psd_lt001_pct,<0.01 mm rcsi405789,,soil_measurement,почвенные измерения,40,1,100.0,100.0,100.0,95.0,0.0,%,34.5,24.2,44.5,40
 manual_930607012X_t6,"strontium in plant dry matter [10.1134/S106422930607012X, Table 6]",,soil_chemistry,химические свойства почвы,39,1,100.0,100.0,100.0,0.0,100.0,mg/kg dry plant matter,12.3,5.7,21.0,39
 soil_respiration_rate,specific soil CO2 respiration flux,,biological,биологические свойства,39,1,100.0,100.0,100.0,0.0,100.0,mg C-CO2/m2/h,182.0,29.0,448.0,39
-soil_total_carbon_pct,total carbon,,carbon,углерод,39,3,100.0,100.0,100.0,0.0,71.8,%,9.0,3.26,18.34,39
+soil_total_carbon_pct,total carbon,общий углерод почвы,carbon,углерод,39,3,100.0,100.0,100.0,0.0,71.8,%,9.0,3.26,18.34,39
 anthracene_9314090087,Anthracene [9314090087],,soil_organic_pollutants,органические загрязнители,38,1,100.0,100.0,100.0,0.0,100.0,ng/g,0.0,0.0,0.0,38
 benzkfluoranthene_9314090087,Benzo[k]fluoranthene [9314090087],,soil_organic_pollutants,органические загрязнители,38,1,100.0,100.0,100.0,0.0,100.0,ng/g,0.0,0.0,0.0,38
 benzoaperylene_9314090087,Benzo[a]perylene [9314090087],,soil_organic_pollutants,органические загрязнители,38,1,100.0,100.0,100.0,0.0,100.0,ng/g,0.0,0.0,0.0,38
@@ -207,7 +207,7 @@ rcsi356174_na2o_pct,Na2O rcsi356174,,soil_measurement,почвенные изм�
 rcsi356174_p2o5_pct,P2O5 rcsi356174,,soil_measurement,почвенные измерения,34,1,100.0,100.0,100.0,100.0,0.0,%,0.23,0.18,0.29,34
 rcsi356174_sio2_pct,SiO2 rcsi356174,,soil_measurement,почвенные измерения,34,1,100.0,100.0,100.0,100.0,0.0,%,70.62,69.69,71.19,34
 rcsi356174_tio2_pct,TiO2 rcsi356174,,soil_measurement,почвенные измерения,34,1,100.0,100.0,100.0,100.0,0.0,%,1.13,1.07,1.22,34
-annual_precipitation,annual precipitation,,manual_article,ручной ввод из статьи,33,5,100.0,100.0,100.0,0.0,33.3,mm,520.0,436.0,610.0,33
+annual_precipitation,annual precipitation,годовое количество осадков,manual_article,ручной ввод из статьи,33,5,100.0,100.0,100.0,0.0,33.3,mm,520.0,436.0,610.0,33
 manual_2108004_frac_0005_0001,manual_2108004_frac_0005_0001,,manual_article,ручной ввод из статьи,32,1,100.0,100.0,100.0,0.0,100.0,%,17.0,15.0,18.0,32
 manual_2108004_frac_001_0005,manual_2108004_frac_001_0005,,manual_article,ручной ввод из статьи,32,1,100.0,100.0,100.0,0.0,100.0,%,12.0,11.0,13.0,32
 manual_2108004_frac_005_001,manual_2108004_frac_005_001,,manual_article,ручной ввод из статьи,32,1,100.0,100.0,100.0,0.0,100.0,%,48.0,40.0,49.0,32
@@ -235,7 +235,7 @@ rcsi306469_cn,C/N [rcsi306469],,soil_measurement,почвенные измере
 rcsi306469_n,N total [rcsi306469],,soil_measurement,почвенные измерения,31,1,100.0,100.0,100.0,0.0,0.0,%,0.49,0.19,0.65,31
 rcsi306469_ph,pH [rcsi306469],,soil_measurement,почвенные измерения,31,1,100.0,100.0,100.0,0.0,0.0,pH,7.6,6.3,8.2,31
 soil_gypsum_content,soil gypsum content,,soil_chemistry,химические свойства почвы,31,1,100.0,100.0,100.0,100.0,0.0,%,38.3,34.84,55.04,31
-depth_or_x,x p,,manual_article,ручной ввод из статьи,30,3,100.0,100.0,100.0,66.7,100.0,%,16.3,10.0,80.0,30
+depth_or_x,x p,показатель «x p» (заголовок источника не расшифрован),manual_article,ручной ввод из статьи,30,3,100.0,100.0,100.0,66.7,100.0,%,16.3,10.0,80.0,30
 manual_930607012X_t3,"acidity parameter [10.1134/S106422930607012X, Table 3]",,soil_chemistry,химические свойства почвы,30,1,100.0,100.0,100.0,0.0,100.0,meq/100 g soil,1.0,0.1,1.4,30
 manual_930607012X_t5,"crop yield [10.1134/S106422930607012X, Table 5]",,soil_chemistry,химические свойства почвы,30,1,100.0,100.0,100.0,0.0,100.0,t/ha,9.1,7.6,11.7,30
 manual_9307010024_cec,cec [10.1134/S1064229307010024],,soil_chemistry,химические свойства почвы,30,1,100.0,100.0,100.0,0.0,100.0,meq/100 g,5.4,3.4,10.0,30
@@ -271,7 +271,7 @@ manual_9308130152_na,na [10.1134/S1064229308130152],,soil_chemistry,химиче
 manual_9308130152_ph,ph [10.1134/S1064229308130152],,soil_chemistry,химические свойства почвы,27,1,100.0,100.0,100.0,0.0,100.0,1,8.2,7.75,8.3,27
 mg_exchangeable_9314070047,exchangeable Mg2+ [9314070047],,soil_chemistry,химические свойства почвы,27,1,100.0,100.0,100.0,0.0,100.0,meq/100 g,1.2,0.6,2.0,27
 penetration_resistance,penetration resistance,сопротивление пенетрации,physical,физические свойства,27,1,100.0,100.0,100.0,0.0,0.0,kPa,46.21,23.58,87.41,27
-precipitation_total,total precipitation,,climate,климат,27,2,100.0,100.0,100.0,0.0,100.0,mm,59.0,42.0,103.0,27
+precipitation_total,total precipitation,суммарное количество осадков,climate,климат,27,2,100.0,100.0,100.0,0.0,100.0,mm,59.0,42.0,103.0,27
 rcsi273717_caco3_pct,CaCO3 [rcsi273717],,soil,почва (общее),27,1,100.0,100.0,100.0,0.0,0.0,%,0.15,0.1,0.26,27
 rcsi273717_humus_pct,Humus [rcsi273717],,soil,почва (общее),27,1,100.0,100.0,100.0,0.0,0.0,%,3.0,1.61,3.78,27
 rcsi280548_cn,C/N ratio [rcsi280548 Table 3],,soil_measurement,почвенные измерения,27,1,100.0,100.0,100.0,0.0,0.0,1,2.9,2.3,6.3,27
@@ -282,7 +282,7 @@ retained_ch4_9316050045,retained CH4 [9316050045],,soil_gas_chemistry,почве
 retained_sum_c1_4_9316050045,retained ΣC1-4 [9316050045],,soil_gas_chemistry,почвенные газы,26,1,100.0,100.0,100.0,0.0,100.0,ppmv,3.3,2.3,13.6,26
 soil_iron_amorphous_pct,amorphous iron,,soil_chemistry,химические свойства почвы,26,1,100.0,100.0,100.0,100.0,0.0,%,0.19,0.06,0.24,26
 soil_iron_non_silicate_pct,non-silicate iron,,soil_chemistry,химические свойства почвы,26,1,100.0,100.0,100.0,100.0,0.0,%,0.34,0.26,0.37,26
-calcium_magnesium_ratio,calcium to magnesium ratio,,soil_solution,почвенный раствор,25,2,100.0,100.0,100.0,96.0,72.0,1,5.9,5.5,6.4,7
+calcium_magnesium_ratio,calcium to magnesium ratio,отношение Ca/Mg,soil_solution,почвенный раствор,25,2,100.0,100.0,100.0,96.0,72.0,1,5.9,5.5,6.4,7
 fa_percent,Fulvic acids (FA) rcsi1906002,,soil_measurement,почвенные измерения,25,1,100.0,100.0,100.0,0.0,0.0,%,23.98,17.09,35.62,25
 free_ch4_9316050045,free CH4 [9316050045],,soil_gas_chemistry,почвенные газы,25,1,100.0,100.0,100.0,0.0,100.0,ppmv,2.6,2.2,3.7,25
 free_sum_c1_4_9316050045,free ΣC1-4 [9316050045],,soil_gas_chemistry,почвенные газы,25,1,100.0,100.0,100.0,0.0,100.0,ppmv,3.0,2.3,10.5,25
@@ -476,7 +476,7 @@ manual_931105005X_t3_HA,HA (% of C total) [10.1134/S106422931105005X],,soil_orga
 manual_931105005X_t3_HA1,HA 1 (% of total HA) [10.1134/S106422931105005X],,soil_organic_matter,органическое вещество почвы,19,1,100.0,100.0,100.0,0.0,100.0,% of total HA,39.0,12.0,52.0,19
 manual_931105005X_t3_HA2,HA 2 (% of total HA) [10.1134/S106422931105005X],,soil_organic_matter,органическое вещество почвы,19,1,100.0,100.0,100.0,0.0,100.0,% of total HA,41.0,16.0,65.0,19
 manual_931105005X_t3_HA3,HA 3 (% of total HA) [10.1134/S106422931105005X],,soil_organic_matter,органическое вещество почвы,19,1,100.0,100.0,100.0,0.0,100.0,% of total HA,21.0,17.0,27.0,19
-qCO2,specific microbial respiration qCO2,,biological,биологические свойства,19,2,100.0,100.0,100.0,36.8,100.0,µg C-CO2/mg C/h,1.69,1.3,2.09,19
+qCO2,specific microbial respiration qCO2,удельное микробное дыхание (qCO₂),biological,биологические свойства,19,2,100.0,100.0,100.0,36.8,100.0,µg C-CO2/mg C/h,1.69,1.3,2.09,19
 aggregation_pc_9315010160,Pc [9315010160],,soil_physical_properties,физические свойства почвы,18,1,100.0,100.0,100.0,0.0,100.0,dimensionless,116.0,108.0,119.0,18
 bulk_density_9315010160,D [9315010160],,soil_physical_properties,физические свойства почвы,18,1,100.0,100.0,100.0,0.0,100.0,g/cm3,1.4,1.3,1.4,18
 fraction_002_0002_9316020046,0.02-0.002 mm [9316020046],,soil_physical_properties,физические свойства почвы,18,1,100.0,100.0,100.0,0.0,0.0,%,17.0,14.0,19.0,18
@@ -496,13 +496,13 @@ physical_clay_9315010160,<0.01 mm physical clay [9315010160],,soil_physical_prop
 rcsi405757_na_mol_kg,Na+ rcsi405757,,soil_measurement,почвенные измерения,18,1,100.0,100.0,100.0,83.3,0.0,cmol(+)/kg,0.06,0.02,0.12,18
 relative_swelling_9315010160,h0.5/H [9315010160],,soil_physical_properties,физические свойства почвы,18,1,100.0,100.0,100.0,0.0,100.0,dimensionless,83.8,81.9,84.3,18
 sample_thickness_cm,sample thickness,,physical,физические свойства,18,1,100.0,100.0,100.0,0.0,0.0,cm,20.0,10.0,40.0,18
-sum_exchangeable_bases,sum exchangeable bases,,soil_chemistry,химические свойства почвы,18,3,100.0,100.0,100.0,100.0,22.2,cmol(+)/kg,18.4,15.7,32.5,18
+sum_exchangeable_bases,sum exchangeable bases,сумма обменных оснований,soil_chemistry,химические свойства почвы,18,3,100.0,100.0,100.0,100.0,22.2,cmol(+)/kg,18.4,15.7,32.5,18
 swelling_rv_9315010160,Rv/Rh [9315010160],,soil_physical_properties,физические свойства почвы,18,1,100.0,100.0,100.0,0.0,100.0,%,20.6,18.2,22.4,18
 toxic_salt_sum_0_50,toxic salt sum 0–50 cm,,manual_article,ручной ввод из статьи,18,1,100.0,100.0,100.0,0.0,0.0,%,0.67,0.08,0.76,18
 toxic_salt_sum_50_100,toxic salt sum 50–100 cm,,manual_article,ручной ввод из статьи,18,1,100.0,100.0,100.0,0.0,0.0,%,0.82,0.09,1.11,18
 water_content_wr_9315010160,Wr [9315010160],,soil_physical_properties,физические свойства почвы,18,1,100.0,100.0,100.0,0.0,100.0,%,50.3,48.9,52.7,18
 wpc_cl_9315010160,WPC/CL [9315010160],,soil_physical_properties,физические свойства почвы,18,1,100.0,100.0,100.0,0.0,100.0,%,68.7,55.2,78.9,18
-ec,Electrical conductivity rcsi405803,,soil_measurement,почвенные измерения,17,2,100.0,100.0,100.0,94.1,0.0,uS/cm,16.3,7.6,38.1,17
+ec,Electrical conductivity rcsi405803,электропроводность (источник-специфичный ряд),soil_measurement,почвенные измерения,17,2,100.0,100.0,100.0,94.1,0.0,uS/cm,16.3,7.6,38.1,17
 manual_9310040022_t1_CaMg,Ca2+ + Mg2+ [10.1134/S1064229310040022],,urban_soil_chemistry,химия городских почв,17,1,100.0,100.0,100.0,100.0,100.0,mmol/100 g,12.75,10.87,14.5,17
 organic_matter_loss_rate,organic matter/humus loss rate,,organic,органическое вещество и углерод,17,1,100.0,100.0,70.6,0.0,0.0,,,,,0
 rcsi259375_loss_ignition_pct,loss on ignition rcsi259375,,soil_measurement,почвенные измерения,17,1,100.0,100.0,100.0,100.0,0.0,%,6.8,6.24,8.4,17
@@ -559,8 +559,8 @@ cpl_pct_corg_9317020065,C-pl [9317020065],,soil_microbiology,микробиол�
 csir_9317020065,C-SIR [9317020065],,soil_microbiology,микробиология почвы,15,1,100.0,100.0,100.0,0.0,0.0,μg C/g,26.6,0.4,63.1,15
 csir_pct_corg_9317020065,C-SIR [9317020065] (% Corg),,soil_microbiology,микробиология почвы,15,1,100.0,100.0,100.0,0.0,0.0,% Corg,0.44,0.01,1.37,15
 csir_pct_cpl_9317020065,C-SIR [9317020065] (% C-pl),,soil_microbiology,микробиология почвы,15,1,100.0,100.0,100.0,0.0,0.0,% C-pl,6.41,0.14,15.48,15
-field_capacity_water_storage,field-capacity water storage,,water,вода,15,2,100.0,100.0,100.0,80.0,100.0,mm,293.0,138.0,357.0,12
-fungal_fraction,fungal fraction,,biological,биологические свойства,15,2,100.0,100.0,100.0,0.0,100.0,%,8.5,4.4,10.0,15
+field_capacity_water_storage,field-capacity water storage,запас влаги при наименьшей влагоёмкости,water,вода,15,2,100.0,100.0,100.0,80.0,100.0,mm,293.0,138.0,357.0,12
+fungal_fraction,fungal fraction,доля грибной биомассы,biological,биологические свойства,15,2,100.0,100.0,100.0,0.0,100.0,%,8.5,4.4,10.0,15
 manual_930607012X_K2O,K2O [10.1134/S106422930607012X],,soil_chemistry,химические свойства почвы,15,1,100.0,100.0,100.0,0.0,100.0,mg/100 g,7.6,5.5,11.7,15
 manual_930607012X_P2O5,P2O5 [10.1134/S106422930607012X],,soil_chemistry,химические свойства почвы,15,1,100.0,100.0,100.0,0.0,100.0,mg/100 g,7.9,6.4,12.5,15
 manual_930607012X_t7_grasses,"Sr removal with harvested grasses [10.1134/S106422930607012X, Table 7]",,soil_chemistry,химические свойства почвы,15,1,100.0,100.0,100.0,0.0,100.0,g/ha,66.4,38.5,70.8,15
@@ -624,7 +624,7 @@ atomic_radius,atomic radius,,manual_article,ручной ввод из стат�
 fwc_9315010020,within FWC range [9315010020],,soil_hydrology,гидрология почвы,14,1,100.0,100.0,100.0,0.0,100.0,mm,140.0,100.0,140.0,14
 ionic_radius_k6,Ln3+ ionic radius CN6,,manual_article,ручной ввод из статьи,14,1,100.0,100.0,100.0,0.0,0.0,nm,0.0923,0.089,0.0958,14
 ionic_radius_k8,Ln3+ ionic radius CN8,,manual_article,ручной ввод из статьи,14,1,100.0,100.0,100.0,0.0,0.0,nm,0.104,0.1004,0.1079,14
-litter_thickness,litter thickness,,manual_article,ручной ввод из статьи,14,3,100.0,100.0,100.0,0.0,92.9,cm,2.0,1.0,3.0,13
+litter_thickness,litter thickness,мощность лесной подстилки,manual_article,ручной ввод из статьи,14,3,100.0,100.0,100.0,0.0,92.9,cm,2.0,1.0,3.0,13
 manual_2108014_c_total,manual_2108014_c_total,,manual_article,ручной ввод из статьи,14,1,100.0,100.0,100.0,0.0,100.0,%,2.8,1.9,4.1,14
 manual_2108014_caco3,manual_2108014_caco3,,manual_article,ручной ввод из статьи,14,1,100.0,100.0,100.0,0.0,100.0,%,0.0,0.0,3.6,14
 manual_2108014_co2_per_c,manual_2108014_co2_per_c,,manual_article,ручной ввод из статьи,14,1,100.0,100.0,100.0,0.0,100.0,µg/g C total,884.0,679.0,1032.0,14
@@ -727,7 +727,7 @@ rcsi356175_pb_mg_kg,Pb rcsi356175,,soil_measurement,почвенные изме�
 rcsi356175_zn_mg_kg,Zn rcsi356175,,soil_measurement,почвенные измерения,12,1,100.0,100.0,100.0,0.0,0.0,mg/kg,47.13,37.71,52.69,12
 root_elongation,root elongation,,manual_article,ручной ввод из статьи,12,1,100.0,100.0,100.0,0.0,0.0,%,22.0,19.0,67.0,12
 seed_germination,seed germination,,manual_article,ручной ввод из статьи,12,1,100.0,100.0,100.0,0.0,0.0,%,66.7,60.0,79.4,12
-volumetric_water_content,volumetric soil water content,,water,вода,12,2,100.0,100.0,100.0,58.3,41.7,m3/m3,0.1907,0.1717,11.7,12
+volumetric_water_content,volumetric soil water content,объёмная влажность почвы,water,вода,12,2,100.0,100.0,100.0,58.3,41.7,m3/m3,0.1907,0.1717,11.7,12
 average_phytotoxicity,average PE of two tests,,manual_article,ручной ввод из статьи,11,1,100.0,100.0,100.0,0.0,0.0,%,49.3,24.1,55.4,11
 ca_exchangeable_9315080074,exchangeable Ca2+ [9315080074],,soil_chemistry,химические свойства почвы,11,1,100.0,100.0,100.0,0.0,100.0,cmol(+)/kg,6.82,5.63,7.17,11
 fine_fraction_001_1911002,Particle fraction <0.01 mm rcsi1911002,,soil_measurement,почвенные измерения,11,1,100.0,100.0,100.0,100.0,0.0,%,43.0,38.0,47.0,11
@@ -741,7 +741,7 @@ na_exchangeable_pct_9315080074,exchangeable Na [9315080074],,soil_chemistry,хи
 nuob_manual_9311040037,NuOb manual [9311040037],,soil_structure,структура почвы,11,1,100.0,100.0,100.0,0.0,100.0,per 1 mm3,0.043,0.023,744.5,11
 nuob_otsu2d_9311040037,NuOb Otsu 2D [9311040037],,soil_structure,структура почвы,11,1,100.0,100.0,100.0,0.0,100.0,per 1 mm3,0.084,0.028,43.03,11
 nuob_otsu3d_9311040037,NuOb Otsu 3D [9311040037],,soil_structure,структура почвы,11,1,100.0,100.0,100.0,0.0,100.0,per 1 mm3,0.1,0.024,50.3,11
-organic_matter_pct,organic matter,,organic,органическое вещество и углерод,11,2,100.0,100.0,100.0,63.6,36.4,%,2.81,2.32,3.07,11
+organic_matter_pct,organic matter,органическое вещество (метод не уточнён),organic,органическое вещество и углерод,11,2,100.0,100.0,100.0,63.6,36.4,%,2.81,2.32,3.07,11
 ph_h2o_1911002,pH H2O rcsi1911002,,soil_measurement,почвенные измерения,11,1,100.0,100.0,100.0,100.0,0.0,pH,8.4,8.3,8.5,11
 rcsi280550_available_k2o_stock,Available K2O stock [rcsi280550 Table 1],,soil_measurement,почвенные измерения,11,1,100.0,100.0,100.0,0.0,0.0,kg/ha,14.0,8.0,15.0,11
 rcsi280550_available_p2o5_stock,Available P2O5 stock [rcsi280550 Table 1],,soil_measurement,почвенные измерения,11,1,100.0,100.0,100.0,0.0,0.0,kg/ha,22.0,4.1,47.0,11
@@ -1163,7 +1163,7 @@ mineral_reflection_1_7_soil_pct,"1.7 nm reflection, % of soil",,soil_mineralogy,
 p2001009_clay,Fraction <0.001 mm [manual table recovery],,soil_measurement,почвенные измерения,6,1,100.0,100.0,100.0,0.0,0.0,%,19.0,10.0,22.0,6
 p2001009_fine,Fraction <0.01 mm [manual table recovery],,soil_measurement,почвенные измерения,6,1,100.0,100.0,100.0,0.0,0.0,%,34.0,17.0,39.0,6
 ph_water_9310100054,pHwater,,soil_chemistry,химические свойства почвы,6,1,100.0,100.0,100.0,0.0,100.0,pH,5.08,4.99,5.15,6
-potassium_mgkg,potassium,,soil_elements,элементный состав почвы,6,2,100.0,100.0,100.0,0.0,0.0,mg/kg,1.57,1.51,11.26,6
+potassium_mgkg,potassium,калий (валовое содержание),soil_elements,элементный состав почвы,6,2,100.0,100.0,100.0,0.0,0.0,mg/kg,1.57,1.51,11.26,6
 rcsi273738_fraction_0005_0001,Particle fraction 0.005–0.001 mm [rcsi273738],,soil_measurement,почвенные измерения,6,1,100.0,100.0,100.0,0.0,0.0,%,2.34,0.76,9.35,6
 rcsi273738_fraction_001_0005,Particle fraction 0.01–0.005 mm [rcsi273738],,soil_measurement,почвенные измерения,6,1,100.0,100.0,100.0,0.0,0.0,%,3.0,1.02,4.04,6
 rcsi273738_fraction_005_001,Particle fraction 0.05–0.01 mm [rcsi273738],,soil_measurement,почвенные измерения,6,1,100.0,100.0,100.0,0.0,0.0,%,25.9,1.88,29.1,6
@@ -1428,9 +1428,9 @@ rcsi356165_n_total,Total nitrogen [rcsi356165],,soil_measurement,почвенн�
 rcsi405792_gypsum_dehydration_pct,gypsum dehydration method rcsi405792,,soil_measurement,почвенные измерения,5,1,100.0,100.0,100.0,100.0,0.0,%,42.23,36.01,54.35,5
 rcsi429280_cn_ratio,C/N [rcsi429280],,soil,почва (общее),5,1,100.0,100.0,100.0,0.0,0.0,1,34.0,33.7,34.5,5
 s_total_9319110097,S [9319110097],,soil_chemical_properties,химические свойства почвы,5,1,100.0,100.0,100.0,0.0,100.0,cmol(+)/kg,21.04,19.28,24.45,5
-salt_sum,sum of salts,,manual_article,ручной ввод из статьи,5,2,100.0,100.0,100.0,80.0,0.0,%,1.205,0.699,1.289,5
+salt_sum,sum of salts,сумма солей,manual_article,ручной ввод из статьи,5,2,100.0,100.0,100.0,80.0,0.0,%,1.205,0.699,1.289,5
 smectite_9313040145,smectite [9313040145],,soil_mineralogy,минералогия почвы,5,1,100.0,100.0,100.0,0.0,100.0,%,28.0,19.0,44.0,5
-snow_depth,snow cover depth,,manual_article,ручной ввод из статьи,5,2,100.0,100.0,100.0,0.0,100.0,cm,43.0,38.0,82.0,5
+snow_depth,snow cover depth,высота снежного покрова,manual_article,ручной ввод из статьи,5,2,100.0,100.0,100.0,0.0,100.0,cm,43.0,38.0,82.0,5
 soil_carbon_mineralization_rate,soil carbon mineralization rate,,biological,биологические свойства,5,1,100.0,100.0,100.0,0.0,100.0,,,,,0
 specific_surface_area,specific surface area,,physical,физические свойства,5,1,100.0,100.0,100.0,0.0,100.0,m2/g,9.54,8.86,11.16,5
 total_acidity_9310020018,total acidity,,soil_chemistry,химические свойства почвы,5,1,100.0,100.0,100.0,0.0,100.0,meq/100 g,3.8,1.4,41.1,5
@@ -1846,7 +1846,7 @@ soil_metal_ti,soil metal Ti,,soil_chemical,химия почвы,3,1,100.0,100.0
 soil_organic_carbon_stock_total,soil organic carbon stock (total),,carbon,углерод,3,1,100.0,100.0,100.0,0.0,0.0,10^3 t,52361.0,3975.0,52361.0,3
 soil_organic_carbon_stock_total_calculated,soil organic carbon stock (calculated total),,carbon,углерод,3,1,100.0,100.0,100.0,0.0,0.0,10^3 t,50662.0,4311.0,50662.0,3
 soil_particle_fraction_gt_0_25_mm,soil particle fraction >0.25 mm,,physical,физические свойства,3,1,100.0,100.0,100.0,0.0,0.0,%,11.2,9.6,11.2,3
-soil_respiration,CO2 emission,,manual_article,ручной ввод из статьи,3,2,100.0,100.0,100.0,0.0,33.3,g CO2/(m2 day),15.9,0.46,15.9,3
+soil_respiration,CO2 emission,эмиссия CO₂ из почвы,manual_article,ручной ввод из статьи,3,2,100.0,100.0,100.0,0.0,33.3,g CO2/(m2 day),15.9,0.46,15.9,3
 strontium,Sr,,manual_article,ручной ввод из статьи,3,1,100.0,100.0,100.0,0.0,0.0,mg/kg,0.6,0.46,0.6,3
 strontium_mgkg,strontium,,soil_elements,элементный состав почвы,3,1,100.0,100.0,100.0,0.0,0.0,mg/kg,96.0,92.0,96.0,3
 total_exchangeable_bases_mmeq_kg,total exchangeable bases,,soil_buffer_chemistry,буферная химия почвы,3,1,100.0,100.0,100.0,0.0,100.0,mmeq/kg,142.0,55.0,142.0,3
