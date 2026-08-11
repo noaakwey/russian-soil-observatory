@@ -10,7 +10,9 @@ working SQLite database:
 ``data/portal_map.json``         author-reported coordinates with their source
                                  evidence and strictly linked measurements.
 ``data/aggregates.json``         every number the report and the charts quote.
-``data/full_table_observations.csv``  the complete layer with quality flags.
+``data/full_table_observations.csv``  the clean table layer with quality flags;
+                                 rejected raw candidates remain in the source
+                                 database and review queue, not in public data.
 
 The build never invents a value.  Unit, coordinate and property confidence
 travel with each row so a pedologist can filter on them.
@@ -176,6 +178,7 @@ JOIN source_artifact a ON a.artifact_id = o.artifact_id
 LEFT JOIN document_publication_year y ON y.document_id = o.document_id
 LEFT JOIN document_spatial_tier t ON t.document_id = o.document_id
 LEFT JOIN observation_unit_inference u ON u.observation_id = o.observation_id
+WHERE o.property_id <> 'unclassified_table_metric'
 """
 
 
@@ -247,8 +250,12 @@ def build_browser_database(source: sqlite3.Connection, target_path: Path,
     target.executemany("INSERT INTO meta VALUES(?,?)", [
         ('generated_at', generated_at),
         ('observations', str(len(rows))),
+        ('raw_observations', str(source.execute("SELECT COUNT(*) FROM table_observation").fetchone()[0])),
+        ('excluded_rejected_unclassified', str(source.execute(
+            "SELECT COUNT(*) FROM table_observation WHERE property_id='unclassified_table_metric'"
+        ).fetchone()[0])),
         ('license', 'CC BY 4.0 for the compiled database; source articles remain under their own rights'),
-        ('note', 'Values are OCR-derived. Filter header_match_kind and value_plausibility before analysis.'),
+        ('note', 'Clean export: rejected unclassified raw candidates remain only in the source audit layer.'),
     ])
     target.commit()
     target.execute('VACUUM')
@@ -304,6 +311,7 @@ def build_map(source: sqlite3.Connection) -> dict:
         JOIN property_definition p ON p.property_id = o.property_id
         JOIN document d ON d.document_id = o.document_id
         WHERE s.latitude IS NOT NULL
+          AND o.property_id <> 'unclassified_table_metric'
     """):
         key = (round(latitude, 5), round(longitude, 5))
         if key in sites and len(sites[key]['measurements']) < 60:
@@ -321,6 +329,7 @@ def build_map(source: sqlite3.Connection) -> dict:
         JOIN site s ON s.site_id = o.context_site_id
         JOIN observation_soil_type st ON st.observation_id = o.observation_id
         WHERE s.latitude IS NOT NULL AND st.soil_type_normalized IS NOT NULL
+          AND o.property_id <> 'unclassified_table_metric'
     """):
         key = (round(latitude, 5), round(longitude, 5))
         entry = sites.get(key)
@@ -347,7 +356,8 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
         return source.execute(sql).fetchall()
 
     corpus = dict(rows("SELECT corpus, COUNT(*) FROM document GROUP BY 1"))
-    total_observations = rows("SELECT COUNT(*) FROM table_observation")[0][0]
+    total_observations = rows("SELECT COUNT(*) FROM table_observation WHERE property_id <> 'unclassified_table_metric'")[0][0]
+    raw_observations = rows("SELECT COUNT(*) FROM table_observation")[0][0]
 
     # A property's own distribution needs a scan of its trusted+metric values,
     # its depth coverage and its spatial coverage.  106 286 rows is cheap to
@@ -413,6 +423,7 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
             FROM table_observation o
             JOIN document d ON d.document_id = o.document_id
             LEFT JOIN document_publication_year y ON y.document_id = o.document_id
+            WHERE o.property_id <> 'unclassified_table_metric'
             GROUP BY 1 ORDER BY 1
         """)
     ]
@@ -462,11 +473,15 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
 
     quality = {
         'header_match_kind': dict(rows(
-            "SELECT header_match_kind, COUNT(*) FROM observation_quality_flag GROUP BY 1")),
+            "SELECT f.header_match_kind, COUNT(*) FROM observation_quality_flag f "
+            "JOIN table_observation o ON o.observation_id=f.observation_id "
+            "WHERE o.property_id <> 'unclassified_table_metric' GROUP BY 1")),
         'value_plausibility': dict(rows(
-            "SELECT value_plausibility, COUNT(*) FROM observation_quality_flag GROUP BY 1")),
+            "SELECT f.value_plausibility, COUNT(*) FROM observation_quality_flag f "
+            "JOIN table_observation o ON o.observation_id=f.observation_id "
+            "WHERE o.property_id <> 'unclassified_table_metric' GROUP BY 1")),
         'normalization_status': dict(rows(
-            "SELECT normalization_status, COUNT(*) FROM table_observation GROUP BY 1")),
+            "SELECT normalization_status, COUNT(*) FROM table_observation WHERE property_id <> 'unclassified_table_metric' GROUP BY 1")),
         # 2026-08 rebuild: table_observation is admission-gated (three-agent
         # verified provenance; a row only exists here once its unit is
         # proven), so normalization_status is 'exact'/'converted' for
@@ -477,26 +492,31 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
         'candidate_status': dict(rows(
             "SELECT status, COUNT(*) FROM table_measurement_candidate GROUP BY 1")),
         'spatial_linkage': dict(rows(
-            "SELECT spatial_linkage, COUNT(*) FROM table_observation GROUP BY 1")),
+            "SELECT spatial_linkage, COUNT(*) FROM table_observation WHERE property_id <> 'unclassified_table_metric' GROUP BY 1")),
         'analysis_ready': rows("""
             SELECT COUNT(*) FROM table_observation o
             JOIN observation_quality_flag f ON f.observation_id = o.observation_id
-            WHERE f.header_match_kind <> 'symbol_embedded' AND f.value_plausibility = 'ok'""")[0][0],
+            WHERE o.property_id <> 'unclassified_table_metric'
+              AND f.header_match_kind <> 'symbol_embedded' AND f.value_plausibility = 'ok'""")[0][0],
         'unflagged': rows("""
-            SELECT COUNT(*) FROM observation_quality_flag
-            WHERE header_match_kind <> 'symbol_embedded' AND value_plausibility = 'ok'""")[0][0],
+            SELECT COUNT(*) FROM observation_quality_flag f
+            JOIN table_observation o ON o.observation_id=f.observation_id
+            WHERE o.property_id <> 'unclassified_table_metric'
+              AND f.header_match_kind <> 'symbol_embedded' AND f.value_plausibility = 'ok'""")[0][0],
     }
 
     depth = {
-        'with_depth': rows("SELECT COUNT(*) FROM table_observation WHERE depth_top_cm IS NOT NULL")[0][0],
+        'with_depth': rows("SELECT COUNT(*) FROM table_observation WHERE property_id <> 'unclassified_table_metric' AND depth_top_cm IS NOT NULL")[0][0],
         'profiles': rows("""SELECT COUNT(*) FROM (
               SELECT document_id, row_label_raw FROM table_observation
-              WHERE depth_top_cm IS NOT NULL GROUP BY 1,2)""")[0][0],
+              WHERE property_id <> 'unclassified_table_metric' AND depth_top_cm IS NOT NULL GROUP BY 1,2)""")[0][0],
     }
 
     return {
         'documents': {'total': sum(corpus.values()), **corpus},
         'observations': total_observations,
+        'raw_observations': raw_observations,
+        'excluded_rejected_unclassified': raw_observations - total_observations,
         'artifacts': rows("SELECT COUNT(*) FROM source_artifact")[0][0],
         'ocr_tables': rows("SELECT COUNT(DISTINCT artifact_id) FROM table_cell")[0][0],
         'properties': properties,
@@ -508,6 +528,7 @@ def build_aggregates(source: sqlite3.Connection, names: dict[str, dict[str, str]
             for category, props, count in rows("""
                 SELECT p.category, COUNT(DISTINCT p.property_id), COUNT(*)
                 FROM table_observation o JOIN property_definition p ON p.property_id=o.property_id
+                WHERE o.property_id <> 'unclassified_table_metric'
                 GROUP BY 1 ORDER BY 3 DESC""")
         ],
         'per_year': per_year,
@@ -564,6 +585,7 @@ def export_csv(source: sqlite3.Connection, path: Path, names: dict[str, dict[str
             LEFT JOIN document_publication_year y ON y.document_id = o.document_id
             LEFT JOIN document_spatial_tier t ON t.document_id = o.document_id
             LEFT JOIN observation_unit_inference u ON u.observation_id = o.observation_id
+            WHERE o.property_id <> 'unclassified_table_metric'
             ORDER BY o.observation_id
         """):
             values = [strip_host_paths(cell) for cell in row]
@@ -625,21 +647,148 @@ def export_property_census(properties: list[dict], path: Path) -> int:
     return len(properties)
 
 
+def export_supplemental_layer(
+    core: sqlite3.Connection,
+    extended: sqlite3.Connection,
+    output: Path,
+    names: dict[str, dict[str, str]],
+) -> dict:
+    """Export explicit semantic mappings without changing the core layer.
+
+    The extended repair copy contains a deliberately broader experimental
+    catalog.  Only rows whose extended property is absent from the fixed core
+    catalog and whose core candidate is still unclassified are exported here.
+    They remain supplemental evidence, not core observations used by the
+    manuscript aggregates.
+    """
+    core_ids = {row[0] for row in core.execute(
+        'SELECT property_id FROM property_definition')}
+    core_assignments = dict(core.execute(
+        'SELECT candidate_id, property_id FROM table_observation'))
+    extended_rows = extended.execute("""
+        SELECT o.observation_id, o.candidate_id, o.document_id, d.corpus, d.doi,
+               COALESCE(y.publication_year, d.publication_year),
+               o.property_id, p.canonical_name, p.category,
+               o.property_header_raw, o.value_num_raw, o.unit_raw,
+               o.value_normalized, o.unit_normalized, o.normalization_status,
+               f.header_match_kind, f.value_plausibility, f.plausibility_rule,
+               o.qa_status, o.row_label_raw, o.horizon_label_raw,
+               o.depth_top_cm, o.depth_bottom_cm, a.page_start, a.table_label,
+               o.evidence_locator
+        FROM table_observation o
+        JOIN document d ON d.document_id=o.document_id
+        JOIN property_definition p ON p.property_id=o.property_id
+        JOIN observation_quality_flag f ON f.observation_id=o.observation_id
+        JOIN source_artifact a ON a.artifact_id=o.artifact_id
+        LEFT JOIN document_publication_year y ON y.document_id=o.document_id
+        WHERE o.property_id <> 'unclassified_table_metric'
+        ORDER BY o.observation_id
+    """).fetchall()
+    rows = [row for row in extended_rows
+            if row[6] not in core_ids
+            and core_assignments.get(row[1]) == 'unclassified_table_metric']
+
+    observation_path = output / 'supplemental_observations.csv'
+    observation_columns = [
+        'observation_id', 'candidate_id', 'document_id', 'corpus', 'doi',
+        'publication_year', 'property_id', 'property', 'property_ru',
+        'category', 'property_header_raw', 'value_num_raw', 'unit_raw',
+        'value_normalized', 'unit_normalized', 'normalization_status',
+        'header_match_kind', 'value_plausibility', 'plausibility_rule',
+        'qa_status', 'row_label_raw', 'horizon_label_raw', 'depth_top_cm',
+        'depth_bottom_cm', 'page_start', 'table_label', 'evidence_locator',
+        'layer_status',
+    ]
+    with observation_path.open('w', encoding='utf-8', newline='') as handle:
+        writer = csv.writer(handle)
+        writer.writerow(observation_columns)
+        for row in rows:
+            values = list(row)
+            property_id = values[6]
+            values.insert(8, names.get(property_id, {}).get('ru'))
+            values.append('supplemental_semantic_not_core')
+            writer.writerow([strip_host_paths(value) for value in values])
+
+    property_ids = sorted({row[6] for row in rows})
+    definitions = []
+    for property_id in property_ids:
+        definition = extended.execute(
+            'SELECT property_id, canonical_name, category, canonical_unit '
+            'FROM property_definition WHERE property_id=?', (property_id,)
+        ).fetchone()
+        property_rows = [row for row in rows if row[6] == property_id]
+        documents = sorted({row[2] for row in property_rows})
+        definitions.append([
+            *definition,
+            names.get(property_id, {}).get('ru'),
+            names.get(property_id, {}).get('category_ru'),
+            len(property_rows), len(documents), ';'.join(documents),
+            'explicit_header_mapping',
+        ])
+    with (output / 'supplemental_property_definitions.csv').open(
+            'w', encoding='utf-8', newline='') as handle:
+        writer = csv.writer(handle)
+        writer.writerow([
+            'property_id', 'property', 'category', 'canonical_unit',
+            'property_ru', 'category_ru', 'observations', 'documents',
+            'document_ids', 'mapping_basis',
+        ])
+        writer.writerows(definitions)
+
+    core_raw = core.execute('SELECT COUNT(*) FROM table_observation').fetchone()[0]
+    core_unclassified = core.execute(
+        "SELECT COUNT(*) FROM table_observation "
+        "WHERE property_id='unclassified_table_metric'"
+    ).fetchone()[0]
+    audit = {
+        'core_catalog_definitions': len(core_ids),
+        'core_raw_observations': core_raw,
+        'core_unclassified_observations': core_unclassified,
+        'supplemental_property_definitions': len(definitions),
+        'supplemental_observations': len(rows),
+        'core_quarantine_after_supplemental_mapping': core_unclassified - len(rows),
+        'extended_candidate_quarantine': extended.execute(
+            "SELECT COUNT(*) FROM table_observation "
+            "WHERE property_id='unclassified_table_metric'"
+        ).fetchone()[0],
+        'layer_status': 'supplemental_semantic_not_core',
+        'definition': (
+            'Explicit mappings from the extended repair copy. They retain '
+            'raw provenance and are excluded from core portal aggregates, '
+            'manuscript tables, and the fixed 2,629-property catalog.'
+        ),
+    }
+    (output / 'supplemental_layer_audit.json').write_text(
+        json.dumps(audit, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    return audit
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--db', type=Path, required=True)
     parser.add_argument('--output', type=Path, default=Path('docs/data'))
     parser.add_argument('--dictionary', type=Path,
                         default=Path('docs/data/property_dictionary_ru_public.csv'))
+    parser.add_argument('--supplemental-db', type=Path,
+                        help='Extended repair copy used only for the supplemental semantic export.')
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
 
     names = load_property_names(args.dictionary)
     source = sqlite3.connect(f'file:{args.db}?mode=ro', uri=True)
+    supplemental = None
+    supplemental_audit = None
+    if args.supplemental_db:
+        supplemental = sqlite3.connect(
+            f'file:{args.supplemental_db}?mode=ro', uri=True)
     generated_at = source.execute("SELECT datetime('now')").fetchone()[0]
 
     aggregates = build_aggregates(source, names)
     aggregates['generated_at'] = generated_at
+    if supplemental is not None:
+        supplemental_audit = export_supplemental_layer(
+            source, supplemental, args.output, names)
+        aggregates['supplemental_semantic_layer'] = supplemental_audit
     (args.output / 'aggregates.json').write_text(
         json.dumps(aggregates, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
 
@@ -654,7 +803,52 @@ def main() -> None:
     census_rows = export_property_census(
         aggregates['properties'], args.output / 'property_census.csv')
     link_rows = export_document_links(source, args.output / 'document_links.csv')
+    raw_count = source.execute("SELECT COUNT(*) FROM table_observation").fetchone()[0]
+    excluded_count = source.execute(
+        "SELECT COUNT(*) FROM table_observation WHERE property_id='unclassified_table_metric'"
+    ).fetchone()[0]
+    excluded_status = dict(source.execute(
+        """SELECT q.status, COUNT(*)
+           FROM table_observation o
+           JOIN table_manual_review_queue q ON q.candidate_id=o.candidate_id
+           WHERE o.property_id='unclassified_table_metric'
+           GROUP BY q.status"""
+    ).fetchall())
+    excluded_quality = dict(source.execute(
+        """SELECT COALESCE(f.value_plausibility, 'no_quality_flag'), COUNT(*)
+           FROM table_observation o
+           LEFT JOIN observation_quality_flag f ON f.observation_id=o.observation_id
+           WHERE o.property_id='unclassified_table_metric'
+           GROUP BY COALESCE(f.value_plausibility, 'no_quality_flag')"""
+    ).fetchall())
+    clean_soil_links = source.execute(
+        """SELECT COUNT(*) FROM observation_soil_type st
+           JOIN table_observation o ON o.observation_id=st.observation_id
+           WHERE o.property_id <> 'unclassified_table_metric'"""
+    ).fetchone()[0]
+    (args.output / 'full_table_observation_audit.json').write_text(
+        json.dumps({
+            'raw_table_observations': raw_count,
+            'clean_table_observations': raw_count - excluded_count,
+            'excluded_rejected_unclassified': excluded_count,
+            'excluded_queue_status': excluded_status,
+            'excluded_unclassified_quality': excluded_quality,
+            'supplemental_semantic_layer': supplemental_audit,
+            'clean_soil_type_links': clean_soil_links,
+            'source_soil_type_links': source.execute(
+                'SELECT COUNT(*) FROM observation_soil_type').fetchone()[0],
+            'soil_type_orphans': source.execute(
+                """SELECT COUNT(*) FROM observation_soil_type st
+                   LEFT JOIN table_observation o ON o.observation_id=st.observation_id
+                   WHERE o.observation_id IS NULL"""
+            ).fetchone()[0],
+            'foreign_key_errors': len(source.execute('PRAGMA foreign_key_check').fetchall()),
+            'integrity_check': source.execute('PRAGMA integrity_check').fetchone()[0],
+            'definition': 'Public portal exports only clean table observations; rejected raw candidates remain in the audit source.',
+        }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     source.close()
+    if supplemental is not None:
+        supplemental.close()
 
     print(json.dumps({
         'generated_at': generated_at,

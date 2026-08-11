@@ -1,0 +1,58 @@
+property_id,property,category,canonical_unit,property_ru,category_ru,observations,documents,document_ids,mapping_basis
+aboveground_dry_phytomass,above-ground dry phytomass,biological,g/m2,,,9,1,springer:10.1134_S1064229324604402,explicit_header_mapping
+aggregate_perpendicular_max,soil aggregate perpendicular maximum,soil_structure,cm,,,14,1,springer:10.1134_S1064229306050048,explicit_header_mapping
+ash_element_concentration,element concentration in ash,geochemical,mg/kg,,,28,2,springer:10.1134_S1064229322050040;springer:10.1134_S1064229323603335,explicit_header_mapping
+ashfall_background_concentration,ashfall background concentration,geochemical,mg/kg,,,18,1,springer:10.1134_S1064229316030121,explicit_header_mapping
+bentonite_application,bentonite application,soil_amendment,g/L,,,16,1,springer:10.1134_S1064229320080062,explicit_header_mapping
+carbon_stock,carbon stock,organic,t/ha,,,50,1,springer:10.1134_S1064229324604402,explicit_header_mapping
+carbon_stock_g_m2,carbon stock (g/m2),organic,g/m2,,,2,1,springer:10.1134_S1064229324604402,explicit_header_mapping
+element_background_concentration,element background concentration,geochemical,mg/kg,,,20,1,springer:10.1134_S1064229316030121,explicit_header_mapping
+evapotranspiration,evapotranspiration,hydrophysical,mm,,,53,2,springer:10.1134_S1064229308070077;springer:10.1134_S1064229310010072,explicit_header_mapping
+flow_depth,flow depth,hydrological,cm,,,89,1,springer:10.1134_S1064229306080102,explicit_header_mapping
+fungal_mycelium_biomass,fungal mycelium biomass,biological,g/g,,,17,1,springer:10.1134_S1064229306130175,explicit_header_mapping
+groundwater_salinity,groundwater salinity,salinity,g/L,,,16,1,springer:10.1134_S1064229308050086,explicit_header_mapping
+humate_application,humate application,soil_amendment,g/L,,,15,1,springer:10.1134_S1064229320080062,explicit_header_mapping
+infiltration_change,infiltration change due to mulching,hydrophysical,mm,,,32,2,springer:10.1134_S106422930803006X;springer:10.1134_S1064229318010039,explicit_header_mapping
+irrigation_water_salinity,irrigation water salinity,salinity,g/L,,,25,1,springer:10.1134_S1064229308050086,explicit_header_mapping
+langmuir_cadmium_constant,Langmuir cadmium constant,soil_chemistry,L/mg,,,24,1,springer:10.1134_S1064229323601555,explicit_header_mapping
+layer_depth,layer depth,hydrophysical,cm,,,85,2,springer:10.1134_S1064229312010036;springer:10.1134_S1064229323601270,explicit_header_mapping
+leaf_length,leaf length,vegetation,mm,,,26,1,springer:10.1134_S1064229310070070,explicit_header_mapping
+microbial_colony_size,microbial colony size,biological,mm,,,19,1,springer:10.1134_S1064229324601628,explicit_header_mapping
+microorganism_count,total soil microorganisms,biological,thousand CFU/g soil,,,13,1,springer:10.1134_S1064229307050134,explicit_header_mapping
+mobile_element_concentration,mobile element concentration,geochemical,mg/kg,,,103,1,springer:10.1134_S1064229316030121,explicit_header_mapping
+modern_soil_grains,modern soil grains,particle_size,%,,,26,1,springer:10.1134_S1064229316090118,explicit_header_mapping
+n_alkanes,n-alkanes,organic,mg/kg,,,15,1,springer:10.1134_S1064229322040147,explicit_header_mapping
+pah_content_sludge_lignin,PAH content of sludge-lignin,contaminant,mg/kg,,,9,1,springer:10.1134_S1064229323603335,explicit_header_mapping
+qmax_cadmium_adsorption,maximum cadmium adsorption capacity,soil_chemistry,mg/g,,,22,1,springer:10.1134_S1064229323601555,explicit_header_mapping
+rainfall_intensity,rainfall intensity,hydrometeorological,mm/h,,,12,1,springer:10.1134_S1064229322100672,explicit_header_mapping
+rock_depth,rock depth,soil_profile,cm,,,13,1,springer:10.1134_S1064229325605591,explicit_header_mapping
+root_biomass,dry root biomass,biological,g/100 cm3,,,57,1,springer:10.1134_S1064229324604402,explicit_header_mapping
+root_length,root length,vegetation,mm,,,24,1,springer:10.1134_S1064229310070070,explicit_header_mapping
+runoff_change,runoff change due to mulching,hydrophysical,mm,,,32,2,springer:10.1134_S106422930803006X;springer:10.1134_S1064229318010039,explicit_header_mapping
+scattering_intensity,small-angle scattering intensity,soil_physics,cm-1,,,27,1,springer:10.1134_S1064229307090050,explicit_header_mapping
+sisal_fiber_length,sisal fiber length,soil_amendment,mm,,,35,1,springer:10.1134_S1064229325602793,explicit_header_mapping
+slope_gradient,slope gradient,terrain,deg,,,35,1,springer:10.1134_S106422930609002X,explicit_header_mapping
+smp_reserve,spherical magnetic particle reserve,soil_contamination,g/m2,,,29,1,springer:10.1134_S1064229312010036,explicit_header_mapping
+snow_period_precipitation,precipitation during snow period,hydrometeorological,mm,,,28,3,springer:10.1134_S1064229308070077;springer:10.1134_S1064229318010039;springer:10.1134_S1064229322100040,explicit_header_mapping
+snow_water_reserve,water reserve in snow,hydrometeorological,mm,,,2,1,springer:10.1134_S1064229308070077,explicit_header_mapping
+snowmelt_water_change,snowmelt water change,hydrometeorological,mm,,,16,1,springer:10.1134_S1064229318010039,explicit_header_mapping
+soil_cover_percentage,percentage in soil cover,vegetation,%,,,22,1,springer:10.1134_S1064229306050012,explicit_header_mapping
+soil_depth,soil depth,hydrophysical,cm,,,31,2,springer:10.1134_S1064229313040066;springer:10.1134_S1064229315080062,explicit_header_mapping
+soil_effervescence_depth,soil effervescence depth,soil_profile,cm,,,12,1,springer:10.1134_S1064229325600502,explicit_header_mapping
+soil_horizon_depth,soil horizon depth,soil_profile,cm,,,152,2,springer:10.1134_S1064229313020038;springer:10.1134_S1064229316070140,explicit_header_mapping
+soil_loss,soil loss,erosion,t/ha/year,,,72,2,springer:10.1134_S1064229308080115;springer:10.1134_S106422931912010X,explicit_header_mapping
+soil_moistening_depth,soil moistening depth,hydrophysical,cm,,,83,2,springer:10.1134_S1064229308070077;springer:10.1134_S1064229310010072,explicit_header_mapping
+soil_moisture_reserve,soil moisture reserve,hydrophysical,mm,,,39,1,springer:10.1134_S1064229310120069,explicit_header_mapping
+soil_thorium_concentration,soil thorium concentration,contaminant,mg/kg,,,14,1,springer:10.1134_S1064229317120031,explicit_header_mapping
+soil_uranium_concentration,soil uranium concentration,contaminant,mg/kg,,,13,1,springer:10.1134_S1064229317120031,explicit_header_mapping
+soil_water_deficit,soil water deficit,hydrophysical,mm,,,98,2,springer:10.1134_S1064229308070077;springer:10.1134_S1064229310010072,explicit_header_mapping
+sorption_b,sorption b,soil_chemistry,kg/kg,,,42,1,springer:10.1134_S1064229318070098,explicit_header_mapping
+sorption_ln_a,sorption ln(a),soil_chemistry,J/kg,,,17,1,springer:10.1134_S1064229318070098,explicit_header_mapping
+total_humus_carbon,total humus carbon,organic,g,,,22,1,springer:10.1134_S106422930609002X,explicit_header_mapping
+underground_dry_phytomass,under-ground dry phytomass,biological,g/100 cm3,,,2,1,springer:10.1134_S1064229324604402,explicit_header_mapping
+vegetation_pole_density,pole density,vegetation,%,,,888,1,springer:10.1134_S1064229313040066,explicit_header_mapping
+water_infiltration,water infiltration,hydrophysical,mm,,,13,1,springer:10.1134_S1064229318010039,explicit_header_mapping
+water_input,water input,hydrophysical,mm,,,41,1,springer:10.1134_S1064229310010072,explicit_header_mapping
+water_outflow,water outflow,hydrophysical,mm,,,20,2,springer:10.1134_S1064229308070077;springer:10.1134_S1064229310010072,explicit_header_mapping
+water_vapor_sorption,water vapor sorption,soil_physics,µL/g,,,20,1,springer:10.1134_S1064229314120011,explicit_header_mapping
+xray_diffraction_intensity,X-ray diffraction intensity,soil_mineralogy,arbitrary unit,,,17,1,springer:10.1134_S1064229322050076,explicit_header_mapping

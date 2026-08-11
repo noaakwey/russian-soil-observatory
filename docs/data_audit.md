@@ -1,6 +1,7 @@
 # Научный анализ базы Russian Soil Observatory
 
-**Версия слоя наблюдений: 10 августа 2026 г. · 94 996 табличных наблюдений из 4 862 публикаций**
+**Версия слоя наблюдений: 11 августа 2026 г. · 87 321 наблюдение
+аналитического ядра (94 996 в исходном допущенном слое) из 4 862 публикаций**
 
 > **Abstract.** This report audits a database of soil measurements extracted from the
 > full text of 4 862 Russian soil-science publications (966 original-language
@@ -19,7 +20,17 @@
 > (25.9%) were admitted; 94 996 of those materialised into `table_observation` (the
 > remaining four were dropped by a downstream identity collision). Every admitted
 > observation carries `normalization_status` of `exact` (94.5%) or `converted`
-> (5.5%) — never `incompatible` or `missing_unit`. Two structural limits dominate
+> (5.5%) — never `incompatible` or `missing_unit`. Of the 94,996 materialised
+> rows, 7,675 (8.1%) carry the catch-all `unclassified_table_metric` property —
+> a proven value and unit that cannot be mapped to a shared catalogue property
+> without losing physical meaning. They remain in the database with full
+> provenance but are excluded from the analytical core; every number in this
+> report and the manuscript that is not explicitly labelled "raw layer" is
+> drawn from the remaining **87,321** observations. A further 2,674 of the
+> 7,675 excluded rows carry an explicit manual semantic mapping across 57
+> additional properties, published separately as a supplemental export
+> (`docs/data/supplemental_observations.csv`); it is not part of the fixed
+> 2,629-property catalogue and does not feed any number below. Two structural limits dominate
 > any downstream use: coordinates with document-level precision are attached to
 > only 18.4% of observations directly (67.5% if a low-precision regional centroid
 > is accepted as "having coordinates"), and the 1 214 reported coordinate records
@@ -36,8 +47,8 @@
 > (14.6%) additionally clear the WRB-mapping bar (`wrb_confidence IN ('high',
 > 'medium')`) used throughout this report and the manuscript as the reliable
 > tier; after the further filters applied by the analysis pipeline (metric
-> status, quality flags, per-property document-count thresholds), 13 249
-> observations from 246 publications across seven WRB reference groups feed
+> status, quality flags, per-property document-count thresholds), 13 287
+> observations from 249 publications across seven WRB reference groups feed
 > the soil-type comparisons in the manuscript (Table 14). This and two
 > script-level bugs found while preparing this revision (a missing
 > Russia-bounds filter and an uncoalesced publication-year field, both in
@@ -73,6 +84,20 @@
    которое нельзя без потери точности свести к общей единице измерения,
    получает собственный `property_id` вместо того, чтобы быть отброшенным или
    насильно приведённым к чужой шкале.
+4a. **Из 94 996 наблюдений 7 675 (8.1%) отнесены к служебному показателю
+   `unclassified_table_metric` и исключены из аналитического ядра —
+   исправлено 2026-08-11.** Это значения с доказанной единицей, для которых
+   не нашлось общего для базы каталожного аналога; объединять величины
+   разной физической природы под одним ярлыком означало терять
+   интерпретируемость средних. Эти строки остаются в базе с полным
+   происхождением, но не входят ни в один количественный результат этого
+   отчёта или рукописи: **аналитическое ядро — 87 321 наблюдение** (2 064
+   показателя с ≥1 наблюдением), это число используется везде далее, если
+   явно не оговорено иное. Для 2 674 из 7 675 исключённых строк по 57
+   дополнительным показателям сохранена отдельная ручная семантическая
+   разметка (`docs/data/supplemental_observations.csv`,
+   `docs/data/supplemental_property_definitions.csv`) — она не входит в
+   основной каталог и ни в один результат ниже.
 5. **Корпус теперь состоит из трёх источников, а не двух.** К «Почвоведению»
    (966) и переводам Springer/*Eurasian Soil Science* (3 555) добавлен третий,
    отдельно отслеживаемый источник — 341 статья архива РЦНИ, заново
@@ -100,7 +125,7 @@
    эталонный уровень (`confidence='high' AND wrb_confidence IN ('high',
    'medium')`) — 13 823 наблюдения (14.6%), из которых после дополнительных
    фильтров конвейера анализа (метричность, флаги качества, порог по числу
-   публикаций на группу) 13 249 из 246 публикаций и 7 референтных групп WRB
+   публикаций на группу) 13 287 из 249 публикаций и 7 референтных групп WRB
    входят в сравнения Таблицы 14 рукописи.
 8. **Ни одно значение не удалено «по подозрению».** Отклонённый кандидат
    остаётся в `table_measurement_candidate` со статусом `rejected` и полным
@@ -659,8 +684,8 @@ WRB-группа назначена 83 025 наблюдениям (87.4% от в
 `medium`}) — 13 823 наблюдения (14.6%) из 15 референтных групп WRB, из
 которых 7 обеспечены не менее чем 10 публикациями (после дополнительных
 фильтров конвейера анализа — метричность, флаги качества, порог по числу
-публикаций на конкретный показатель — окончательные 13 249 наблюдений из
-246 публикаций входят в сравнения Таблицы 14 рукописи; см. раздел 7 выше).
+публикаций на конкретный показатель — окончательные 13 287 наблюдений из
+249 публикаций входят в сравнения Таблицы 14 рукописи; см. раздел 7 выше).
 Числа, использовавшиеся в рукописи и на портале до этого исправления
 (6 926 наблюдений / 135 публикаций / 4 группы), были построены на том же
 устаревшем слое и заменены везде на пересчитанные.

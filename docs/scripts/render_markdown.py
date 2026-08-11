@@ -172,7 +172,7 @@ PAGE = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
-<link rel="stylesheet" href="assets/portal.css?v=20260810b">
+<link rel="stylesheet" href="assets/portal.css?v=20260811a">
 <style>
   main {{ max-width: 82ch; }}
   main h1 {{ font-size: 1.7rem; margin-top: .2em; }}

@@ -60,7 +60,8 @@ const STRINGS = {
     'quality.value': 'Физическая правдоподобность значений',
     'quality.value.note': 'Проверка диапазона запускается только там, где единица действительно известна. pH проверяется всегда — он безразмерен.',
     'quality.unit': 'Допуск кандидатов в слой наблюдений', 'quality.spatial': 'Сила пространственной привязки',
-    'quality.unit.note': 'Кандидат из OCR-таблицы становится наблюдением только после согласованной трёхагентной проверки происхождения и доказанной единицы измерения; <strong>accepted</strong> — кандидат допущен, <strong>rejected</strong> — отклонён или оставлен в очереди ручного разбора. Показанные ниже 94 996 наблюдений — это только допущенные кандидаты.',
+    'quality.unit.note': 'Кандидат из OCR-таблицы становится наблюдением только после согласованной трёхагентной проверки происхождения и доказанной единицы измерения; отклонённые сырые кандидаты остаются только в аудите и не входят в чистый экспорт портала.',
+    'quality.supplemental.note': 'Supplemental-слой: 2 674 явно сопоставленные raw-строки и 57 дополнительных свойств. Он доступен отдельными файлами и не входит в core-каталог 2 629 или clean-аналитику.',
     'query.lede': 'Вся база наблюдений загружается в браузер и выполняет SQL локально — данные никуда не отправляются. Таблицы: <code>observation</code>, <code>reported_site</code>, <code>verified_measurement</code>, <code>meta</code>.',
     'query.run': 'Выполнить', 'query.ex1': 'Свойства с доказанной единицей', 'query.ex2': 'pH по глубине',
     'query.ex3': 'Тяжёлые металлы по годам', 'query.ex4': 'Только «чистые» данные',
@@ -156,7 +157,8 @@ const STRINGS = {
     'quality.value': 'Physical plausibility of values',
     'quality.value.note': 'A range check only fires where the unit is actually known. pH is always checked — it is dimensionless.',
     'quality.unit': 'Candidate admission into the observation layer', 'quality.spatial': 'Strength of spatial linkage',
-    'quality.unit.note': 'An OCR-table candidate becomes an observation only after agreed three-agent provenance review and a proven unit; <strong>accepted</strong> — the candidate was admitted, <strong>rejected</strong> — it was declined or left in the manual-review queue. The 94,996 observations shown elsewhere on this portal are only the admitted candidates.',
+    'quality.unit.note': 'An OCR-table candidate becomes an observation only after agreed three-agent provenance review and a proven unit; rejected raw candidates remain in the audit layer and are excluded from the portal\'s clean export.',
+    'quality.supplemental.note': 'Supplemental layer: 2,674 explicitly mapped raw rows and 57 additional properties. It is available as separate files and is excluded from the 2,629-property core catalog and clean analysis.',
     'query.lede': 'The whole observation database loads into your browser and runs SQL locally — nothing is sent anywhere. Tables: <code>observation</code>, <code>reported_site</code>, <code>verified_measurement</code>, <code>meta</code>.',
     'query.run': 'Run', 'query.ex1': 'Properties with proven units', 'query.ex2': 'pH by depth',
     'query.ex3': 'Heavy metals by year', 'query.ex4': 'Analysis-ready subset only',
@@ -383,7 +385,7 @@ const DOWNLOADS = [
     en: 'All table observations with quality flags and provenance' }, '83 MB'],
   ['data/observatory.sqlite.gz', {
     ru: 'База для браузера и локального анализа (SQLite, gzip)',
-    en: 'Database for the browser and local analysis (SQLite, gzip)' }, '9.6 MB'],
+    en: 'Database for the browser and local analysis (SQLite, gzip)' }, '8.3 MB'],
   ['data/aggregates.json', {
     ru: 'Все сводные показатели портала', en: 'Every aggregate the portal quotes' }, '47 KB'],
   ['data/portal_map.json', {
@@ -406,6 +408,15 @@ const DOWNLOADS = [
     ru: 'Аудит полноты слоя наблюдений', en: 'Observation layer coverage audit' }, '1 KB'],
   ['data/observation_quality_audit.json', {
     ru: 'Аудит флагов качества', en: 'Quality flag audit' }, '2 KB'],
+  ['data/supplemental_observations.csv', {
+    ru: 'Supplemental: 2 674 явно сопоставленных raw-наблюдения',
+    en: 'Supplemental: 2,674 explicitly mapped raw observations' }, '1.8 MB'],
+  ['data/supplemental_property_definitions.csv', {
+    ru: 'Supplemental-каталог: 57 дополнительных свойств',
+    en: 'Supplemental catalog: 57 additional properties' }, '8 KB'],
+  ['data/supplemental_layer_audit.json', {
+    ru: 'Аудит supplemental-слоя и его границы с core',
+    en: 'Supplemental-layer audit and core-layer boundary' }, '1 KB'],
   ['data/publication_year_audit.json', {
     ru: 'Аудит восстановления года публикации', en: 'Publication year recovery audit' }, '1 KB'],
 ];

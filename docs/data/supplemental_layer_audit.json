@@ -1,0 +1,11 @@
+{
+  "core_catalog_definitions": 2629,
+  "core_raw_observations": 94996,
+  "core_unclassified_observations": 7675,
+  "supplemental_property_definitions": 57,
+  "supplemental_observations": 2674,
+  "core_quarantine_after_supplemental_mapping": 5001,
+  "extended_candidate_quarantine": 4871,
+  "layer_status": "supplemental_semantic_not_core",
+  "definition": "Explicit mappings from the extended repair copy. They retain raw provenance and are excluded from core portal aggregates, manuscript tables, and the fixed 2,629-property catalog."
+}

@@ -68,6 +68,12 @@ PHYSICAL_RANGE: dict[str, tuple[float | None, float | None, str]] = {
     'soil_organic_carbon': (0.0, 600.0, 'organic carbon content 0–600 g/kg (Histosol ceiling)'),
     'total_nitrogen': (0.0, 50.0, 'total nitrogen content 0–50 g/kg'),
     'total_potassium': (0.0, 60.0, 'total potassium content 0–60 g/kg'),
+    'soil_depth': (0.0, 2000.0, 'soil depth 0–2 000 cm'),
+    'flow_depth': (0.0, 2000.0, 'flow depth 0–2 000 cm'),
+    'layer_depth': (0.0, 2000.0, 'layer depth 0–2 000 cm'),
+    'soil_moistening_depth': (0.0, 2000.0, 'soil moistening depth 0–2 000 cm'),
+    'leaf_length': (0.0, 2000.0, 'leaf length 0–2 000 mm'),
+    'root_length': (0.0, 2000.0, 'root length 0–2 000 mm'),
 
     # Found the same way, once observation_unit_inference (2026-08-04) started
     # assigning a unit to essentially every observation instead of leaving most
@@ -112,6 +118,7 @@ PERCENT_PROPERTIES = {
     'carbonate_equivalent', 'exchangeable_sodium_percentage',
     'gravimetric_water_content', 'field_capacity', 'wilting_point',
     'water_holding_capacity',
+    'vegetation_pole_density', 'soil_cover_percentage',
     'coarse_silt', 'medium_silt', 'fine_silt', 'very_coarse_sand',
     'fine_fraction_lt_0_001mm',
     # Elemental-oxide composition (geochemical/elemental_oxide categories):
@@ -141,7 +148,8 @@ UNCLASSIFIED_UNIT_RANGE: dict[str, tuple[float | None, float | None, str]] = {
 CONTENT_CATEGORIES = {
     'organic', 'macronutrient', 'exchange', 'particle_size', 'microelement',
     'contaminant', 'salinity', 'biological', 'hydrophysical', 'elemental_oxide',
-    'soil_solution', 'geochemical',
+    'soil_solution', 'geochemical', 'vegetation', 'erosion', 'hydrological',
+    'hydrometeorological',
 }
 # Redox potential is genuinely negative in reduced soils.
 SIGNED_PROPERTIES = {'redox_potential', 'soil_temperature'}
@@ -239,6 +247,14 @@ def main() -> None:
               plausibility_rule=excluded.plausibility_rule,
               flagged_at=CURRENT_TIMESTAMP
         """, payload)
+        unclassified_review_status = dict(con.execute("""
+            SELECT COALESCE(q.status, 'no_review') AS review_status, COUNT(*)
+            FROM table_observation o
+            LEFT JOIN table_manual_review_queue q ON q.candidate_id=o.candidate_id
+            WHERE o.property_id='unclassified_table_metric'
+            GROUP BY COALESCE(q.status, 'no_review')
+            ORDER BY review_status
+        """).fetchall())
         con.commit()
 
     trusted = sum(
@@ -250,6 +266,7 @@ def main() -> None:
         'header_match_kind': dict(header_stats),
         'value_plausibility': dict(value_stats),
         'unflagged_observations': trusted,
+        'unclassified_review_status': unclassified_review_status,
         'most_affected_properties': {
             pid: dict(counts) for pid, counts in
             sorted(per_property.items(),
