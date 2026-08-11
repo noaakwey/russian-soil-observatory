@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/leaflet-1.9.4.css">
-<link rel="stylesheet" href="assets/portal.css?v=20260811a">
+<link rel="stylesheet" href="assets/portal.css?v=20260811b">
 </head>
 <body>
 
@@ -146,6 +146,10 @@
       <div class="toolbar">
         <input type="text" id="prop-filter" class="ghost" style="min-width:220px"
                data-i18n-placeholder="props.filter" placeholder="Найти свойство…">
+        <label class="status" for="prop-category" data-i18n="props.category">Группа:</label>
+        <select id="prop-category" class="ghost" style="padding:.35rem .5rem">
+          <option value="" data-i18n="props.category.all">все группы</option>
+        </select>
         <label class="status" for="prop-sort" data-i18n="props.sort">Сортировка:</label>
         <select id="prop-sort" class="ghost" style="padding:.35rem .5rem">
           <option value="observations" data-i18n="props.sort.n">по числу наблюдений</option>
@@ -272,6 +276,7 @@
         <button class="ghost" data-example="1" data-i18n="query.ex2">pH по глубине</button>
         <button class="ghost" data-example="2" data-i18n="query.ex3">Тяжёлые металлы по годам</button>
         <button class="ghost" data-example="3" data-i18n="query.ex4">Только «чистые» данные</button>
+        <button class="ghost" data-example="4" data-i18n="query.ex5">Сводка по группам показателей</button>
         <button class="ghost" id="sql-csv" data-i18n="query.csv">Скачать результат CSV</button>
       </div>
       <p class="status" id="sql-status" data-i18n="query.loading">Загрузка базы…</p>
@@ -352,6 +357,6 @@ python3 docs/scripts/build_portal.py --db DB --output docs/data</pre>
 <button type="button" id="to-top" class="to-top" aria-label="Наверх" title="Наверх">↑</button>
 
 <script src="assets/leaflet.js"></script>
-<script src="assets/portal.js?v=20260811a"></script>
+<script src="assets/portal.js?v=20260811b"></script>
 </body>
 </html>

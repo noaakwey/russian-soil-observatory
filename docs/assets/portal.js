@@ -33,6 +33,7 @@ const STRINGS = {
     'props.sort': 'Сортировка:', 'props.sort.n': 'по числу наблюдений',
     'props.sort.norm': 'по доказанным единицам', 'props.sort.docs': 'по числу публикаций',
     'props.showRare': 'показать редкие (из одной публикации)',
+    'props.category': 'Группа:', 'props.category.all': 'все группы',
     'props.th.property': 'Свойство', 'props.th.category': 'Группа', 'props.th.n': 'Наблюдений',
     'props.th.docs': 'Публикаций', 'props.th.unit': 'Единица доказана',
     'props.th.header': 'Заголовок надёжен', 'props.th.value': 'Значение правдоподобно',
@@ -66,6 +67,7 @@ const STRINGS = {
     'query.lede': 'Вся база наблюдений загружается в браузер и выполняет SQL локально — данные никуда не отправляются. Таблицы: <code>observation</code>, <code>reported_site</code>, <code>verified_measurement</code>, <code>meta</code>.',
     'query.run': 'Выполнить', 'query.ex1': 'Свойства с доказанной единицей', 'query.ex2': 'pH по глубине',
     'query.ex3': 'Тяжёлые металлы по годам', 'query.ex4': 'Только «чистые» данные',
+    'query.ex5': 'Сводка по группам показателей',
     'query.csv': 'Скачать результат CSV', 'query.loading': 'База загружается при первом запросе.',
     'about.chain': 'Доказательная цепочка',
     'about.chain.text': 'Каждое наблюдение прослеживается до конкретной ячейки:',
@@ -131,6 +133,7 @@ const STRINGS = {
     'props.sort': 'Sort by:', 'props.sort.n': 'observation count',
     'props.sort.norm': 'proven units', 'props.sort.docs': 'publication count',
     'props.showRare': 'show single-publication properties',
+    'props.category': 'Group:', 'props.category.all': 'all groups',
     'props.th.property': 'Property', 'props.th.category': 'Group', 'props.th.n': 'Observations',
     'props.th.docs': 'Publications', 'props.th.unit': 'Unit proven',
     'props.th.header': 'Header reliable', 'props.th.value': 'Value plausible',
@@ -164,6 +167,7 @@ const STRINGS = {
     'query.lede': 'The whole observation database loads into your browser and runs SQL locally — nothing is sent anywhere. Tables: <code>observation</code>, <code>reported_site</code>, <code>verified_measurement</code>, <code>meta</code>.',
     'query.run': 'Run', 'query.ex1': 'Properties with proven units', 'query.ex2': 'pH by depth',
     'query.ex3': 'Heavy metals by year', 'query.ex4': 'Analysis-ready subset only',
+    'query.ex5': 'Summary by property group',
     'query.csv': 'Download result as CSV', 'query.loading': 'The database loads on your first query.',
     'about.chain': 'Chain of evidence',
     'about.chain.text': 'Every observation is traceable to a specific cell:',
@@ -323,10 +327,31 @@ function propertyLabel(row) {
   return lang === 'ru' && row.property_ru ? row.property_ru : row.property;
 }
 
+/* The dropdown lists every category actually present in AGG.properties,
+   labelled in the current language, sorted alphabetically. Rebuilt on every
+   language switch (labels differ) but keeps the previous selection when the
+   underlying category slug is still present. */
+function populatePropertyCategoryFilter() {
+  const select = document.getElementById('prop-category');
+  const previous = select.value;
+  const byCategory = new Map();
+  AGG.properties.forEach((row) => {
+    if (!byCategory.has(row.category)) {
+      byCategory.set(row.category,
+        lang === 'ru' ? (row.category_ru || row.category) : row.category);
+    }
+  });
+  const options = [...byCategory.entries()].sort((a, b) => a[1].localeCompare(b[1], lang));
+  select.innerHTML = `<option value="" data-i18n="props.category.all">${esc(t('props.category.all'))}</option>`
+    + options.map(([slug, label]) => `<option value="${esc(slug)}">${esc(label)}</option>`).join('');
+  select.value = options.some(([slug]) => slug === previous) ? previous : '';
+}
+
 function renderProperties() {
   const sort = document.getElementById('prop-sort').value;
   const query = (document.getElementById('prop-filter').value || '').trim().toLowerCase();
   const showRare = document.getElementById('prop-show-rare').checked;
+  const category = document.getElementById('prop-category').value;
   const pct = (part, whole) => whole ? `${Math.round(100 * part / whole)}%` : '—';
   let rows = [...AGG.properties].sort((a, b) => b[sort] - a[sort]);
   // Most of the 2,064-property catalogue is source-specific: a value that
@@ -338,6 +363,9 @@ function renderProperties() {
   // rcsi405789"; hide documents < 2 unless explicitly asked to see them.
   if (!showRare) {
     rows = rows.filter((row) => row.documents >= 2);
+  }
+  if (category) {
+    rows = rows.filter((row) => row.category === category);
   }
   if (query) {
     rows = rows.filter((row) =>
@@ -601,6 +629,17 @@ WHERE header_match_kind <> 'symbol_embedded'
   AND metric = 1
 GROUP BY category, property
 ORDER BY n DESC;`,
+  `-- One row per thematic group (category): how much of the layer it covers
+-- and how well-supported it is. category_ru is the same Russian label the
+-- Properties tab's "Группа" filter uses.
+SELECT category, category_ru,
+       COUNT(*)                          AS observations,
+       COUNT(DISTINCT property_id)       AS properties,
+       COUNT(DISTINCT document_id)       AS documents,
+       ROUND(100.0 * COUNT(*) / (SELECT COUNT(*) FROM observation), 1) AS pct_of_layer
+FROM observation
+GROUP BY category, category_ru
+ORDER BY observations DESC;`,
 ];
 
 let db = null;
@@ -1037,7 +1076,7 @@ function applyLanguage() {
   });
   document.getElementById('lang-ru').setAttribute('aria-pressed', String(lang === 'ru'));
   document.getElementById('lang-en').setAttribute('aria-pressed', String(lang === 'en'));
-  if (AGG) { renderOverview(); renderProperties(); renderQuality(); renderDownloads(); }
+  if (AGG) { renderOverview(); populatePropertyCategoryFilter(); renderProperties(); renderQuality(); renderDownloads(); }
   if (MAP_DATA && map) renderMap();
   if (selectedProperty) selectProperty(selectedProperty);
   observeReveals();
@@ -1096,6 +1135,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('prop-sort').onchange = renderProperties;
   document.getElementById('prop-filter').oninput = renderProperties;
   document.getElementById('prop-show-rare').onchange = renderProperties;
+  document.getElementById('prop-category').onchange = renderProperties;
   document.querySelector('#props-table tbody').addEventListener('click', (event) => {
     const row = event.target.closest('tr[data-property-id]');
     if (row) selectProperty(row.dataset.propertyId);

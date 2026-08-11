@@ -239,6 +239,10 @@ main { max-width: 1320px; margin: 0 auto; padding: 1.4rem 1.1rem 4rem; }
 .leaflet-popup-content td, .leaflet-popup-content th { border-bottom: 1px solid #dde4ea; padding: 2px 4px; text-align: left; vertical-align: top; }
 .leaflet-popup-content details { margin: .35rem 0; font-size: .78rem; overflow-wrap: anywhere; }
 .leaflet-popup-content summary { cursor: pointer; color: #075985; }
+/* Leaflet ships a flag glyph next to the attribution link (CARTO's own
+   attribution HTML draws it via this class); this portal's attribution is
+   plain text with no geopolitical content to illustrate, so drop it. */
+.leaflet-attribution-flag { display: none !important; }
 
 /* ---------- tables ---------- */
 
