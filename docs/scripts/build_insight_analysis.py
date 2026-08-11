@@ -66,7 +66,11 @@ def apply_theme(theme: dict) -> None:
 
 
 def save(fig, output: Path, name: str, theme_name: str) -> None:
-    fig.savefig(output / f'{name}_{theme_name}.png')
+    # bbox_inches='tight': tight_layout() doesn't know about legends placed
+    # outside the axes via bbox_to_anchor (e.g. fig5_time's stackplot
+    # legend), so without it such a legend gets silently clipped off the
+    # saved PNG rather than shrinking the plot to make room.
+    fig.savefig(output / f'{name}_{theme_name}.png', bbox_inches='tight')
     plt.close(fig)
 
 
@@ -418,7 +422,12 @@ def figure_time(frame: pd.DataFrame, output: Path, theme_name: str,
     ax.set_xlim(min(years), max(years)); ax.set_ylim(0, 100)
     ax.set_xlabel('год'); ax.set_ylabel('% наблюдений')
     ax.set_title('Смена тематики: состав измеряемых свойств')
-    ax.legend(frameon=False, fontsize=8.2, loc='lower center', ncol=2)
+    # A stackplot fills the whole 0-100% band, so an in-axes legend
+    # inevitably sits on top of some series; anchor it below the axes
+    # instead (found 2026-08-11: 'lower center' inside the plot covered
+    # the bottom of the stack).
+    ax.legend(frameon=False, fontsize=8.2, loc='upper center',
+             bbox_to_anchor=(0.5, -0.16), ncol=3)
 
     # Has the research frontier moved east?
     located = dated[dated.latitude.notna()]

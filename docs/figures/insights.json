@@ -1,31 +1,31 @@
 {
   "layer": {
-    "observations": 86210,
-    "trusted": 82667,
-    "metric": 82667,
-    "located": 55677,
-    "precise": 8952,
-    "documents_outside_russia": 160
+    "observations": 86976,
+    "trusted": 83361,
+    "metric": 83361,
+    "located": 61670,
+    "precise": 12079,
+    "documents_outside_russia": 161
   },
   "effort": {
-    "documents_located": 958,
-    "observations_located": 53537,
-    "european_documents_pct": 73.0,
+    "documents_located": 1030,
+    "observations_located": 59289,
+    "european_documents_pct": 72.6,
     "european_area_pct": 23.0,
-    "documents_east_of_100E": 111,
+    "documents_east_of_100E": 119,
     "by_tier": {
-      "region": 791,
-      "reported": 133,
-      "dms": 34
+      "region": 844,
+      "reported": 181,
+      "dms": 5
     }
   },
   "zonal": {
     "ph_latitude": {
-      "n_documents": 65,
-      "spearman_rho": -0.591,
-      "p_value": 2.24e-07,
-      "slope_per_degree": -0.1036,
-      "r_squared": 0.285
+      "n_documents": 66,
+      "spearman_rho": -0.617,
+      "p_value": 3.54e-08,
+      "slope_per_degree": -0.1222,
+      "r_squared": 0.334
     },
     "ph_bands": [
       {
@@ -36,38 +36,38 @@
       },
       {
         "band": "44–48",
-        "n_documents": 40,
+        "n_documents": 39,
         "mean_ph": 6.86,
-        "sd": 1.39
+        "sd": 1.41
       },
       {
         "band": "48–52",
-        "n_documents": 29,
-        "mean_ph": 7.29,
-        "sd": 1.56
+        "n_documents": 33,
+        "mean_ph": 7.25,
+        "sd": 1.5
       },
       {
         "band": "52–56",
-        "n_documents": 130,
-        "mean_ph": 6.21,
+        "n_documents": 131,
+        "mean_ph": 6.17,
         "sd": 1.5
       },
       {
         "band": "56–60",
-        "n_documents": 74,
-        "mean_ph": 5.88,
-        "sd": 1.18
+        "n_documents": 81,
+        "mean_ph": 5.85,
+        "sd": 1.21
       },
       {
         "band": "60–64",
-        "n_documents": 36,
-        "mean_ph": 5.46,
-        "sd": 0.98
+        "n_documents": 40,
+        "mean_ph": 5.42,
+        "sd": 1.09
       },
       {
         "band": "64–68",
-        "n_documents": 24,
-        "mean_ph": 5.64,
+        "n_documents": 25,
+        "mean_ph": 5.59,
         "sd": 1.34
       },
       {
@@ -78,14 +78,14 @@
       }
     ],
     "soc_latitude": {
-      "n_documents": 121,
-      "spearman_rho": -0.025,
-      "p_value": 0.785,
+      "n_documents": 125,
+      "spearman_rho": -0.081,
+      "p_value": 0.371,
       "median_g_per_kg": 21.6
     }
   },
   "cooccurrence": {
-    "tables_with_multiple_properties": 1343,
+    "tables_with_multiple_properties": 1347,
     "strongest_pairs": [
       {
         "a": "chloride ion Cl-",
@@ -114,7 +114,7 @@
       {
         "a": "copper",
         "b": "lead",
-        "jaccard": 0.55,
+        "jaccard": 0.543,
         "tables": 82
       },
       {
@@ -130,12 +130,6 @@
         "tables": 26
       },
       {
-        "a": "lead",
-        "b": "zinc",
-        "jaccard": 0.526,
-        "tables": 81
-      },
-      {
         "a": "phosphorus pentoxide (P2O5)",
         "b": "potassium oxide K2O",
         "jaccard": 0.526,
@@ -148,10 +142,22 @@
         "tables": 80
       },
       {
+        "a": "lead",
+        "b": "zinc",
+        "jaccard": 0.519,
+        "tables": 81
+      },
+      {
         "a": "calcium ion Ca2+",
         "b": "magnesium ion Mg2+",
         "jaccard": 0.487,
         "tables": 109
+      },
+      {
+        "a": "aluminum oxide Al2O3",
+        "b": "silicon dioxide",
+        "jaccard": 0.478,
+        "tables": 32
       },
       {
         "a": "aluminum oxide Al2O3",
@@ -162,38 +168,14 @@
       {
         "a": "lead",
         "b": "nickel",
-        "jaccard": 0.475,
+        "jaccard": 0.468,
         "tables": 66
-      },
-      {
-        "a": "aluminum oxide Al2O3",
-        "b": "silicon dioxide SiO2",
-        "jaccard": 0.463,
-        "tables": 31
       },
       {
         "a": "bicarbonate ion HCO3-",
         "b": "chloride ion Cl-",
         "jaccard": 0.456,
         "tables": 31
-      },
-      {
-        "a": "cadmium",
-        "b": "lead",
-        "jaccard": 0.446,
-        "tables": 50
-      },
-      {
-        "a": "magnesium oxide MgO",
-        "b": "silicon dioxide SiO2",
-        "jaccard": 0.446,
-        "tables": 25
-      },
-      {
-        "a": "calcium",
-        "b": "magnesium",
-        "jaccard": 0.446,
-        "tables": 29
       },
       {
         "a": "potassium ion K+",
@@ -206,14 +188,32 @@
         "b": "zinc",
         "jaccard": 0.441,
         "tables": 71
+      },
+      {
+        "a": "cadmium",
+        "b": "lead",
+        "jaccard": 0.439,
+        "tables": 50
+      },
+      {
+        "a": "magnesium oxide MgO",
+        "b": "silicon dioxide",
+        "jaccard": 0.439,
+        "tables": 25
+      },
+      {
+        "a": "calcium",
+        "b": "magnesium",
+        "jaccard": 0.433,
+        "tables": 29
       }
     ]
   },
   "depth": {
     "soc_decay_north": {
-      "n": 35,
-      "e_folding_depth_cm": 221.9,
-      "r_squared": 0.009
+      "n": 40,
+      "e_folding_depth_cm": 118.6,
+      "r_squared": 0.03
     },
     "soc_decay_south": {
       "n": 78,
@@ -224,58 +224,58 @@
   },
   "time": {
     "metal_share_2006_2010": 5.9,
-    "metal_share_2020_2025": 6.3,
-    "longitude_drift_per_year": 0.306,
-    "longitude_drift_p": 0.0655,
+    "metal_share_2020_2025": 6.2,
+    "longitude_drift_per_year": 0.365,
+    "longitude_drift_p": 0.0365,
     "median_longitude_2006_2010": 41.0,
     "median_longitude_2020_2025": 44.0
   },
   "zones": [
     {
       "zone": "Арктика и субарктика (>66°)",
-      "documents": 81,
-      "observations": 5873,
-      "properties": 167,
-      "precise_pct": 40.0
+      "documents": 92,
+      "observations": 7326,
+      "properties": 245,
+      "precise_pct": 39.0
     },
     {
       "zone": "Северная тайга (60–66°)",
-      "documents": 94,
-      "observations": 5426,
-      "properties": 166,
+      "documents": 109,
+      "observations": 7069,
+      "properties": 193,
       "precise_pct": 31.0
     },
     {
       "zone": "Средняя тайга (56–60°)",
-      "documents": 207,
-      "observations": 10031,
-      "properties": 244,
-      "precise_pct": 11.0
+      "documents": 220,
+      "observations": 10508,
+      "properties": 280,
+      "precise_pct": 13.0
     },
     {
       "zone": "Южная тайга и лесостепь (52–56°)",
-      "documents": 317,
-      "observations": 19538,
-      "properties": 375,
+      "documents": 331,
+      "observations": 20584,
+      "properties": 421,
       "precise_pct": 9.0
     },
     {
       "zone": "Степь (48–52°)",
-      "documents": 123,
-      "observations": 5530,
-      "properties": 195,
-      "precise_pct": 24.0
+      "documents": 137,
+      "observations": 6396,
+      "properties": 218,
+      "precise_pct": 23.0
     },
     {
       "zone": "Сухая степь и предгорья (<48°)",
-      "documents": 136,
-      "observations": 7139,
-      "properties": 144,
-      "precise_pct": 18.0
+      "documents": 141,
+      "observations": 7406,
+      "properties": 164,
+      "precise_pct": 19.0
     }
   ],
   "landscape": {
-    "total_properties": 245,
+    "total_properties": 247,
     "best_unit_proven": [
       {
         "property": "soil organic carbon",
@@ -285,17 +285,17 @@
       {
         "property": "organic matter/humus",
         "unit_proven_pct": 100.0,
-        "observations": 4124
+        "observations": 4122
       },
       {
         "property": "pH (method unspecified)",
         "unit_proven_pct": 100.0,
-        "observations": 3976
+        "observations": 3953
       },
       {
         "property": "pH in water",
         "unit_proven_pct": 100.0,
-        "observations": 3685
+        "observations": 3684
       },
       {
         "property": "magnesium ion Mg2+",
@@ -312,17 +312,17 @@
       {
         "property": "organic matter/humus",
         "unit_proven_pct": 100.0,
-        "observations": 4124
+        "observations": 4122
       },
       {
         "property": "pH (method unspecified)",
         "unit_proven_pct": 100.0,
-        "observations": 3976
+        "observations": 3953
       },
       {
         "property": "pH in water",
         "unit_proven_pct": 100.0,
-        "observations": 3685
+        "observations": 3684
       },
       {
         "property": "magnesium ion Mg2+",
@@ -352,9 +352,9 @@
         "observations": 286
       },
       {
-        "property": "chloride ion Cl-",
-        "depth_pct": 81.0,
-        "observations": 748
+        "property": "exchangeable calcium",
+        "depth_pct": 80.4,
+        "observations": 777
       }
     ],
     "best_spatial_coverage": [
@@ -364,29 +364,29 @@
         "observations": 244
       },
       {
+        "property": "calcium oxide CaO",
+        "spatial_pct": 94.9,
+        "observations": 370
+      },
+      {
+        "property": "bicarbonate ion HCO3-",
+        "spatial_pct": 93.9,
+        "observations": 607
+      },
+      {
         "property": "iron oxide Fe2O3",
-        "spatial_pct": 93.2,
+        "spatial_pct": 93.8,
         "observations": 2339
       },
       {
-        "property": "sodium",
-        "spatial_pct": 92.3,
-        "observations": 312
-      },
-      {
-        "property": "phosphorus pentoxide (P2O5)",
-        "spatial_pct": 91.7,
-        "observations": 2012
-      },
-      {
-        "property": "calcium oxide CaO",
-        "spatial_pct": 91.4,
-        "observations": 370
+        "property": "titanium dioxide TiO2",
+        "spatial_pct": 93.0,
+        "observations": 200
       }
     ],
     "median_unit_proven_pct": 100.0,
     "properties_over_1000_obs": 21,
-    "properties_under_50_obs": 125
+    "properties_under_50_obs": 126
   },
   "correlations": {
     "pairs_tested": 60,
@@ -492,13 +492,13 @@
         "q_value": 0.0
       },
       {
-        "a": "гумус",
-        "b": "CaCO3",
-        "n": 90,
-        "pearson_r": 0.504,
+        "a": "pH(H2O)",
+        "b": "песок",
+        "n": 116,
+        "pearson_r": -0.503,
         "ci": [
-          0.332,
-          0.644
+          -0.628,
+          -0.353
         ],
         "q_value": 0.0
       }
@@ -507,141 +507,152 @@
   "mixed_effects": {
     "ph": {
       "label": "pH",
-      "n_observations": 803,
-      "n_documents": 65,
-      "naive_ols_slope_per_degree": -0.1036,
-      "naive_ols_r_squared": 0.285,
-      "mixed_slope_per_degree": -0.1009,
+      "n_observations": 784,
+      "n_documents": 66,
+      "naive_ols_slope_per_degree": -0.1222,
+      "naive_ols_r_squared": 0.334,
+      "mixed_slope_per_degree": -0.1198,
       "mixed_ci": [
-        -0.1387,
-        -0.0631
+        -0.1597,
+        -0.0799
       ],
-      "mixed_p_value": 1.67e-07,
-      "icc_document": 0.626
+      "mixed_p_value": 4.01e-09,
+      "icc_document": 0.63
     },
     "soc": {
       "label": "log(SOC)",
-      "n_observations": 1029,
-      "n_documents": 121,
-      "naive_ols_slope_per_degree": -0.0031,
-      "naive_ols_r_squared": 0.0,
-      "mixed_slope_per_degree": 0.0012,
+      "n_observations": 1064,
+      "n_documents": 125,
+      "naive_ols_slope_per_degree": -0.0115,
+      "naive_ols_r_squared": 0.003,
+      "mixed_slope_per_degree": -0.0082,
       "mixed_ci": [
-        -0.0356,
-        0.0381
+        -0.0451,
+        0.0286
       ],
-      "mixed_p_value": 0.947,
-      "icc_document": 0.514
+      "mixed_p_value": 0.662,
+      "icc_document": 0.535
     },
     "ph_multiple": {
-      "n_observations": 577,
-      "n_documents": 32,
+      "n_observations": 569,
+      "n_documents": 34,
       "coefficients": {
         "Intercept": {
-          "estimate": 11.396,
+          "estimate": 11.387,
           "ci": [
-            7.9212,
-            14.8708
+            7.8249,
+            14.949
           ],
-          "p_value": 1.29e-10
+          "p_value": 3.72e-10
         },
         "C(corpus)[T.springer]": {
-          "estimate": -0.5873,
+          "estimate": 0.4203,
           "ci": [
-            -1.761,
-            0.5864
+            -0.7965,
+            1.637
           ],
-          "p_value": 0.327
+          "p_value": 0.498
         },
         "latitude": {
-          "estimate": -0.0878,
+          "estimate": -0.1068,
           "ci": [
-            -0.1393,
-            -0.0364
+            -0.162,
+            -0.0517
           ],
-          "p_value": 0.000822
+          "p_value": 0.000147
         },
         "depth_top_cm": {
-          "estimate": 0.0101,
+          "estimate": 0.01,
           "ci": [
-            0.0082,
+            0.0081,
             0.012
           ],
-          "p_value": 6.06e-25
+          "p_value": 4.82e-24
         }
       }
     }
   },
   "zonal_sweep": {
     "properties_eligible": 51,
-    "properties_total": 2065,
-    "properties_significant_fdr5": 6,
+    "properties_total": 2064,
+    "properties_significant_fdr5": 7,
     "strengthening": [
       {
         "property": "physical clay",
-        "n_documents": 47,
-        "slope_per_degree": -1.1161,
+        "n_documents": 51,
+        "slope_per_degree": -1.0444,
         "ci": [
-          -1.6261,
-          -0.606
+          -1.546,
+          -0.5428
         ],
         "log_transformed": false,
-        "q_value": 0.0003
+        "q_value": 0.0008
       },
       {
         "property": "clay",
         "n_documents": 42,
-        "slope_per_degree": -1.0485,
+        "slope_per_degree": -1.0339,
         "ci": [
-          -1.6239,
-          -0.473
+          -1.5908,
+          -0.4769
         ],
         "log_transformed": false,
-        "q_value": 0.0045
-      },
-      {
-        "property": "potassium oxide K2O",
-        "n_documents": 79,
-        "slope_per_degree": -0.0905,
-        "ci": [
-          -0.1548,
-          -0.0262
-        ],
-        "log_transformed": true,
-        "q_value": 0.0494
+        "q_value": 0.0035
       },
       {
         "property": "pH (method unspecified)",
-        "n_documents": 162,
-        "slope_per_degree": -0.0887,
+        "n_documents": 170,
+        "slope_per_degree": -0.0941,
         "ci": [
-          -0.1277,
-          -0.0498
+          -0.1317,
+          -0.0565
         ],
         "log_transformed": false,
-        "q_value": 0.0002
+        "q_value": 0.0
+      },
+      {
+        "property": "potassium oxide K2O",
+        "n_documents": 80,
+        "slope_per_degree": -0.0898,
+        "ci": [
+          -0.1541,
+          -0.0254
+        ],
+        "log_transformed": true,
+        "q_value": 0.0459
       },
       {
         "property": "pH in water",
-        "n_documents": 177,
-        "slope_per_degree": -0.08,
+        "n_documents": 180,
+        "slope_per_degree": -0.0857,
         "ci": [
-          -0.1058,
-          -0.0542
+          -0.1115,
+          -0.0599
         ],
         "log_transformed": false,
         "q_value": 0.0
       },
       {
         "property": "sand",
-        "n_documents": 52,
-        "slope_per_degree": 0.1414,
+        "n_documents": 53,
+        "slope_per_degree": 0.1361,
         "ci": [
-          0.059,
-          0.2238
+          0.0537,
+          0.2186
         ],
         "log_transformed": true,
-        "q_value": 0.0079
+        "q_value": 0.0124
+      },
+      {
+        "property": "bicarbonate ion HCO3-",
+        "n_documents": 11,
+        "slope_per_degree": 0.2013,
+        "ci": [
+          0.0606,
+          0.342
+        ],
+        "log_transformed": true,
+        "q_value": 0.043
       }
     ]
   }

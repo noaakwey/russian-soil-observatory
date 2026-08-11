@@ -1,76 +1,80 @@
 {
-  "observations": 106839,
+  "observations": 94996,
   "header_match_kind": {
-    "phrase": 86063,
-    "symbol_clean": 15178,
-    "symbol_embedded": 5598
+    "phrase": 86174,
+    "symbol_clean": 7571,
+    "symbol_embedded": 1251
   },
   "value_plausibility": {
-    "ok": 101203,
-    "out_of_physical_range": 4928,
-    "negative_content": 708
+    "ok": 92172,
+    "out_of_physical_range": 2701,
+    "negative_content": 123
   },
-  "unflagged_observations": 96101,
+  "unflagged_observations": 91060,
+  "unclassified_review_status": {
+    "resolved_reject": 7675
+  },
   "most_affected_properties": {
     "ph_unspecified": {
-      "ok": 3539,
-      "out_of_physical_range": 1321
+      "ok": 2955,
+      "out_of_physical_range": 1021
     },
-    "ph_h2o": {
-      "ok": 4096,
-      "out_of_physical_range": 966
-    },
-    "available_phosphorus": {
-      "out_of_physical_range": 406,
-      "ok": 1622
-    },
-    "boron": {
-      "ok": 2156,
-      "negative_content": 403
-    },
-    "clay": {
-      "ok": 2406,
-      "out_of_physical_range": 228
-    },
-    "organic_matter": {
-      "ok": 5641,
-      "out_of_physical_range": 223
-    },
-    "soil_organic_carbon": {
-      "out_of_physical_range": 194,
-      "ok": 4625
+    "unclassified_table_metric": {
+      "ok": 7352,
+      "out_of_physical_range": 323
     },
     "bulk_density": {
-      "out_of_physical_range": 166,
-      "ok": 1129
+      "ok": 1452,
+      "out_of_physical_range": 212
     },
-    "calcium": {
-      "ok": 1940,
-      "out_of_physical_range": 162
+    "magnesium": {
+      "ok": 928,
+      "out_of_physical_range": 187
     },
-    "ph_kcl": {
-      "out_of_physical_range": 100,
-      "ok": 934
+    "potassium_oxide_k2o": {
+      "ok": 888,
+      "out_of_physical_range": 126
+    },
+    "ph_h2o": {
+      "ok": 3571,
+      "out_of_physical_range": 114
+    },
+    "soil_organic_carbon": {
+      "ok": 4112,
+      "out_of_physical_range": 88
+    },
+    "organic_matter": {
+      "ok": 4044,
+      "out_of_physical_range": 75,
+      "negative_content": 5
     },
     "chromium": {
-      "ok": 920,
-      "negative_content": 91
+      "ok": 613,
+      "negative_content": 62
     },
-    "physical_clay": {
-      "ok": 3103,
-      "out_of_physical_range": 80
+    "phosphorus_pentoxide": {
+      "ok": 1962,
+      "out_of_physical_range": 50
+    },
+    "calcium": {
+      "ok": 432,
+      "out_of_physical_range": 49
     },
     "silt": {
-      "ok": 1308,
-      "out_of_physical_range": 73
+      "ok": 884,
+      "out_of_physical_range": 44
     },
-    "sodium_ion": {
-      "out_of_physical_range": 69,
-      "ok": 3300
+    "iron_oxide_fe2o3": {
+      "ok": 2295,
+      "out_of_physical_range": 44
     },
-    "manganese": {
-      "ok": 1355,
-      "out_of_physical_range": 67
+    "clay": {
+      "ok": 1869,
+      "out_of_physical_range": 42
+    },
+    "bicarbonate_ion": {
+      "out_of_physical_range": 36,
+      "ok": 571
     }
   }
 }

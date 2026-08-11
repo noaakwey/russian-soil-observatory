@@ -1,30 +1,19 @@
 {
-  "table_measurement_candidate": 106839,
-  "table_observation": 106839,
-  "normalization": {
-    "converted": 3471,
-    "exact": 22910,
-    "incompatible": 5490,
-    "missing_unit": 74968
+  "raw_table_observations": 94645,
+  "clean_table_observations": 86976,
+  "excluded_rejected_unclassified": 7669,
+  "excluded_queue_status": {
+    "resolved_reject": 7669
   },
-  "spatial_linkage": {
-    "document_multiple_reported_coordinates": 5191,
-    "document_single_reported_coordinate": 5448,
-    "no_reported_coordinate": 95381,
-    "row_profile_verified": 819
+  "excluded_unclassified_quality": {
+    "ok": 7348,
+    "out_of_physical_range": 321
   },
-  "qa_status": {
-    "normalized": 25570,
-    "flagged": 819,
-    "unit_incompatible": 5490,
-    "unit_missing": 74960
-  },
-  "linked_operational_measurements": 819,
-  "checks": {
-    "coverage_gap": 0,
-    "candidate_uniqueness": "enforced by table_observation.candidate_id UNIQUE",
-    "artifact_property_context_integrity": "enforced by FOREIGN KEY during materialization",
-    "locator_integrity": "enforced by evidence_locator NOT NULL"
-  },
-  "ready": true
+  "supplemental_semantic_layer": null,
+  "clean_soil_type_links": 86976,
+  "source_soil_type_links": 94645,
+  "soil_type_orphans": 0,
+  "foreign_key_errors": 30,
+  "integrity_check": "ok",
+  "definition": "Public portal exports only clean table observations; rejected raw candidates remain in the audit source."
 }

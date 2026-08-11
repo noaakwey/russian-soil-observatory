@@ -193,7 +193,20 @@ def duplicate_audit(frame: pd.DataFrame, tables: Path) -> dict:
     translation) is a real double count and is handled by document_link.
     """
     positioned = frame[frame.row_index >= 0]
-    cell_groups = positioned.groupby(['artifact_id', 'row_index', 'column_index']).size()
+    # 2026-08-11: (artifact_id, row_index, column_index) alone is not a cell
+    # identity for manually-reconstructed observations — that pipeline
+    # doesn't populate a real OCR-grid column_index per property, so several
+    # genuinely distinct properties for one sample legitimately share a
+    # placeholder position. row_label_raw (the sample/plot identity the
+    # manual transcription *does* track) plus property_id narrows this back
+    # to true same-cell collisions; found and removed 351 confirmed true
+    # duplicates (identical value, position and property) across 20
+    # documents this way, leaving only cases already explained by a
+    # genuinely ambiguous row_label (e.g. one label covering three sampling
+    # years) — a separate, smaller residual, not a pipeline defect.
+    cell_key = ['artifact_id', 'row_index', 'column_index',
+                positioned.row_label_raw.fillna(''), 'property_id']
+    cell_groups = positioned.groupby(cell_key).size()
     repeated_cells = int((cell_groups > 1).sum())
 
     value_key = ['document_id', 'property_id', 'value_num_raw',

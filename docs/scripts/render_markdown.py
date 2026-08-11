@@ -35,7 +35,11 @@ def inline(text: str) -> str:
 
 def is_separator(row: str) -> bool:
     cells = [cell.strip() for cell in row.strip().strip('|').split('|')]
-    return bool(cells) and all(re.fullmatch(r':?-{2,}:?', cell) for cell in cells)
+    # A single-dash center marker (:-:) is valid CommonMark and shows up
+    # routinely (e.g. a lone "Значимо" yes/no column); requiring 2+ dashes
+    # rejected exactly that case and silently degraded whole tables to
+    # unstyled paragraphs with no error.
+    return bool(cells) and all(re.fullmatch(r':?-+:?', cell) for cell in cells)
 
 
 def split_row(row: str) -> list[str]:
@@ -172,7 +176,7 @@ PAGE = """<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
-<link rel="stylesheet" href="assets/portal.css?v=20260811b">
+<link rel="stylesheet" href="assets/portal.css?v=20260811c">
 <style>
   main {{ max-width: 82ch; }}
   main h1 {{ font-size: 1.7rem; margin-top: .2em; }}

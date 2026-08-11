@@ -1,52 +1,52 @@
 property_id,property,n_observations,n_documents,log_transformed,slope_per_degree,ci_low,ci_high,p_value,icc_document,q_value,significant_fdr5
-horizon_thickness,soil horizon thickness,817,62,False,-16.89105,-45.69885,11.91675,0.25047,0.38022,0.65393,False
-physical_clay,physical clay,667,47,False,-1.11607,-1.62611,-0.60604,2e-05,0.49893,0.00031,True
-clay,clay,715,42,False,-1.04847,-1.6239,-0.47303,0.00036,0.5421,0.00453,True
-fine_sand,fine sand,247,17,False,-0.64456,-1.81902,0.52989,0.28208,0.74904,0.65393,False
-carbonate_equivalent,carbonate equivalent (CaCO3),247,14,True,-0.25172,-0.45446,-0.04898,0.01495,0.52634,0.10894,False
-fine_fraction_lt_0_001mm,fine fraction <0.001 mm,297,18,False,-0.24634,-0.80782,0.31514,0.38984,0.51363,0.66591,False
-exchangeable_calcium,exchangeable calcium,222,22,False,-0.14618,-0.93428,0.64191,0.7162,0.65738,0.91315,False
-lead,lead,541,57,True,-0.09461,-0.19064,0.00142,0.05349,0.41343,0.3031,False
-potassium_oxide_k2o,potassium oxide K2O,787,79,True,-0.09052,-0.15484,-0.0262,0.00581,0.649,0.0494,True
-ph_unspecified,pH (method unspecified),1751,162,False,-0.08874,-0.12773,-0.04975,1e-05,0.6892,0.00021,True
-ph_h2o,pH in water,2787,177,False,-0.08002,-0.10582,-0.05421,0.0,0.63289,0.0,True
-phosphorus_pentoxide,phosphorus pentoxide (P2O5),844,51,True,-0.07316,-0.21366,0.06735,0.30749,0.7546,0.65393,False
-magnesium_ion,magnesium ion Mg2+,595,46,True,-0.05498,-0.14024,0.03027,0.2062,0.39316,0.65393,False
-aluminum_oxide_al2o3,aluminum oxide Al2O3,496,37,True,-0.0545,-0.15813,0.04913,0.30262,0.72045,0.65393,False
-sodium_ion,sodium ion Na+,377,32,True,-0.05139,-0.18736,0.08459,0.45891,0.588,0.74387,False
-chromium,chromium,277,31,True,-0.04534,-0.14185,0.05118,0.35722,0.45461,0.66591,False
-total_nitrogen,total nitrogen,68,10,True,-0.03724,-0.18382,0.10935,0.61857,0.89958,0.8763,False
-silicon_dioxide_sio2,silicon dioxide SiO2,484,29,False,-0.02928,-1.82461,1.76606,0.9745,0.77837,0.98574,False
-soil_organic_carbon,soil organic carbon,2092,168,True,-0.02095,-0.06296,0.02105,0.32826,0.63833,0.66591,False
-organic_matter,organic matter/humus,2572,149,True,-0.01793,-0.04167,0.0058,0.13866,0.43573,0.6429,False
-fine_silt,fine silt 0.005-0.001 mm,258,18,True,-0.00342,-0.0444,0.03756,0.87025,0.48443,0.94674,False
-ph_kcl,pH in KCl,587,34,False,-0.00052,-0.05706,0.05603,0.98574,0.59066,0.98574,False
-zinc,zinc,743,67,True,0.00261,-0.08347,0.08869,0.9526,0.49544,0.98574,False
-bulk_density,bulk density,598,36,False,0.00356,-0.01707,0.02419,0.73518,0.76737,0.91449,False
-iron_oxide_fe2o3,iron oxide Fe2O3,2138,62,True,0.00693,-0.05324,0.0671,0.82137,0.5696,0.94674,False
-manganese_oxide_mno,manganese oxide MnO,162,15,True,0.00731,-0.08159,0.09621,0.87198,0.53283,0.94674,False
-calcium_ion,calcium ion Ca2+,600,43,True,0.00763,-0.08257,0.09784,0.86828,0.73366,0.94674,False
-medium_silt,medium silt 0.01-0.005 mm,298,19,True,0.01192,-0.03908,0.06291,0.64695,0.63468,0.89174,False
-titanium_dioxide,titanium dioxide TiO2,182,18,True,0.0126,-0.02505,0.05026,0.51187,0.60065,0.76781,False
-magnesium,magnesium,312,30,True,0.01906,-0.05027,0.08839,0.58994,0.51753,0.85963,False
-magnesium_oxide_mgo,magnesium oxide MgO,225,25,True,0.02081,-0.01733,0.05895,0.28485,0.54202,0.65393,False
-coarse_sand,coarse sand,177,15,True,0.02132,-0.239,0.28164,0.87249,0.6777,0.94674,False
-calcium_oxide_cao,calcium oxide CaO,338,26,True,0.02241,-0.02836,0.07318,0.38697,0.63629,0.66591,False
-manganese,manganese,450,41,True,0.03001,-0.1204,0.18043,0.69573,0.73757,0.9098,False
-copper,copper,647,67,True,0.03192,-0.05693,0.12078,0.48133,0.63025,0.74387,False
-carbon_nitrogen_ratio,C:N ratio,174,24,True,0.03214,-0.0136,0.07788,0.16844,0.50584,0.65393,False
-cobalt,cobalt,113,19,True,0.0339,-0.1264,0.1942,0.67854,0.62783,0.9098,False
-cation_exchange_capacity,cation exchange capacity,442,33,True,0.03523,-0.02111,0.09157,0.22034,0.37616,0.65393,False
-cadmium,cadmium,386,34,True,0.05093,-0.0886,0.19046,0.47435,0.62806,0.74387,False
-nickel,nickel,556,48,True,0.05929,-0.03959,0.15816,0.23989,0.56206,0.65393,False
-calcium,calcium,206,21,True,0.07021,-0.03822,0.17863,0.20441,0.29611,0.65393,False
-porosity,total porosity,336,26,False,0.08137,-1.71234,1.87508,0.92916,0.8533,0.98574,False
-sulfate_ion,sulfate ion SO4 2-,32,11,True,0.08923,-0.11495,0.29342,0.39171,0.69302,0.66591,False
-silt,silt,114,14,True,0.10721,-0.0988,0.31323,0.30773,0.8386,0.65393,False
-chloride_ion,chloride ion Cl-,39,9,True,0.12748,-0.07719,0.33216,0.22216,0.78736,0.65393,False
-iron,iron,331,34,True,0.12949,-0.0721,0.33108,0.20804,0.76376,0.65393,False
-sand,sand,903,52,True,0.14141,0.05898,0.22385,0.00077,0.64924,0.00789,True
-potassium_ion,potassium ion K+,101,15,True,0.17377,0.02079,0.32675,0.026,0.55012,0.16573,False
-bicarbonate_ion,bicarbonate ion HCO3-,50,9,True,0.21987,-0.04153,0.48128,0.09923,0.44969,0.50609,False
-base_saturation,base saturation,300,16,False,0.2992,-2.55067,3.14907,0.83697,0.68698,0.94674,False
-coarse_silt,coarse silt 0.05-0.01 mm,231,16,False,0.53646,-0.6308,1.70372,0.36771,0.76061,0.66591,False
+horizon_thickness,soil horizon thickness,1104,62,False,-16.57733,-44.80863,11.65396,0.24978,0.46879,0.72128,False
+physical_clay,physical clay,714,51,False,-1.04439,-1.546,-0.54279,4e-05,0.50402,0.00076,True
+clay,clay,707,42,False,-1.03385,-1.59079,-0.47692,0.00027,0.52177,0.0035,True
+fine_sand,fine sand,247,17,False,-0.64456,-1.81902,0.52989,0.28208,0.74904,0.72128,False
+fine_fraction_lt_0_001mm,fine fraction <0.001 mm,297,18,False,-0.24634,-0.80782,0.31514,0.38984,0.51363,0.73637,False
+carbonate_equivalent,carbonate equivalent (CaCO3),272,16,True,-0.24386,-0.42988,-0.05784,0.01019,0.46699,0.06359,False
+exchangeable_calcium,exchangeable calcium,222,22,False,-0.14618,-0.93428,0.64191,0.7162,0.65738,0.89088,False
+ph_unspecified,pH (method unspecified),1795,170,False,-0.09412,-0.13172,-0.05653,0.0,0.6783,2e-05,True
+potassium_oxide_k2o,potassium oxide K2O,791,80,True,-0.08975,-0.15415,-0.02535,0.0063,0.65076,0.04592,True
+lead,lead,587,61,True,-0.08931,-0.1839,0.00527,0.06421,0.42175,0.29772,False
+ph_h2o,pH in water,2881,180,False,-0.08572,-0.1115,-0.05993,0.0,0.6222,0.0,True
+phosphorus_pentoxide,phosphorus pentoxide (P2O5),857,52,True,-0.07213,-0.2118,0.06754,0.31147,0.75486,0.72128,False
+aluminum_oxide_al2o3,aluminum oxide Al2O3,496,37,True,-0.05429,-0.15783,0.04926,0.30416,0.72049,0.72128,False
+sodium_ion,sodium ion Na+,386,33,True,-0.04797,-0.18152,0.08557,0.48138,0.58383,0.77098,False
+chromium,chromium,277,31,True,-0.04534,-0.14185,0.05118,0.35722,0.45461,0.72128,False
+magnesium_ion,magnesium ion Mg2+,626,50,True,-0.03766,-0.11792,0.04259,0.35766,0.39695,0.72128,False
+total_nitrogen,total nitrogen,68,10,True,-0.02628,-0.20344,0.15087,0.77124,0.90144,0.9365,False
+organic_matter,organic matter/humus,2640,154,True,-0.01906,-0.04194,0.00381,0.10233,0.42078,0.40146,False
+porosity,total porosity,363,27,False,-0.01734,-1.76537,1.73069,0.98448,0.77291,0.99267,False
+ph_kcl,pH in KCl,625,38,False,-0.01348,-0.07411,0.04716,0.66308,0.61096,0.86514,False
+soil_organic_carbon,soil organic carbon,2231,173,True,-0.01222,-0.05693,0.03249,0.5923,0.65429,0.86306,False
+fine_silt,fine silt 0.005-0.001 mm,258,18,True,-0.00342,-0.0444,0.03756,0.87025,0.48443,0.95153,False
+zinc,zinc,767,71,True,-0.0004,-0.08627,0.08547,0.99267,0.50305,0.99267,False
+iron_oxide_fe2o3,iron oxide Fe2O3,2151,64,True,0.00372,-0.05623,0.06367,0.90317,0.57382,0.95962,False
+manganese_oxide_mno,manganese oxide MnO,162,15,True,0.00732,-0.08145,0.0961,0.87154,0.53282,0.95153,False
+bulk_density,bulk density,728,39,False,0.00748,-0.01576,0.03071,0.52828,0.79985,0.7961,False
+calcium_ion,calcium ion Ca2+,621,45,True,0.00806,-0.07983,0.09595,0.85732,0.73351,0.95153,False
+titanium_dioxide,titanium dioxide TiO2,186,19,True,0.01173,-0.02495,0.04842,0.53074,0.59274,0.7961,False
+medium_silt,medium silt 0.01-0.005 mm,298,19,True,0.01192,-0.03908,0.06291,0.64695,0.63468,0.86514,False
+magnesium,magnesium,313,31,True,0.01541,-0.05333,0.08414,0.66041,0.51597,0.86514,False
+magnesium_oxide_mgo,magnesium oxide MgO,248,27,True,0.01904,-0.01684,0.05492,0.29838,0.50037,0.72128,False
+coarse_sand,coarse sand,183,16,True,0.01994,-0.23239,0.27228,0.8769,0.66632,0.95153,False
+calcium_oxide_cao,calcium oxide CaO,350,27,True,0.02338,-0.02556,0.07233,0.34909,0.61752,0.72128,False
+copper,copper,663,70,True,0.03133,-0.05636,0.11902,0.48375,0.62669,0.77098,False
+manganese,manganese,469,44,True,0.03168,-0.1135,0.17686,0.66884,0.73378,0.86514,False
+cobalt,cobalt,113,19,True,0.0339,-0.1264,0.1942,0.67854,0.62783,0.86514,False
+cation_exchange_capacity,cation exchange capacity,430,32,True,0.03559,-0.02182,0.093,0.2244,0.37937,0.71528,False
+carbon_nitrogen_ratio,C:N ratio,189,27,True,0.04572,-0.00655,0.09798,0.08648,0.47361,0.36753,False
+cadmium,cadmium,394,35,True,0.05395,-0.08385,0.19176,0.44287,0.62566,0.77098,False
+nickel,nickel,566,50,True,0.06099,-0.03691,0.1589,0.22208,0.56132,0.71528,False
+sulfate_ion,sulfate ion SO4 2-,34,12,True,0.06297,-0.11295,0.2389,0.48295,0.68466,0.77098,False
+calcium,calcium,210,22,True,0.07407,-0.03172,0.17986,0.16996,0.28938,0.61915,False
+silicon_dioxide,silicon dioxide,502,30,False,0.08186,-1.66005,1.82377,0.92661,0.77777,0.96443,False
+iron,iron,334,35,True,0.10854,-0.09433,0.3114,0.29435,0.77113,0.72128,False
+sand,sand,925,53,True,0.13615,0.05365,0.21864,0.00122,0.65061,0.01242,True
+potassium_ion,potassium ion K+,110,16,True,0.19282,0.04378,0.34186,0.01122,0.53712,0.06359,False
+bicarbonate_ion,bicarbonate ion HCO3-,55,11,True,0.20129,0.06057,0.34202,0.00506,0.41933,0.04297,True
+chloride_ion,chloride ion Cl-,47,10,True,0.20759,0.00087,0.41432,0.04905,0.85606,0.25015,False
+base_saturation,base saturation,300,16,False,0.2992,-2.55067,3.14907,0.83697,0.68698,0.95153,False
+coarse_silt,coarse silt 0.05-0.01 mm,231,16,False,0.53646,-0.6308,1.70372,0.36771,0.76061,0.72128,False
+silt,silt,105,14,False,0.98677,-1.49344,3.46698,0.43552,0.70586,0.77098,False
