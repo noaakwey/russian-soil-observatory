@@ -29,6 +29,9 @@ from collections import Counter
 from itertools import combinations
 from pathlib import Path
 
+import csv
+import sys
+
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -37,6 +40,26 @@ import pandas as pd
 import statsmodels.formula.api as smf
 from scipy import stats
 from statsmodels.stats.multitest import multipletests
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from property_dictionary_ru import CATEGORY_RU, merged_category
+
+DATA_DIR = Path(__file__).resolve().parents[1] / 'data'
+
+
+def load_property_ru(path: Path = DATA_DIR / 'property_dictionary_ru_public.csv') -> dict:
+    """property_id -> Russian name, from the same public dictionary the
+    portal and the print figures use. Every figure that labels a property
+    by name (not just by category) must go through this, or an English
+    canonical_name/property_id leaks straight into a Russian-language
+    figure — found 2026-08-12 in fig6_property_landscape/fig3_cooccurrence,
+    which had never been wired to the dictionary at all."""
+    if not path.exists():
+        return {}
+    with path.open(encoding='utf-8', newline='') as handle:
+        return {row['property_id']: row['property_russian']
+                for row in csv.DictReader(handle) if row.get('property_russian')}
+
 
 EARTH_RADIUS_KM = 6371.0
 
@@ -122,6 +145,16 @@ def load(db: Path) -> pd.DataFrame:
     # confidence tier) is no longer populated. "Proven unit" is therefore no
     # longer a per-row filter — it is the admission criterion itself.
     frame = frame[frame.property_id != 'unclassified_table_metric'].copy()
+    # Collapse near-duplicate category slugs (same fix as the portal, see
+    # property_dictionary_ru.CATEGORY_MERGE) so a figure's legend never shows
+    # e.g. both 'soil_chemistry' and 'soil_chemical_properties' as separate
+    # entries, and translate for a Russian-language display column — the
+    # underlying English 'category'/'property' columns are left alone since
+    # other code in this module keys off them.
+    frame['category'] = frame['category'].map(merged_category)
+    frame['category_ru'] = frame['category'].map(lambda c: CATEGORY_RU.get(c, c))
+    property_ru = load_property_ru()
+    frame['property_ru'] = frame['property_id'].map(property_ru).fillna(frame['property'])
     frame['trusted'] = ((frame.header_match_kind != 'symbol_embedded')
                         & (frame.value_plausibility == 'ok'))
     frame['metric'] = frame.normalization_status.isin(['exact', 'converted'])
@@ -274,8 +307,12 @@ def figure_cooccurrence(frame: pd.DataFrame, output: Path, theme_name: str,
     apply_theme(theme)
     trusted = frame[frame.trusted]
     # A table is the unit of co-measurement: properties printed in one table
-    # were measured on one set of samples.
-    tables = trusted.groupby('artifact_id').property.unique()
+    # were measured on one set of samples. Grouped by the Russian display
+    # name directly (not the English canonical_name) so the figure's own
+    # axis labels are what get counted/paired — otherwise two properties
+    # that share a Russian translation but differ in English casing would
+    # silently double-count, and English would leak into a Russian figure.
+    tables = trusted.groupby('artifact_id').property_ru.unique()
     tables = tables[tables.map(len) > 1]
 
     counts: Counter = Counter()
@@ -539,7 +576,9 @@ def property_landscape(frame: pd.DataFrame, output: Path) -> dict:
         row = {
             'property_id': pid,
             'property': group.property.iloc[0],
+            'property_ru': group.property_ru.iloc[0],
             'category': group.category.iloc[0],
+            'category_ru': group.category_ru.iloc[0],
             'observations': len(group),
             'documents': int(group.document_id.nunique()),
             'header_trusted_pct': pct(group.header_match_kind != 'symbol_embedded'),
@@ -568,7 +607,7 @@ def property_landscape(frame: pd.DataFrame, output: Path) -> dict:
         palette = {c: base[i % len(base)] for i, c in enumerate(categories)}
         ordered = census.sort_values('observations')
         fig, ax = plt.subplots(figsize=(9.6, max(9, 0.16 * len(ordered))))
-        ax.barh(ordered.property, ordered.observations,
+        ax.barh(ordered.property_ru, ordered.observations,
                color=[palette[c] for c in ordered.category], height=0.72)
         ax.set_xscale('log')
         ax.set_xlabel(('число наблюдений (лог. шкала)' if theme_name == 'light'
@@ -576,7 +615,8 @@ def property_landscape(frame: pd.DataFrame, output: Path) -> dict:
         ax.set_title(f'Все {len(ordered)} свойства с n≥30', pad=12)
         ax.tick_params(axis='y', labelsize=7.2)
         handles = [plt.Rectangle((0, 0), 1, 1, color=palette[c]) for c in categories]
-        ax.legend(handles, categories, loc='lower right', fontsize=7.4, frameon=False, ncol=1)
+        legend_labels = [CATEGORY_RU.get(c, c) for c in categories]
+        ax.legend(handles, legend_labels, loc='lower right', fontsize=7.4, frameon=False, ncol=1)
         fig.tight_layout()
         save(fig, output, 'fig6_property_landscape', theme_name)
 
@@ -775,7 +815,7 @@ def mixed_effects_models(frame: pd.DataFrame, output: Path) -> dict:
                & frame.latitude.notna() & (frame.unit_normalized == 'g/kg')
                & ((frame.depth_top_cm.isna()) | (frame.depth_top_cm < 30))].copy()
     soc['log_value'] = np.log(soc.value_normalized.clip(lower=0.1))
-    result['soc'] = fit_pair(soc, 'log_value', 'log(SOC)')
+    result['soc'] = fit_pair(soc, 'log_value', 'log(Cорг.)')
 
     # A multiple-predictor model for pH: does latitude survive once depth and
     # corpus (a proxy for which editorial/lab tradition produced the value)
@@ -809,14 +849,14 @@ def mixed_effects_models(frame: pd.DataFrame, output: Path) -> dict:
         mixed_err = [[m - c[0] for m, c in zip(mixed_vals, [r['mixed_ci'] for r in rows_plot])],
                     [c[1] - m for m, c in zip(mixed_vals, [r['mixed_ci'] for r in rows_plot])]]
         ax.scatter(naive_vals, y - 0.12, marker='D', s=50, color=theme['muted'],
-                  label='наивный OLS (средние по публикациям)', zorder=3)
+                  label='обычная OLS-оценка (средние по публикациям, без поправки на псевдоповторность)', zorder=3)
         ax.errorbar(mixed_vals, y + 0.12, xerr=mixed_err, fmt='o', markersize=7,
                    color=theme['series'][0], ecolor=theme['series'][0], capsize=4,
                    label='смешанная модель (документ — случайный эффект, 95% ДИ)', zorder=4)
         ax.axvline(0, color=theme['grid'], linewidth=1)
         ax.set_yticks(y); ax.set_yticklabels([r['label'] for r in rows_plot])
         ax.set_xlabel('наклон на градус широты')
-        ax.set_title('Наивная оценка против смешанной модели', pad=10)
+        ax.set_title('Обычная OLS-оценка против смешанной модели', pad=10)
         ax.legend(frameon=False, fontsize=8, loc='upper left', bbox_to_anchor=(0, -0.18))
         ax.grid(axis='x', alpha=.35, linewidth=.6)
         fig.tight_layout()
@@ -853,6 +893,7 @@ def zonal_sweep(frame: pd.DataFrame, output: Path) -> dict:
                .loc[lambda s: s >= ZONAL_SWEEP_MIN_DOCS].index.tolist())
 
     names = base.drop_duplicates('property_id').set_index('property_id')['property']
+    names_ru = base.drop_duplicates('property_id').set_index('property_id')['property_ru']
     rows = []
     for pid in eligible:
         data = base[base.property_id == pid][['document_id', 'latitude', 'value_normalized']].dropna()
@@ -879,6 +920,7 @@ def zonal_sweep(frame: pd.DataFrame, output: Path) -> dict:
         var_resid = float(fitted.scale)
         rows.append({
             'property_id': pid, 'property': names.get(pid, pid),
+            'property_ru': names_ru.get(pid, pid),
             'n_observations': len(data), 'n_documents': data.document_id.nunique(),
             'log_transformed': use_log,
             'slope_per_degree': fitted.params['latitude'],
@@ -906,9 +948,9 @@ def zonal_sweep(frame: pd.DataFrame, output: Path) -> dict:
                    ecolor=colours, capsize=0, elinewidth=1.6, color='none', zorder=3)
         ax.scatter(table.slope_per_degree, y, s=26, color=colours, zorder=4)
         ax.axvline(0, color=theme['grid'], linewidth=1)
-        labels = [f"{CORRELATION_LABELS_RU.get(pid, name)}"
+        labels = [f"{CORRELATION_LABELS_RU.get(pid, name_ru)}"
                  f"{' (лог)' if log else ''}"
-                 for pid, name, log in zip(table.property_id, table.property, table.log_transformed)]
+                 for pid, name_ru, log in zip(table.property_id, table.property_ru, table.log_transformed)]
         ax.set_yticks(y); ax.set_yticklabels(labels, fontsize=7.6)
         ax.set_xlabel('наклон на градус широты (смешанная модель, 95% ДИ)')
         ax.set_title(f'Широтный градиент по {len(table)} свойствам с достаточным охватом\n'

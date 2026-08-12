@@ -88,122 +88,122 @@
     "tables_with_multiple_properties": 1347,
     "strongest_pairs": [
       {
-        "a": "chloride ion Cl-",
-        "b": "sulfate ion SO4 2-",
+        "a": "сульфат-ион SO4 2-",
+        "b": "хлорид-ион Cl-",
         "jaccard": 0.671,
         "tables": 47
       },
       {
-        "a": "sand",
-        "b": "silt",
+        "a": "песок",
+        "b": "пылеватая фракция",
         "jaccard": 0.576,
         "tables": 68
       },
       {
-        "a": "aluminum oxide Al2O3",
-        "b": "iron oxide Fe2O3",
+        "a": "оксид алюминия (Al₂O₃)",
+        "b": "оксид железа (Fe₂O₃)",
         "jaccard": 0.571,
         "tables": 52
       },
       {
-        "a": "copper",
-        "b": "zinc",
+        "a": "медь",
+        "b": "цинк",
         "jaccard": 0.562,
         "tables": 95
       },
       {
-        "a": "copper",
-        "b": "lead",
+        "a": "медь",
+        "b": "свинец",
         "jaccard": 0.543,
         "tables": 82
       },
       {
-        "a": "bicarbonate ion HCO3-",
-        "b": "sulfate ion SO4 2-",
+        "a": "гидрокарбонат-ион HCO3-",
+        "b": "сульфат-ион SO4 2-",
         "jaccard": 0.543,
         "tables": 38
       },
       {
-        "a": "calcium oxide CaO",
-        "b": "magnesium oxide MgO",
+        "a": "оксид калия (K₂O)",
+        "b": "пентаоксид фосфора (P₂O₅)",
+        "jaccard": 0.532,
+        "tables": 83
+      },
+      {
+        "a": "оксид кальция (CaO)",
+        "b": "оксид магния (MgO)",
         "jaccard": 0.531,
         "tables": 26
       },
       {
-        "a": "phosphorus pentoxide (P2O5)",
-        "b": "potassium oxide K2O",
-        "jaccard": 0.526,
-        "tables": 82
-      },
-      {
-        "a": "copper",
-        "b": "nickel",
+        "a": "медь",
+        "b": "никель",
         "jaccard": 0.519,
         "tables": 80
       },
       {
-        "a": "lead",
-        "b": "zinc",
+        "a": "свинец",
+        "b": "цинк",
         "jaccard": 0.519,
         "tables": 81
       },
       {
-        "a": "calcium ion Ca2+",
-        "b": "magnesium ion Mg2+",
+        "a": "ион кальция Ca2+ (метод не указан)",
+        "b": "ион магния Mg2+ (метод не указан)",
         "jaccard": 0.487,
         "tables": 109
       },
       {
-        "a": "aluminum oxide Al2O3",
-        "b": "silicon dioxide",
+        "a": "диоксид кремния (SiO₂)",
+        "b": "оксид алюминия (Al₂O₃)",
         "jaccard": 0.478,
         "tables": 32
       },
       {
-        "a": "aluminum oxide Al2O3",
-        "b": "magnesium oxide MgO",
+        "a": "оксид алюминия (Al₂O₃)",
+        "b": "оксид магния (MgO)",
         "jaccard": 0.476,
         "tables": 30
       },
       {
-        "a": "lead",
-        "b": "nickel",
+        "a": "никель",
+        "b": "свинец",
         "jaccard": 0.468,
         "tables": 66
       },
       {
-        "a": "bicarbonate ion HCO3-",
-        "b": "chloride ion Cl-",
+        "a": "гидрокарбонат-ион HCO3-",
+        "b": "хлорид-ион Cl-",
         "jaccard": 0.456,
         "tables": 31
       },
       {
-        "a": "potassium ion K+",
-        "b": "sodium ion Na+",
+        "a": "ион калия K+ (метод не указан)",
+        "b": "ион натрия Na+ (метод не указан)",
         "jaccard": 0.444,
         "tables": 56
       },
       {
-        "a": "manganese",
-        "b": "zinc",
+        "a": "марганец",
+        "b": "цинк",
         "jaccard": 0.441,
         "tables": 71
       },
       {
-        "a": "cadmium",
-        "b": "lead",
+        "a": "кадмий",
+        "b": "свинец",
         "jaccard": 0.439,
         "tables": 50
       },
       {
-        "a": "magnesium oxide MgO",
-        "b": "silicon dioxide",
+        "a": "диоксид кремния (SiO₂)",
+        "b": "оксид магния (MgO)",
         "jaccard": 0.439,
         "tables": 25
       },
       {
-        "a": "calcium",
-        "b": "magnesium",
+        "a": "кальций",
+        "b": "магний",
         "jaccard": 0.433,
         "tables": 29
       }
@@ -224,7 +224,7 @@
   },
   "time": {
     "metal_share_2006_2010": 5.9,
-    "metal_share_2020_2025": 6.2,
+    "metal_share_2020_2025": 6.3,
     "longitude_drift_per_year": 0.365,
     "longitude_drift_p": 0.0365,
     "median_longitude_2006_2010": 41.0,
@@ -520,7 +520,7 @@
       "icc_document": 0.63
     },
     "soc": {
-      "label": "log(SOC)",
+      "label": "log(Cорг.)",
       "n_observations": 1064,
       "n_documents": 125,
       "naive_ols_slope_per_degree": -0.0115,

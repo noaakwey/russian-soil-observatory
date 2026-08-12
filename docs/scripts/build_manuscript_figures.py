@@ -27,6 +27,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from property_dictionary_ru import CATEGORY_RU, merged_category
+
 # Печатная ширина: одна колонка и полная ширина полосы, в дюймах.
 COLUMN = 3.35
 FULL = 6.9
@@ -45,23 +49,14 @@ CATEGORY_COLOURS = [
     '#7d6244', '#5a86a8', '#a05248',
 ]
 
-CATEGORY_RU = {
-    'acid_base': 'кислотно-основные',
-    'organic': 'органическое вещество',
-    'particle_size': 'гранулометрический состав',
-    'soil_solution': 'почвенный раствор и ионы',
-    'microelement': 'микроэлементы',
-    'geochemical': 'валовой состав',
-    'exchange': 'обменный комплекс',
-    'macronutrient': 'макроэлементы питания',
-    'contaminant': 'загрязнители',
-    'salinity': 'засоление',
-    'physical': 'физические',
-    'biological': 'биологические',
-    'hydrophysical': 'гидрофизические',
-    'elemental_oxide': 'оксиды элементов',
-    'environmental': 'условия среды',
-}
+# Category labels (Russian) and the alias-collapsing merged_category() come
+# from the shared property_dictionary_ru module — this used to be a local,
+# 15-entry dict that fell back to the raw English/snake_case slug for
+# anything outside that short list (soil_measurement, manual_article,
+# carbon, …), which is exactly what leaked into figR2/figR3 before this
+# fix (found 2026-08-12). Every DataFrame with a `category` column has it
+# passed through merged_category() right after loading (see main()) so both
+# the synonym-collapsing and the translation happen in one place.
 
 
 def apply_print_style() -> None:
@@ -235,7 +230,10 @@ def figure_depth_sweep(depth: pd.DataFrame, names: dict, output: Path) -> None:
     linear = depth[~depth.log_transformed].sort_values('slope_per_cm')
     logged = depth[depth.log_transformed].sort_values('slope_per_cm')
 
-    fig, axes = plt.subplots(1, 2, figsize=(FULL, 3.4),
+    # Same fixed-height overlap as figure_zonal_sweep (see its comment) —
+    # scale to whichever panel has more rows.
+    height = max(3.4, 0.24 * max(len(linear), len(logged)))
+    fig, axes = plt.subplots(1, 2, figsize=(FULL, height),
                              gridspec_kw={'width_ratios': [1, 1]})
     for ax, part, caption in (
             (axes[0], linear, 'Исходная шкала показателя,\nединиц на сантиметр'),
@@ -260,7 +258,12 @@ def figure_zonal_sweep(zonal: pd.DataFrame, names: dict, output: Path) -> None:
     wide = zonal[zonal.width > 2.0].sort_values('slope_per_degree')
     narrow = zonal[zonal.width <= 2.0].sort_values('slope_per_degree')
 
-    fig, axes = plt.subplots(1, 2, figsize=(FULL, 4.3),
+    # A fixed figure height overlapped labels once the sweep grew past a
+    # couple dozen properties (51 with the current admission rules) — the
+    # left panel needs room proportional to its own row count, not a
+    # constant chosen when the sweep was shorter (found 2026-08-12).
+    height = max(4.3, 0.19 * len(narrow))
+    fig, axes = plt.subplots(1, 2, figsize=(FULL, height),
                              gridspec_kw={'width_ratios': [2.2, 1.1]})
     # The right panel is narrow, so its x-label has to be short enough to fit
     # inside the panel width; the units are stated in the caption.
@@ -395,6 +398,18 @@ def figure_density_grid(cells: pd.DataFrame, output: Path) -> None:
     save(fig, output, 'figR8_density_grid')
 
 
+# WRB-2022 reference-group names are Latin taxonomy, not English prose, but
+# the journal's Russian text uses the standard transliterated forms
+# («Подзол», not «Podzol») — found leaking untranslated into figR9 2026-08-12.
+WRB_RU = {
+    'Chernozem': 'Чернозём', 'Podzol': 'Подзол', 'Solonchak': 'Солончак',
+    'Solonetz': 'Солонец', 'Kastanozem': 'Каштанозём', 'Fluvisol': 'Флювисоль',
+    'Histosol': 'Histosol (торфяная почва)', 'Cryosol': 'Криозём',
+    'Phaeozem': 'Феозём', 'Gleysol': 'Глеезём', 'Cambisol': 'Камбисоль',
+    'Luvisol': 'Лювисоль', 'Arenosol': 'Ареносоль', 'Regosol': 'Регосоль',
+}
+
+
 def figure_soil_type(db: Path, census: pd.DataFrame, comparison: pd.DataFrame,
                      output: Path) -> None:
     """WRB-2022 reference groups: how many observations carry a reliable soil
@@ -437,7 +452,7 @@ def figure_soil_type(db: Path, census: pd.DataFrame, comparison: pd.DataFrame,
     positions = np.arange(len(top))
     ax.barh(positions, top.observations, height=.68, color=PALETTE['primary'], alpha=.85)
     ax.set_yticks(positions)
-    ax.set_yticklabels(top.wrb_reference_group)
+    ax.set_yticklabels([WRB_RU.get(g, g) for g in top.wrb_reference_group])
     ax.set_xlabel('Наблюдений (эталонный уровень)')
     ax.grid(axis='x', alpha=.45)
     ax.set_axisbelow(True)
@@ -447,8 +462,8 @@ def figure_soil_type(db: Path, census: pd.DataFrame, comparison: pd.DataFrame,
     for pid, title, groups, ax in panels:
         data = [obs.loc[(obs.property_id == pid) & (obs.wrb_reference_group == g),
                         'value_normalized'].dropna().to_numpy() for g in groups]
-        bp = ax.boxplot(data, tick_labels=groups, showfliers=False, patch_artist=True,
-                        widths=.55)
+        bp = ax.boxplot(data, tick_labels=[WRB_RU.get(g, g) for g in groups],
+                        showfliers=False, patch_artist=True, widths=.55)
         for patch, colour in zip(bp['boxes'], CATEGORY_COLOURS):
             patch.set_facecolor(colour)
             patch.set_alpha(.55)
@@ -478,7 +493,9 @@ def main() -> None:
     names = russian_names(args.dictionary)
 
     census = pd.read_csv(args.tables / 'table_property_census.csv')
+    census['category'] = census['category'].map(merged_category)
     shape = pd.read_csv(args.tables / 'table_distribution_shape.csv')
+    shape['category'] = shape['category'].map(merged_category)
     depth = pd.read_csv(args.tables / 'table_depth_sweep.csv')
     zonal = pd.read_csv(args.tables / 'table_zonal_sweep.csv')
     corr = pd.read_csv(args.tables / 'table_correlations.csv')
